@@ -1,10 +1,11 @@
 # Info for developers
 
 - Frontend is in directory `client/`
-  - Using React, TypeScript, Vite
+  - Using React, TypeScript, [Vite](https://vitejs.dev/guide/)
 
 - Backend is in directory `server/`
-  - Using NestJS, TypeScript
+  - Using [NestJS](https://docs.nestjs.com/first-steps), TypeScript
+  - NestJS has a [CLI](https://docs.nestjs.com/cli/overview)  that you may or may not need
 
 - We are using `pnpm` instead of `npm` for package management for both client and server
   - `pnpm` is faster than `npm`
