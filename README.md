@@ -21,8 +21,8 @@
   pnpm install
   pnpm run dev
 
-  # Run backend
-  cd ../server
+  # Open another terminal to run backend
+  cd server
   pnpm install
   pnpm run start:dev
   ```
