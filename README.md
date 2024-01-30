@@ -19,11 +19,14 @@
   # Run frontend
   cd client
   pnpm install
+  cp .env.template .env
   pnpm run dev
 
   # Open another terminal to run backend
   cd server
   pnpm install
+  cp .env.template .env 
+  # In .env, you need to fill in CLERK_SECRET_KEY. Get it from Joe. 
   pnpm run start:dev
   ```
 
