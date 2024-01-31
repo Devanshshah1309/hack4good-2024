@@ -4,7 +4,7 @@
   - Using React, TypeScript, [Vite](https://vitejs.dev/guide/)
 
 - Backend is in directory `server/`
-  - Using [NestJS](https://docs.nestjs.com/first-steps), TypeScript, MySQL ([Planetscale](https://planetscale.com/))
+  - Using [NestJS](https://docs.nestjs.com/first-steps), TypeScript, MySQL ([PlanetScale](https://planetscale.com/)), [Prisma ORM](https://www.prisma.io/docs/orm)
   - NestJS has a [CLI](https://docs.nestjs.com/cli/overview)  that you may or may not need
 
 - We are using `pnpm` instead of `npm` for package management for both client and server
@@ -34,7 +34,8 @@
   ```
 
 - Setup your development database on PlanetScale (free tier)
-  - Signup/Login to [PlanetScale](https://planetscale.com/) and create a new organization
+  - Signup/Login to PlanetScale [here](https://planetscale.com/)
+  - Create a new organization
   - In your organization, create a new database. You need to fill in your:
     - Database name: whatever you want
     - Region: ap-southeast-1 (Singapore)
