@@ -5,7 +5,8 @@
 
 - Backend is in directory `server/`
   - Using [NestJS](https://docs.nestjs.com/first-steps), TypeScript, MySQL ([PlanetScale](https://planetscale.com/)), [Prisma ORM](https://www.prisma.io/docs/orm)
-  - NestJS has a [CLI](https://docs.nestjs.com/cli/overview)  that you may or may not need
+  - NestJS has a [CLI](https://docs.nestjs.com/cli/overview) that you may or may not need
+  - NestJS uses Express.js behind the scenes
 
 - We are using `pnpm` instead of `npm` for package management for both client and server
   - `pnpm` is faster than `npm`
@@ -13,7 +14,7 @@
   - Use `pnpm install` instead of `npm install`
   - Notice the `pnpm-lock.yaml` file instead of `package-lock.json`
 
-- We are using [Clerk](https://clerk.com/docs) for authentication. They provide React components as well as Express authentication middleware.
+- We are using [Clerk](https://clerk.com/docs) for authentication. They provide React components as well as Express.js authentication middleware.
 
 - To run locally for development:
   
