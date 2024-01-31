@@ -1,4 +1,11 @@
-import { Controller, Get, Put, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Put,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { Request } from 'express';
 import { PrismaService } from './prisma.service';
@@ -18,14 +25,18 @@ export class AppController {
 
   @Get('me')
   async getMe(@Req() req: RequireAuthProp<Request>) {
-    return this.appService.getUser(req.auth.userId);
+    const user = await this.appService.getUser(req.auth.userId);
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
   }
 
   @Put('me')
   async updateMe(@Req() req: RequireAuthProp<Request>) {
     const { firstName, lastName } = req.body;
     let user = await this.appService.getUser(req.auth.userId);
-    if (user.clerkUserId === '') {
+    if (!user) {
       // user has created account with Clerk, but it does not exist in database yet
       user = await this.prisma.user.create({
         data: {
@@ -46,6 +57,7 @@ export class AppController {
         },
       });
     }
+
     return user;
   }
 }
