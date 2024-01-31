@@ -13,6 +13,7 @@ import {
 } from '@clerk/clerk-sdk-node';
 import { NextFunction, Request, Response } from 'express';
 import 'dotenv/config';
+import { PrismaService } from './prisma.service';
 
 declare global {
   namespace Express {
@@ -23,7 +24,7 @@ declare global {
 @Module({
   imports: [],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PrismaService],
 })
 export class AppModule implements NestModule {
   /** This middleware throws UnauthorizedException. It should run after ClerkExpressWithAuth middleware. */
@@ -42,7 +43,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
-        ClerkExpressWithAuth({ onError: (err) => console.log(err) }),
+        ClerkExpressWithAuth({ onError: (err) => console.log(err) }), // Clerk middleware to set the "auth" key in Request object
         this.authMiddleware,
       )
       .forRoutes('*');

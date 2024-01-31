@@ -4,7 +4,7 @@
   - Using React, TypeScript, [Vite](https://vitejs.dev/guide/)
 
 - Backend is in directory `server/`
-  - Using [NestJS](https://docs.nestjs.com/first-steps), TypeScript
+  - Using [NestJS](https://docs.nestjs.com/first-steps), TypeScript, MySQL ([Planetscale](https://planetscale.com/))
   - NestJS has a [CLI](https://docs.nestjs.com/cli/overview)  that you may or may not need
 
 - We are using `pnpm` instead of `npm` for package management for both client and server
@@ -12,6 +12,8 @@
   - Install `pnpm` [here](https://pnpm.io/installation)
   - Use `pnpm install` instead of `npm install`
   - Notice the `pnpm-lock.yaml` file instead of `package-lock.json`
+
+- We are using [Clerk](https://clerk.com/docs) for authentication. They provide React components as well as Express authentication middleware.
 
 - To run locally for development:
   
@@ -26,7 +28,7 @@
   cd server
   pnpm install
   cp .env.template .env 
-  # In .env, you need to fill in CLERK_SECRET_KEY. Get it from Joe. 
+  # You need to fill in the environment variables in .env - get them from Joe. 
   pnpm run start:dev
   ```
 
