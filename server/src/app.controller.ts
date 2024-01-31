@@ -25,9 +25,16 @@ export class AppController {
 
   @Get('me')
   async getMe(@Req() req: RequireAuthProp<Request>) {
-    const user = await this.appService.getUser(req.auth.userId);
+    let user = await this.appService.getUser(req.auth.userId);
     if (!user) {
-      throw new NotFoundException();
+      // user has created account with Clerk, but it does not exist in database yet
+      user = await this.prisma.user.create({
+        data: {
+          clerkUserId: req.auth.userId,
+          firstName: '',
+          lastName: '',
+        },
+      });
     }
     return user;
   }
