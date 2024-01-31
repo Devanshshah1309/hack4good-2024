@@ -1,10 +1,14 @@
-import { SignOutButton, SignInButton, SignedIn, SignedOut, useAuth } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { authenticatedGet, authenticatedPut } from "./axios";
+import { authenticatedGet, authenticatedPut } from "../axios";
+import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 
-function App() {
-  const { getToken } = useAuth();
+function Profile() {
+  let navigate = useNavigate();
+  const { isSignedIn, getToken } = useAuth();
+  if (!isSignedIn) navigate("/");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [saving, setSaving] = useState(false);
@@ -40,15 +44,9 @@ function App() {
   if (query.isLoading) return "Loading...";
 
   return (
-    <div>
-      <SignedOut>
-        <SignInButton />
-        <p>This content is public. Only signed out users can see the SignInButton above this text.</p>
-      </SignedOut>
-      <SignedIn>
-        <SignOutButton />
-        <p>This content is private. Only signed in users can see the SignOutButton above this text.</p>
-
+    <>
+      <Navbar />
+      <div>
         <input value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First Name" />
         <input value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" />
         <button
@@ -65,9 +63,9 @@ function App() {
           <br />
           {JSON.stringify(query.data, undefined, 2)}
         </pre>
-      </SignedIn>
-    </div>
+      </div>
+    </>
   );
 }
 
-export default App;
+export default Profile;
