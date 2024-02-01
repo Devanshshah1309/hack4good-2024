@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Profile from "./pages/Profile.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
+import CreateProfile from "./pages/CreateProfile.tsx";
 
 // Import Clerk publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -18,20 +19,31 @@ if (!PUBLISHABLE_KEY) {
 // react query
 const queryClient = new QueryClient();
 
+export const RoutePath = {
+  ROOT: "/",
+  DASHBOARD: "/dashboard",
+  PROFILE: "/profile",
+  PROFILE_CREATE: "/profile/create",
+} as const;
+
 // react router
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: RoutePath.ROOT,
     element: <Home />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/dashboard",
+    path: RoutePath.DASHBOARD,
     element: <Dashboard />,
   },
   {
-    path: "/me",
+    path: RoutePath.PROFILE,
     element: <Profile />,
+  },
+  {
+    path: RoutePath.PROFILE_CREATE,
+    element: <CreateProfile />,
   },
 ]);
 

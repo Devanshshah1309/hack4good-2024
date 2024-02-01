@@ -1,5 +1,6 @@
 import { SignOutButton, SignInButton, SignedIn, SignedOut } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
+import { RoutePath } from "../main";
 
 function Navbar() {
   return (
@@ -10,9 +11,9 @@ function Navbar() {
       <SignedIn>
         <SignOutButton />
         <br />
-        <Link to={"/dashboard"}>Dashboard</Link>
+        <Link to={RoutePath.DASHBOARD}>Dashboard</Link>
         <br />
-        <Link to={"/me"}>Profile</Link>
+        <Link to={RoutePath.PROFILE}>Profile</Link>
       </SignedIn>
     </div>
   );

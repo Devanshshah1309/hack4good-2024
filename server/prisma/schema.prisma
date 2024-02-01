@@ -12,9 +12,35 @@ datasource db {
 }
 
 model User {
-  clerkUserId String   @id
-  firstName   String?
-  lastName    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  clerkUserId String     @id
+  role        String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  volunteer   Volunteer?
+}
+
+model Volunteer {
+  user                User                  @relation(fields: [userId], references: [clerkUserId])
+  userId              String                @id
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  firstName           String
+  lastName            String
+  dateOfBirth         DateTime
+  gender              String
+  phone               String
+  residentialStatus   String
+  skills              String
+  experience          String
+  address             String
+  postalCode          String
+  VolunteerPreference VolunteerPreference[]
+}
+
+model VolunteerPreference {
+  volunteer   Volunteer @relation(fields: [volunteerId], references: [userId])
+  volunteerId String
+  preference  String
+
+  @@id([volunteerId, preference])
 }

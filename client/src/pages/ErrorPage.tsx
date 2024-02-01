@@ -1,4 +1,5 @@
 import { useRouteError, Link } from "react-router-dom";
+import { RoutePath } from "../main";
 
 export default function ErrorPage() {
   const error: any = useRouteError();
@@ -11,7 +12,7 @@ export default function ErrorPage() {
       <p>
         <i>{error.statusText || error.message}</i>
       </p>
-      <Link to={"/"}>Go Back</Link>
+      <Link to={RoutePath.ROOT}>Go Back</Link>
     </div>
   );
 }

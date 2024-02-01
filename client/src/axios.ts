@@ -6,6 +6,12 @@ export async function authenticatedGet(url: string, bearerToken: string) {
   });
 }
 
+export async function authenticatedPost(url: string, data: any, bearerToken: string) {
+  return axios.post(url, data, {
+    headers: { Authorization: `Bearer ${bearerToken}` },
+  });
+}
+
 export async function authenticatedPut(url: string, data: any, bearerToken: string) {
   return axios.put(url, data, {
     headers: { Authorization: `Bearer ${bearerToken}` },

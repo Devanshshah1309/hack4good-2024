@@ -1,15 +1,20 @@
 import {
+  BadRequestException,
   Controller,
   Get,
   NotFoundException,
+  Post,
   Put,
   Req,
-  Res,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Request } from 'express';
 import { PrismaService } from './prisma.service';
 import { RequireAuthProp } from '@clerk/clerk-sdk-node';
+import {
+  CreateProfileDataRequest,
+  ProfileDataRequest,
+} from '../../sharedTypes';
 
 @Controller()
 export class AppController {
@@ -23,48 +28,127 @@ export class AppController {
     return 'Hello world';
   }
 
-  @Get('me')
-  async getMe(@Req() req: RequireAuthProp<Request>) {
-    let user = await this.appService.getUser(req.auth.userId);
+  @Get('profile')
+  async getProfile(@Req() req: RequireAuthProp<Request>) {
+    console.log(req.auth);
+    const user = await this.appService.getUser(req.auth.userId);
     if (!user) {
       // user has created account with Clerk, but it does not exist in database yet
-      user = await this.prisma.user.create({
-        data: {
-          clerkUserId: req.auth.userId,
-          firstName: '',
-          lastName: '',
-        },
-      });
+      throw new NotFoundException('Profile has not been added yet');
     }
     return user;
   }
 
-  @Put('me')
-  async updateMe(@Req() req: RequireAuthProp<Request>) {
-    const { firstName, lastName } = req.body;
+  @Post('profile')
+  async addProfile(@Req() req: RequireAuthProp<Request>) {
     let user = await this.appService.getUser(req.auth.userId);
-    if (!user) {
-      // user has created account with Clerk, but it does not exist in database yet
-      user = await this.prisma.user.create({
-        data: {
-          clerkUserId: req.auth.userId,
-          firstName,
-          lastName,
-        },
-      });
-    } else {
-      // User already exists in db
-      user = await this.prisma.user.update({
-        where: {
-          clerkUserId: req.auth.userId,
-        },
-        data: {
-          firstName,
-          lastName,
-        },
-      });
+    if (user) {
+      throw new BadRequestException('Profile already added');
     }
 
+    const {
+      firstName,
+      lastName,
+      dateOfBirth,
+      gender,
+      phone,
+      residentialStatus,
+      skills,
+      experience,
+      address,
+      postalCode,
+      preferences,
+    } = req.body as CreateProfileDataRequest;
+
+    user = await this.prisma.user.create({
+      data: {
+        clerkUserId: req.auth.userId,
+        volunteer: {
+          create: {
+            firstName,
+            lastName,
+            address,
+            dateOfBirth,
+            experience,
+            gender,
+            phone,
+            postalCode,
+            residentialStatus,
+            skills,
+            VolunteerPreference: {
+              create: preferences.map((pref) => ({
+                volunteerId: req.auth.userId,
+                preference: pref,
+              })),
+            },
+          },
+        },
+      },
+      include: {
+        volunteer: {
+          include: {
+            VolunteerPreference: true,
+          },
+        },
+      },
+    });
+
+    console.log(user);
+    return user;
+  }
+
+  @Put('profile')
+  async updateProfile(@Req() req: RequireAuthProp<Request>) {
+    let user = await this.appService.getUser(req.auth.userId);
+    const { phone, skills, experience, address, postalCode, preferences } =
+      req.body as ProfileDataRequest;
+    if (!user) {
+      // user has created account with Clerk, but it does not exist in database yet
+      throw new NotFoundException('Profile has not been added yet');
+    }
+
+    const deleteVolunteerPreferences =
+      this.prisma.volunteerPreference.deleteMany({
+        where: {
+          volunteerId: {
+            equals: req.auth.userId,
+          },
+        },
+      });
+
+    const updateUser = this.prisma.user.update({
+      where: {
+        clerkUserId: req.auth.userId,
+      },
+      data: {
+        volunteer: {
+          update: {
+            data: {
+              address,
+              experience,
+              phone,
+              postalCode,
+              skills,
+            },
+          },
+        },
+      },
+    });
+    const addVolunteerPreferences = this.prisma.volunteerPreference.createMany({
+      data: preferences.map((pref) => ({
+        volunteerId: req.auth.userId,
+        preference: pref,
+      })),
+    });
+
+    await this.prisma.$transaction([
+      deleteVolunteerPreferences,
+      updateUser,
+      addVolunteerPreferences,
+    ]);
+
+    user = await this.appService.getUser(req.auth.userId);
+    console.log(user);
     return user;
   }
 }
