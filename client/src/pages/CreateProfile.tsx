@@ -3,23 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { authenticatedPost } from "../axios";
 import { useNavigate } from "react-router-dom";
-import {
-  CreateProfileDataRequest,
-  Gender,
-  Preference,
-  ResidentialStatus,
-} from "../../../sharedTypes";
+import { CreateProfileDataRequest, Gender, Preference, ResidentialStatus } from "../../../sharedTypes";
 import { RoutePath } from "../constants";
 import Sidebar from "../components/Sidebar";
-import {
-  Box,
-  Button,
-  Chip,
-  Grid,
-  OutlinedInput,
-  Paper,
-  TextField,
-} from "@mui/material";
+import { Box, Button, Chip, Grid, OutlinedInput, Paper, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -27,11 +14,14 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { ALL_PREFERENCES } from "../constants";
+import useUserRole from "../hooks/useUserRole";
 
 function CreateProfile() {
   const navigate = useNavigate();
   const { isSignedIn, getToken } = useAuth();
+  const { role } = useUserRole();
   if (!isSignedIn) navigate(RoutePath.ROOT);
+  if (role === "ADMIN") navigate(RoutePath.ADMIN_DASHBOARD);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -60,11 +50,7 @@ function CreateProfile() {
 
   const mutation = useMutation({
     mutationFn: async (data: CreateProfileDataRequest) => {
-      await authenticatedPost(
-        "http://127.0.0.1:3000/profile",
-        data,
-        (await getToken()) ?? ""
-      );
+      await authenticatedPost("/profile", data, (await getToken()) ?? "");
     },
     onSuccess: () => {
       navigate(RoutePath.DASHBOARD);
@@ -90,15 +76,7 @@ function CreateProfile() {
                 width: "80vw",
               }}
             >
-              <Grid
-                container
-                padding={2}
-                spacing={2}
-                className="center"
-                minWidth="70vw"
-                alignItems={"center"}
-                justifyContent="flex-start"
-              >
+              <Grid container padding={2} spacing={2} className="center" minWidth="70vw" alignItems={"center"} justifyContent="flex-start">
                 <Grid item xs={12} md={4}>
                   <TextField
                     id="first name"
@@ -164,9 +142,7 @@ function CreateProfile() {
                   </Select>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <InputLabel id="residential-status">
-                    Residential Status
-                  </InputLabel>
+                  <InputLabel id="residential-status">Residential Status</InputLabel>
                   <Select
                     sx={{ width: "100%" }}
                     fullWidth
@@ -177,8 +153,7 @@ function CreateProfile() {
                       setResidentialStatus(event.target.value as string);
                       setProfileData({
                         ...profileData,
-                        residentialStatus: event.target
-                          .value as ResidentialStatus,
+                        residentialStatus: event.target.value as ResidentialStatus,
                       });
                     }}
                   >
@@ -192,15 +167,7 @@ function CreateProfile() {
                   </Select>
                 </Grid>
               </Grid>
-              <Grid
-                container
-                paddingLeft={2}
-                paddingRight={2}
-                spacing={2}
-                className="center"
-                minWidth="70vw"
-                alignItems={"center"}
-              >
+              <Grid container paddingLeft={2} paddingRight={2} spacing={2} className="center" minWidth="70vw" alignItems={"center"}>
                 <Grid item xs={12} md={8}>
                   <TextField
                     id="address"
@@ -282,10 +249,7 @@ function CreateProfile() {
                     input={<OutlinedInput />}
                     renderValue={(selected) => (
                       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                        {Array.isArray(selected) &&
-                          selected.map((value) => (
-                            <Chip key={value} label={value} />
-                          ))}
+                        {Array.isArray(selected) && selected.map((value) => <Chip key={value} label={value} />)}
                       </Box>
                     )}
                   >

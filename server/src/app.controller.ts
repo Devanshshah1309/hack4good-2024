@@ -14,6 +14,7 @@ import { RequireAuthProp } from '@clerk/clerk-sdk-node';
 import {
   CreateProfileDataRequest,
   ProfileDataRequest,
+  UserRole,
 } from '../../sharedTypes';
 
 @Controller()
@@ -23,9 +24,16 @@ export class AppController {
     private readonly prisma: PrismaService,
   ) {}
 
-  @Get()
-  getHello() {
-    return 'Hello world';
+  @Get('role')
+  async getRole(
+    @Req() req: RequireAuthProp<Request>,
+  ): Promise<{ role: UserRole | null }> {
+    const user = await this.appService.getUser(req.auth.userId);
+    if (!user) {
+      // user has created account with Clerk, but it does not exist in database yet
+      return { role: null };
+    }
+    return { role: user.role as UserRole };
   }
 
   @Get('profile')

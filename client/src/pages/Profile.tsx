@@ -6,11 +6,15 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { ProfileDataResponse, ProfileDataRequest } from "../../../sharedTypes";
 import { RoutePath } from "../constants";
+import useUserRole from "../hooks/useUserRole";
 
 function Profile() {
   const navigate = useNavigate();
   const { isSignedIn, getToken } = useAuth();
+  const { role } = useUserRole();
+
   if (!isSignedIn) navigate(RoutePath.ROOT);
+  if (role === "ADMIN") navigate(RoutePath.ADMIN_DASHBOARD);
 
   const [profileData, setProfileData] = useState<ProfileDataRequest>({
     phone: "",
@@ -23,14 +27,12 @@ function Profile() {
   const [saving, setSaving] = useState(false);
 
   const queryClient = useQueryClient();
+  const queryKey = "profile";
 
   const query = useQuery({
-    queryKey: ["me"],
+    queryKey: [queryKey],
     queryFn: async () => {
-      const res = await authenticatedGet(
-        "http://127.0.0.1:3000/profile",
-        (await getToken()) ?? ""
-      );
+      const res = await authenticatedGet("/profile", (await getToken()) ?? "");
       const data = res.data as ProfileDataResponse;
       setProfileData({
         phone: data.volunteer.phone,
@@ -38,9 +40,7 @@ function Profile() {
         experience: data.volunteer.experience,
         address: data.volunteer.address,
         postalCode: data.volunteer.postalCode,
-        preferences: data.volunteer.VolunteerPreference.map(
-          (pref) => pref.preference
-        ),
+        preferences: data.volunteer.VolunteerPreference.map((pref) => pref.preference),
       });
       return data;
     },
@@ -48,14 +48,10 @@ function Profile() {
 
   const mutation = useMutation({
     mutationFn: async (data: ProfileDataRequest) => {
-      await authenticatedPut(
-        "http://127.0.0.1:3000/profile",
-        data,
-        (await getToken()) ?? ""
-      );
+      await authenticatedPut("/profile", data, (await getToken()) ?? "");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["me"] });
+      queryClient.invalidateQueries({ queryKey: [queryKey] });
     },
     onError: () => {
       console.error("failed to save");
@@ -85,13 +81,7 @@ function Profile() {
         /> */}
 
           <div>
-            <input
-              value={profileData.experience}
-              onChange={(e) =>
-                setProfileData({ ...profileData, experience: e.target.value })
-              }
-              placeholder="Experience"
-            />
+            <input value={profileData.experience} onChange={(e) => setProfileData({ ...profileData, experience: e.target.value })} placeholder="Experience" />
             <button
               onClick={() => {
                 setSaving(true);
@@ -111,14 +101,10 @@ function Profile() {
               </pre>
               <button
                 onClick={() => {
-                  if (profileData.preferences.includes("WORKING_WITH_CHILDREN"))
-                    return;
+                  if (profileData.preferences.includes("WORKING_WITH_CHILDREN")) return;
                   setProfileData({
                     ...profileData,
-                    preferences: [
-                      ...profileData.preferences,
-                      "WORKING_WITH_CHILDREN",
-                    ],
+                    preferences: [...profileData.preferences, "WORKING_WITH_CHILDREN"],
                   });
                 }}
               >
@@ -128,9 +114,7 @@ function Profile() {
                 onClick={() =>
                   setProfileData({
                     ...profileData,
-                    preferences: profileData.preferences.filter(
-                      (item) => item != "WORKING_WITH_CHILDREN"
-                    ),
+                    preferences: profileData.preferences.filter((item) => item != "WORKING_WITH_CHILDREN"),
                   })
                 }
               >

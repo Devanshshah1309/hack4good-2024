@@ -3,6 +3,8 @@ export const RoutePath = {
   DASHBOARD: "/dashboard",
   PROFILE: "/profile",
   PROFILE_CREATE: "/profile/create",
+
+  ADMIN_DASHBOARD: "/admin/dashboard"
 } as const;
 
 export const ALL_PREFERENCES = [
