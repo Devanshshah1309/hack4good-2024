@@ -10,7 +10,7 @@ import {
 import { AppService } from './app.service';
 import { Request } from 'express';
 import { PrismaService } from './prisma.service';
-import { RequireAuthProp } from '@clerk/clerk-sdk-node';
+import clerkClient, { RequireAuthProp } from '@clerk/clerk-sdk-node';
 import {
   CreateProfileDataRequest,
   ProfileDataRequest,
@@ -39,12 +39,18 @@ export class AppController {
   @Get('profile')
   async getProfile(@Req() req: RequireAuthProp<Request>) {
     console.log(req.auth);
-    const user = await this.appService.getUser(req.auth.userId);
+
+    const [clerkUser, user] = await Promise.all([
+      clerkClient.users.getUser(req.auth.userId),
+      this.appService.getUser(req.auth.userId),
+    ]);
+
     if (!user) {
       // user has created account with Clerk, but it does not exist in database yet
       throw new NotFoundException('Profile has not been added yet');
     }
-    return user;
+
+    return { ...user, email: clerkUser.emailAddresses[0].emailAddress };
   }
 
   @Post('profile')
@@ -102,7 +108,6 @@ export class AppController {
     });
 
     console.log(user);
-    return user;
   }
 
   @Put('profile')
@@ -155,8 +160,11 @@ export class AppController {
       addVolunteerPreferences,
     ]);
 
-    user = await this.appService.getUser(req.auth.userId);
-    console.log(user);
-    return user;
+    const [clerkUser, userNew] = await Promise.all([
+      clerkClient.users.getUser(req.auth.userId),
+      this.appService.getUser(req.auth.userId),
+    ]);
+
+    return { ...userNew, email: clerkUser.emailAddresses[0].emailAddress };
   }
 }

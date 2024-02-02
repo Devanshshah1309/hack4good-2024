@@ -17,7 +17,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { SignOutButton } from "@clerk/clerk-react";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RoutePath } from "../constants";
 
 const drawerWidth = 240;
@@ -30,6 +30,7 @@ const drawerWidth = 240;
 // ]);
 
 export default function Sidebar() {
+  const navigate = useNavigate();
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
@@ -72,7 +73,7 @@ export default function Sidebar() {
               </Link>
             </ListItem>
             <ListItem disablePadding>
-              <Link to="/opportunities" className="sidebar-link">
+              <Link to={RoutePath.OPPORTUNITIES} className="sidebar-link">
                 <ListItemButton>
                   <ListItemIcon>
                     <VolunteerActivismIcon />
@@ -92,7 +93,7 @@ export default function Sidebar() {
               </Link>
             </ListItem>
             <ListItem disablePadding>
-              <SignOutButton>
+              <SignOutButton signOutCallback={() => navigate(RoutePath.ROOT)}>
                 <ListItemButton>
                   <ListItemIcon>
                     <LogoutIcon />

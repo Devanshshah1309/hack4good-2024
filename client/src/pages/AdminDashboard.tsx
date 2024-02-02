@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import useUserRole from "../hooks/useUserRole";
 import { RoutePath } from "../constants";
+import Sidebar from "../components/Sidebar";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -9,8 +10,11 @@ function AdminDashboard() {
   if (role !== "ADMIN") navigate(RoutePath.ROOT);
 
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
+    <div className="main-container">
+      <Sidebar />
+      <div className="main">
+        <h1>Admin Dashboard</h1>
+      </div>
     </div>
   );
 }

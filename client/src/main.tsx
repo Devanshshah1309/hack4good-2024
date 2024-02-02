@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard.tsx";
 import CreateProfile from "./pages/CreateProfile.tsx";
 import { RoutePath } from "./constants.ts";
 import AdminDashboard from "./pages/AdminDashboard.tsx";
+import AdminProfile from "./pages/AdminProfile.tsx";
 
 // Import Clerk publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: RoutePath.ADMIN_DASHBOARD,
     element: <AdminDashboard />,
+  },
+  {
+    path: RoutePath.ADMIN_PROFILE,
+    element: <AdminProfile />,
   },
 ]);
 

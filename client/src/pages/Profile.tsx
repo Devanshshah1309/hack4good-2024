@@ -14,7 +14,7 @@ function Profile() {
   const { role } = useUserRole();
 
   if (!isSignedIn) navigate(RoutePath.ROOT);
-  if (role === "ADMIN") navigate(RoutePath.ADMIN_DASHBOARD);
+  if (role === "ADMIN") navigate(RoutePath.ADMIN_PROFILE);
 
   const [profileData, setProfileData] = useState<ProfileDataRequest>({
     phone: "",
@@ -32,7 +32,7 @@ function Profile() {
   const query = useQuery({
     queryKey: [queryKey],
     queryFn: async () => {
-      const res = await authenticatedGet("/profile", (await getToken()) ?? "");
+      const res = await authenticatedGet("/profile", (await getToken()) ?? "", navigate);
       const data = res.data as ProfileDataResponse;
       setProfileData({
         phone: data.volunteer.phone,
@@ -69,16 +69,6 @@ function Profile() {
         <Sidebar />
         <div className="main">
           <h1>My Account</h1>
-          {/* <input
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          placeholder="First Name"
-        />
-        <input
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          placeholder="Last Name"
-        /> */}
 
           <div>
             <input value={profileData.experience} onChange={(e) => setProfileData({ ...profileData, experience: e.target.value })} placeholder="Experience" />
