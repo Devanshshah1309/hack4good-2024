@@ -14,13 +14,20 @@ import theme from "../Theme";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import HistoryIcon from "@mui/icons-material/History";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { SignOutButton } from "@clerk/clerk-react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
+import { RoutePath } from "../main";
 
 const drawerWidth = 240;
 
-const endpoints = ["/opportunities", "/history", "/profile"];
+// const endpoints = new Map([
+//   ["Create Profile", "/profile/create"],
+//   ["Opportunities", "/opportunities"],
+//   ["Volunteering History", "/history"],
+//   ["Personal Details", "/profile"],
+// ]);
 
 export default function Sidebar() {
   return (
@@ -44,26 +51,46 @@ export default function Sidebar() {
           <Toolbar />
           <Divider />
           <List>
-            {["Opportunities", "Volunteering History", "Personal Details"].map(
-              (text, index) => (
-                <ListItem key={text} disablePadding>
-                  <Link to={endpoints[index]}>
-                    <ListItemButton>
-                      <ListItemIcon>
-                        {index === 0 ? (
-                          <VolunteerActivismIcon />
-                        ) : index === 1 ? (
-                          <HistoryIcon />
-                        ) : (
-                          <AccountBoxIcon />
-                        )}
-                      </ListItemIcon>
-                      <ListItemText primary={text} />
-                    </ListItemButton>
-                  </Link>
-                </ListItem>
-              )
-            )}
+            <ListItem disablePadding>
+              <Link to={RoutePath.PROFILE_CREATE} className="sidebar-link">
+                <ListItemButton>
+                  <ListItemIcon>
+                    <PersonAddIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Create Profile" />
+                </ListItemButton>
+              </Link>
+            </ListItem>
+            <ListItem disablePadding>
+              <Link to={RoutePath.DASHBOARD} className="sidebar-link">
+                <ListItemButton>
+                  <ListItemIcon>
+                    <HistoryIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Volunteering History" />
+                </ListItemButton>
+              </Link>
+            </ListItem>
+            <ListItem disablePadding>
+              <Link to="/opportunities" className="sidebar-link">
+                <ListItemButton>
+                  <ListItemIcon>
+                    <VolunteerActivismIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Opportunities" />
+                </ListItemButton>
+              </Link>
+            </ListItem>
+            <ListItem disablePadding>
+              <Link to={RoutePath.PROFILE} className="sidebar-link">
+                <ListItemButton>
+                  <ListItemIcon>
+                    <AccountBoxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="My Account" />
+                </ListItemButton>
+              </Link>
+            </ListItem>
             <ListItem disablePadding>
               <SignOutButton>
                 <ListItemButton>

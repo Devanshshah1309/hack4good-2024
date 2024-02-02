@@ -1,7 +1,7 @@
 import { useAuth } from "@clerk/clerk-react";
-import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import { RoutePath } from "../main";
+import Sidebar from "../components/Sidebar";
 
 function Dashboard() {
   const { isSignedIn } = useAuth();
@@ -11,8 +11,12 @@ function Dashboard() {
 
   return (
     <>
-      <Navbar />
-      <h1>Dashboard</h1>
+      <div className="main-container">
+        <Sidebar />
+        <div className="main">
+          <h1>Dashboard</h1>
+        </div>
+      </div>
     </>
   );
 }

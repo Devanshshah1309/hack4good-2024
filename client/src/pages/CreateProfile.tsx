@@ -6,9 +6,10 @@ import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import { CreateProfileDataRequest } from "../../../sharedTypes";
 import { RoutePath } from "../main";
+import Sidebar from "../components/Sidebar";
 
 function CreateProfile() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const { isSignedIn, getToken } = useAuth();
   if (!isSignedIn) navigate(RoutePath.ROOT);
 
@@ -28,7 +29,11 @@ function CreateProfile() {
 
   const mutation = useMutation({
     mutationFn: async (data: CreateProfileDataRequest) => {
-      await authenticatedPost("http://127.0.0.1:3000/profile", data, (await getToken()) ?? "");
+      await authenticatedPost(
+        "http://127.0.0.1:3000/profile",
+        data,
+        (await getToken()) ?? ""
+      );
     },
     onSuccess: () => {
       navigate(RoutePath.DASHBOARD);
@@ -40,21 +45,25 @@ function CreateProfile() {
 
   return (
     <>
-      <Navbar />
-      <div>
-        <pre>
-          Me:
-          <br />
-          {JSON.stringify(profileData, undefined, 2)}
-        </pre>
-        <br />
-        <button
-          onClick={() => {
-            mutation.mutate(profileData);
-          }}
-        >
-          Create Profile
-        </button>
+      <div className="main-container">
+        <Sidebar />
+        <div className="main">
+          <div>
+            <pre>
+              Me:
+              <br />
+              {JSON.stringify(profileData, undefined, 2)}
+            </pre>
+            <br />
+            <button
+              onClick={() => {
+                mutation.mutate(profileData);
+              }}
+            >
+              Create Profile
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
