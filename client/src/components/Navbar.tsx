@@ -1,9 +1,20 @@
-import { SignOutButton, SignInButton, SignedIn, SignedOut } from "@clerk/clerk-react";
+import {
+  SignOutButton,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+} from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 
 function Navbar() {
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <SignedOut>
         <SignInButton />
       </SignedOut>

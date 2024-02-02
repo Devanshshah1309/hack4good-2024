@@ -2,11 +2,11 @@ import { useAuth } from "@clerk/clerk-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { authenticatedGet, authenticatedPut } from "../axios";
-import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 function Profile() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const { isSignedIn, getToken } = useAuth();
   if (!isSignedIn) navigate("/");
   const [firstName, setFirstName] = useState("");
@@ -18,7 +18,10 @@ function Profile() {
   const query = useQuery({
     queryKey: ["me"],
     queryFn: async () => {
-      const res = await authenticatedGet("http://127.0.0.1:3000/me", (await getToken()) ?? "");
+      const res = await authenticatedGet(
+        "http://127.0.0.1:3000/me",
+        (await getToken()) ?? ""
+      );
       const data = res.data;
       setFirstName(data.firstName);
       setLastName(data.lastName);
@@ -28,7 +31,11 @@ function Profile() {
 
   const mutation = useMutation({
     mutationFn: async (data: { firstName: string; lastName: string }) => {
-      await authenticatedPut("http://127.0.0.1:3000/me", data, (await getToken()) ?? "");
+      await authenticatedPut(
+        "http://127.0.0.1:3000/me",
+        data,
+        (await getToken()) ?? ""
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["me"] });
@@ -45,10 +52,20 @@ function Profile() {
 
   return (
     <>
-      <Navbar />
-      <div>
-        <input value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First Name" />
-        <input value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" />
+      <Sidebar />
+      {/* display: block to prevent content from overlapping with the Sidebar */}
+      <div style={{ display: "block" }}>
+        <h1>My Account</h1>
+        <input
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          placeholder="First Name"
+        />
+        <input
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          placeholder="Last Name"
+        />
         <button
           onClick={() => {
             setSaving(true);

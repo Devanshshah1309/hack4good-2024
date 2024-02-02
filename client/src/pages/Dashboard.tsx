@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const { isSignedIn } = useAuth();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   if (!isSignedIn) navigate("/");
 
