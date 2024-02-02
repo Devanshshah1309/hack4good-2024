@@ -20,7 +20,7 @@ import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 
-const endpoints = ["/opportunities", "/history", "/me"];
+const endpoints = ["/opportunities", "/history", "/profile"];
 
 export default function Sidebar() {
   return (
@@ -65,14 +65,14 @@ export default function Sidebar() {
               )
             )}
             <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <SignOutButton>
+              <SignOutButton>
+                <ListItemButton>
+                  <ListItemIcon>
                     <LogoutIcon />
-                  </SignOutButton>
-                </ListItemIcon>
-                <ListItemText primary="Log out" />
-              </ListItemButton>
+                  </ListItemIcon>
+                  <ListItemText primary="Log out" />
+                </ListItemButton>
+              </SignOutButton>
             </ListItem>
           </List>
           {/* <Divider /> */}

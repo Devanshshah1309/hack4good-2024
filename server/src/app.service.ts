@@ -10,6 +10,13 @@ export class AppService {
       where: {
         clerkUserId,
       },
+      include: {
+        volunteer: {
+          include: {
+            VolunteerPreference: true,
+          },
+        },
+      },
     });
 
     return user;

@@ -4,13 +4,22 @@ import { useState } from "react";
 import { authenticatedGet, authenticatedPut } from "../axios";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import { ProfileDataResponse, ProfileDataRequest } from "../../../sharedTypes";
+import { RoutePath } from "../main";
 
 function Profile() {
   const navigate = useNavigate();
   const { isSignedIn, getToken } = useAuth();
-  if (!isSignedIn) navigate("/");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  if (!isSignedIn) navigate(RoutePath.ROOT);
+
+  const [profileData, setProfileData] = useState<ProfileDataRequest>({
+    phone: "",
+    skills: "",
+    experience: "",
+    address: "",
+    postalCode: "",
+    preferences: [],
+  });
   const [saving, setSaving] = useState(false);
 
   const queryClient = useQueryClient();
@@ -19,20 +28,28 @@ function Profile() {
     queryKey: ["me"],
     queryFn: async () => {
       const res = await authenticatedGet(
-        "http://127.0.0.1:3000/me",
+        "http://127.0.0.1:3000/profile",
         (await getToken()) ?? ""
       );
-      const data = res.data;
-      setFirstName(data.firstName);
-      setLastName(data.lastName);
+      const data = res.data as ProfileDataResponse;
+      setProfileData({
+        phone: data.volunteer.phone,
+        skills: data.volunteer.skills,
+        experience: data.volunteer.experience,
+        address: data.volunteer.address,
+        postalCode: data.volunteer.postalCode,
+        preferences: data.volunteer.VolunteerPreference.map(
+          (pref) => pref.preference
+        ),
+      });
       return data;
     },
   });
 
   const mutation = useMutation({
-    mutationFn: async (data: { firstName: string; lastName: string }) => {
+    mutationFn: async (data: ProfileDataRequest) => {
       await authenticatedPut(
-        "http://127.0.0.1:3000/me",
+        "http://127.0.0.1:3000/profile",
         data,
         (await getToken()) ?? ""
       );
@@ -41,7 +58,7 @@ function Profile() {
       queryClient.invalidateQueries({ queryKey: ["me"] });
     },
     onError: () => {
-      alert("failed to save");
+      console.error("failed to save");
     },
     onSettled: () => {
       setSaving(false);
@@ -52,11 +69,11 @@ function Profile() {
 
   return (
     <>
-      <Sidebar />
-      {/* display: block to prevent content from overlapping with the Sidebar */}
-      <div style={{ display: "block" }}>
-        <h1>My Account</h1>
-        <input
+      <div className="main-container">
+        <Sidebar />
+        <div className="main">
+          <h1>My Account</h1>
+          {/* <input
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           placeholder="First Name"
@@ -65,21 +82,70 @@ function Profile() {
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
           placeholder="Last Name"
-        />
-        <button
-          onClick={() => {
-            setSaving(true);
-            mutation.mutate({ firstName, lastName });
-          }}
-        >
-          Edit My Name
-        </button>
-        {saving && "Saving..."}
-        <pre>
-          Me:
-          <br />
-          {JSON.stringify(query.data, undefined, 2)}
-        </pre>
+        /> */}
+
+          <div>
+            <input
+              value={profileData.experience}
+              onChange={(e) =>
+                setProfileData({ ...profileData, experience: e.target.value })
+              }
+              placeholder="Experience"
+            />
+            <button
+              onClick={() => {
+                setSaving(true);
+                mutation.mutate(profileData);
+              }}
+            >
+              Save Profile
+            </button>
+            {saving && "Saving..."}
+
+            <br />
+
+            <div>
+              <pre>
+                profileData: <br />
+                {JSON.stringify(profileData, undefined, 2)}
+              </pre>
+              <button
+                onClick={() => {
+                  if (profileData.preferences.includes("WORKING_WITH_CHILDREN"))
+                    return;
+                  setProfileData({
+                    ...profileData,
+                    preferences: [
+                      ...profileData.preferences,
+                      "WORKING_WITH_CHILDREN",
+                    ],
+                  });
+                }}
+              >
+                Add WORKING_WITH_CHILDREN
+              </button>
+              <button
+                onClick={() =>
+                  setProfileData({
+                    ...profileData,
+                    preferences: profileData.preferences.filter(
+                      (item) => item != "WORKING_WITH_CHILDREN"
+                    ),
+                  })
+                }
+              >
+                Remove WORKING_WITH_CHILDREN
+              </button>
+            </div>
+            <br />
+
+            <pre>
+              Response data:
+              <br />
+              {JSON.stringify(query.data, undefined, 2)}
+            </pre>
+          </div>
+        </div>
       </div>
     </>
   );
