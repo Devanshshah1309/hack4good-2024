@@ -86,7 +86,6 @@ export class AppController {
             skills,
             VolunteerPreference: {
               create: preferences.map((pref) => ({
-                volunteerId: req.auth.userId,
                 preference: pref,
               })),
             },
