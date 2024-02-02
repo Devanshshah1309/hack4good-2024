@@ -5,7 +5,7 @@ import { authenticatedGet, authenticatedPut } from "../axios";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { ProfileDataResponse, ProfileDataRequest } from "../../../sharedTypes";
-import { RoutePath } from "../main";
+import { RoutePath } from "../constants";
 
 function Profile() {
   const navigate = useNavigate();

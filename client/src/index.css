@@ -12,10 +12,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  background-color: #e6a4b4 !important;
-}
-
 .sidebar-link {
   width: 100%;
 }
@@ -60,6 +56,16 @@ div {
 
 .main {
   margin: auto;
+}
+
+.center {
+  margin: 1rem auto;
+}
+
+/* disable up-down arrow keys for phone number input */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  display: none;
 }
 
 button {

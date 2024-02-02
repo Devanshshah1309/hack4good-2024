@@ -21,7 +21,7 @@ function Home() {
           <div className="main-container">
             <Sidebar />
             <div className="main">
-              <h1>Welcome!</h1>
+              <h1 className="center">Welcome!</h1>
             </div>
           </div>
         </SignedIn>

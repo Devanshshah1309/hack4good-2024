@@ -9,6 +9,7 @@ import Profile from "./pages/Profile.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import CreateProfile from "./pages/CreateProfile.tsx";
+import { RoutePath } from "./constants.ts";
 
 // Import Clerk publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -18,13 +19,6 @@ if (!PUBLISHABLE_KEY) {
 
 // react query
 const queryClient = new QueryClient();
-
-export const RoutePath = {
-  ROOT: "/",
-  DASHBOARD: "/dashboard",
-  PROFILE: "/profile",
-  PROFILE_CREATE: "/profile/create",
-} as const;
 
 // react router
 const router = createBrowserRouter([

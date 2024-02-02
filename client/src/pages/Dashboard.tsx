@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
-import { RoutePath } from "../main";
+import { RoutePath } from "../constants";
 import Sidebar from "../components/Sidebar";
 
 function Dashboard() {
