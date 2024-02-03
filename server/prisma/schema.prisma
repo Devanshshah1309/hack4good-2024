@@ -52,4 +52,5 @@ model Opportunity {
   start           DateTime
   end             DateTime
   durationMinutes Int
+  imageUrl        String   
 }

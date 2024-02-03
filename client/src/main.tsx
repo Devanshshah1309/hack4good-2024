@@ -17,7 +17,15 @@ import Opportunities from "./pages/Opportunities.tsx";
 // Import Clerk publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key");
+  throw new Error("Missing env var VITE_CLERK_PUBLISHABLE_KEY");
+}
+
+// check that cloudinary env vars are present
+if (!import.meta.env.VITE_CLOUDINARY_IMAGE_UPLOAD_URL) {
+  throw new Error("Missing env var VITE_CLOUDINARY_IMAGE_UPLOAD_URL");
+}
+if (!import.meta.env.VITE_CLOUDINARY_IMAGE_UPLOAD_PRESET) {
+  throw new Error("Missing env var VITE_CLOUDINARY_IMAGE_UPLOAD_PRESET");
 }
 
 // react query

@@ -185,6 +185,8 @@ export class AppController {
     const user = await this.appService.getUser(req.auth.userId);
     if (!user || user.role !== 'ADMIN') throw new ForbiddenException();
 
+    console.log(req.body);
+
     const opportunity = await this.prisma.opportunity.create({
       data: req.body as CreateOpportunityRequest,
     });

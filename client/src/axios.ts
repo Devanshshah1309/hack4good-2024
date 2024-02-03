@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { RoutePath } from "./constants";
 
-export const API_BASE_URL = import.meta.env.API_BASE_URL || "http://127.0.0.1:3000/api/v1";
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:3000/api/v1";
 
 export async function authenticatedGet<T>(path: string, bearerToken: string, navigate: (path: string) => void) {
   try {

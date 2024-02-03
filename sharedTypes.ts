@@ -53,4 +53,5 @@ export type CreateOpportunityRequest = {
   start: Date;
   end: Date;
   durationMinutes: number;
+  imageUrl: string;
 };
