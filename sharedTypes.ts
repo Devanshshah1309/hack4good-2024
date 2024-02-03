@@ -47,11 +47,21 @@ export type CreateProfileDataRequest = {
   postalCode: string;
   preferences: Preference[];
 };
-export type CreateOpportunityRequest = {
+export interface UpdateOpportunityRequest {
   name: string;
   description: string;
   start: Date;
   end: Date;
   durationMinutes: number;
+}
+export interface CreateOpportunityRequest extends UpdateOpportunityRequest {
   imageUrl: string;
+}
+export type UpdateOpportunityImageRequest = {
+  imageUrl: string;
+};
+
+// Utility types
+export type SwapDatesWithStrings<T> = {
+  [k in keyof T]: T[k] extends Date ? string : T[k];
 };

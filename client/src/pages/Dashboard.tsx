@@ -2,12 +2,15 @@ import { useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import { RoutePath } from "../constants";
 import Sidebar from "../components/Sidebar";
+import { useEffect } from "react";
 
 function Dashboard() {
   const { isSignedIn } = useAuth();
   const navigate = useNavigate();
 
-  if (!isSignedIn) navigate(RoutePath.ROOT);
+  useEffect(() => {
+    if (!isSignedIn) navigate(RoutePath.ROOT);
+  }, [isSignedIn]);
 
   return (
     <>

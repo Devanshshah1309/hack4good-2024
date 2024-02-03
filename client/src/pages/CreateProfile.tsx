@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { authenticatedPost } from "../axios";
 import { useNavigate } from "react-router-dom";
 import {
@@ -33,8 +33,11 @@ function CreateProfile() {
   const navigate = useNavigate();
   const { isSignedIn, getToken } = useAuth();
   const { role } = useUserRole();
-  if (!isSignedIn) navigate(RoutePath.ROOT);
-  if (role === "ADMIN") navigate(RoutePath.ADMIN_DASHBOARD);
+
+  useEffect(() => {
+    if (!isSignedIn) navigate(RoutePath.ROOT);
+    if (role === "ADMIN") navigate(RoutePath.ADMIN_DASHBOARD);
+  }, [isSignedIn,role]);
 
   // use Dayjs for date of birth
   const [gender, setGender] = useState("");

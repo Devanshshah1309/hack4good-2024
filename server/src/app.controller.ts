@@ -1,7 +1,7 @@
 import {
   BadRequestException,
   Controller,
-  ForbiddenException,
+  Delete,
   Get,
   NotFoundException,
   Post,
@@ -17,6 +17,9 @@ import {
   CreateProfileDataRequest,
   ProfileDataRequest,
   UserRole,
+  SwapDatesWithStrings,
+  UpdateOpportunityRequest,
+  UpdateOpportunityImageRequest,
 } from '../../sharedTypes';
 
 @Controller('api/v1')
@@ -40,11 +43,9 @@ export class AppController {
 
   @Get('profile')
   async getProfile(@Req() req: RequireAuthProp<Request>) {
-    console.log(req.auth);
-
     const [clerkUser, user] = await Promise.all([
       clerkClient.users.getUser(req.auth.userId),
-      this.appService.getUser(req.auth.userId),
+      this.appService.getVolunteerUser(req.auth.userId),
     ]);
 
     if (!user) {
@@ -74,9 +75,9 @@ export class AppController {
       address,
       postalCode,
       preferences,
-    } = req.body as CreateProfileDataRequest;
+    } = req.body as SwapDatesWithStrings<CreateProfileDataRequest>;
 
-    user = await this.prisma.user.create({
+    await this.prisma.user.create({
       data: {
         clerkUserId: req.auth.userId,
         role: 'VOLUNTEER',
@@ -100,27 +101,19 @@ export class AppController {
           },
         },
       },
-      include: {
-        volunteer: {
-          include: {
-            VolunteerPreference: true,
-          },
-        },
-      },
     });
-
-    console.log(user);
   }
 
   @Put('profile')
   async updateProfile(@Req() req: RequireAuthProp<Request>) {
-    let user = await this.appService.getUser(req.auth.userId);
-    const { phone, skills, experience, address, postalCode, preferences } =
-      req.body as ProfileDataRequest;
+    const user = await this.appService.getUser(req.auth.userId);
     if (!user) {
       // user has created account with Clerk, but it does not exist in database yet
       throw new NotFoundException('Profile has not been added yet');
     }
+
+    const { phone, skills, experience, address, postalCode, preferences } =
+      req.body as SwapDatesWithStrings<ProfileDataRequest>;
 
     const deleteVolunteerPreferences =
       this.prisma.volunteerPreference.deleteMany({
@@ -161,13 +154,6 @@ export class AppController {
       updateUser,
       addVolunteerPreferences,
     ]);
-
-    const [clerkUser, userNew] = await Promise.all([
-      clerkClient.users.getUser(req.auth.userId),
-      this.appService.getUser(req.auth.userId),
-    ]);
-
-    return { ...userNew, email: clerkUser.emailAddresses[0].emailAddress };
   }
 
   @Get('opportunities')
@@ -180,19 +166,113 @@ export class AppController {
     };
   }
 
+  @Get('admin/opportunities')
+  async adminGetOpportunities(@Req() req: RequireAuthProp<Request>) {
+    console.log(req.query);
+    return {
+      opportunities: await this.prisma.opportunity.findMany({
+        orderBy: { start: 'asc' },
+      }),
+    };
+  }
+
   @Post('admin/opportunities')
   async adminCreateOpportunity(@Req() req: RequireAuthProp<Request>) {
-    const user = await this.appService.getUser(req.auth.userId);
-    if (!user || user.role !== 'ADMIN') throw new ForbiddenException();
+    await this.appService.checkUserIsAdmin(req.auth.userId);
 
-    console.log(req.body);
+    const { name, description, start, end, durationMinutes, imageUrl } =
+      req.body as SwapDatesWithStrings<CreateOpportunityRequest>;
+
+    if (new Date(start) > new Date(end))
+      throw new BadRequestException('start cannot be after end');
 
     const opportunity = await this.prisma.opportunity.create({
-      data: req.body as CreateOpportunityRequest,
+      data: {
+        name,
+        description,
+        start,
+        end,
+        durationMinutes,
+        imageUrl,
+      },
     });
 
     return {
       opportunity,
     };
+  }
+
+  @Put('admin/opportunities/:id')
+  async adminUpdateOpportunity(@Req() req: RequireAuthProp<Request>) {
+    await this.appService.checkUserIsAdmin(req.auth.userId);
+
+    let opportunity = await this.prisma.opportunity.findUnique({
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!opportunity)
+      throw new NotFoundException('No opportunity found with that id');
+
+    const { name, description, start, end, durationMinutes } =
+      req.body as SwapDatesWithStrings<UpdateOpportunityRequest>;
+    if (new Date(start) > new Date(end))
+      throw new BadRequestException('start cannot be after end');
+
+    opportunity = await this.prisma.opportunity.update({
+      where: {
+        id: req.params.id,
+      },
+      data: {
+        name,
+        description,
+        start,
+        end,
+        durationMinutes,
+      },
+    });
+
+    return {
+      opportunity,
+    };
+  }
+
+  @Put('admin/opportunities/:id/image')
+  async adminUpdateOpportunityImage(@Req() req: RequireAuthProp<Request>) {
+    await this.appService.checkUserIsAdmin(req.auth.userId);
+
+    let opportunity = await this.prisma.opportunity.findUnique({
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!opportunity)
+      throw new NotFoundException('No opportunity found with that id');
+
+    const { imageUrl } = req.body as UpdateOpportunityImageRequest;
+
+    opportunity = await this.prisma.opportunity.update({
+      where: {
+        id: req.params.id,
+      },
+      data: {
+        imageUrl,
+      },
+    });
+
+    return {
+      opportunity,
+    };
+  }
+
+  @Delete('admin/opportunities/:id')
+  async adminDeleteOpportunity(@Req() req: RequireAuthProp<Request>) {
+    await this.appService.checkUserIsAdmin(req.auth.userId);
+
+    await this.prisma.opportunity.delete({
+      where: {
+        id: req.params.id,
+      },
+    });
   }
 }
