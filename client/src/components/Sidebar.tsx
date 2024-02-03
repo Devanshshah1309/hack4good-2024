@@ -15,13 +15,15 @@ import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import HistoryIcon from "@mui/icons-material/History";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { SignOutButton } from "@clerk/clerk-react";
+import { SignOutButton, useUser } from "@clerk/clerk-react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
-import { RoutePath } from "../constants";
+import { PLACEHOLDER_IMAGE_URL, RoutePath } from "../constants";
 import { useAuth } from "@clerk/clerk-react";
 import useUserRole from "../hooks/useUserRole";
 import { useEffect } from "react";
+import { Typography } from "@mui/material";
+import BigAtHeartLogo from "../../public/big-at-heart.png";
 
 const drawerWidth = 240;
 
@@ -36,6 +38,7 @@ export default function Sidebar() {
   const navigate = useNavigate();
   const { isSignedIn } = useAuth();
   const { role } = useUserRole();
+  const { user } = useUser();
 
   return (
     <ThemeProvider theme={theme}>
@@ -55,6 +58,18 @@ export default function Sidebar() {
           anchor="left"
         >
           <Toolbar />
+          <img src={BigAtHeartLogo} />
+          <Typography variant="h6" style={{ textAlign: "center" }}>
+            Volunteer Management Portal
+          </Typography>
+          {user?.emailAddresses[0].emailAddress && (
+            <div style={{ textAlign: "center" }}>
+              <Typography variant="subtitle1">
+                {user?.emailAddresses[0].emailAddress}
+              </Typography>
+              {role === "ADMIN" && "Admin Account"}
+            </div>
+          )}
           <Divider />
           <List>
             {!isSignedIn && (
