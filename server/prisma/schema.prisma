@@ -20,38 +20,62 @@ model User {
 }
 
 model Volunteer {
-  user                User                  @relation(fields: [userId], references: [clerkUserId])
-  userId              String                @id
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
-  firstName           String
-  lastName            String
-  dateOfBirth         DateTime
-  gender              String
-  phone               String
-  residentialStatus   String
-  skills              String
-  experience          String
-  address             String
-  postalCode          String
-  VolunteerPreference VolunteerPreference[]
+  user                           User                             @relation(fields: [userId], references: [clerkUserId])
+  userId                         String                           @id
+  createdAt                      DateTime                         @default(now())
+  updatedAt                      DateTime                         @updatedAt
+  firstName                      String
+  lastName                       String
+  dateOfBirth                    DateTime
+  gender                         String
+  phone                          String
+  residentialStatus              String
+  skills                         String
+  experience                     String
+  address                        String
+  postalCode                     String
+  VolunteerPreference            VolunteerPreference[]
+  VolunteerOpportunityEnrollment VolunteerOpportunityEnrollment[]
+
+  @@index([userId])
 }
 
 model VolunteerPreference {
   volunteer   Volunteer @relation(fields: [volunteerId], references: [userId])
   volunteerId String
   preference  String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@id([volunteerId, preference])
+  @@index([volunteerId])
 }
 
 model Opportunity {
-  id              String   @id @default(uuid())
-  name            String
-  description     String
-  start           DateTime
-  end             DateTime
-  location        String
-  durationMinutes Int
-  imageUrl        String   
+  id                             String                           @id @default(uuid())
+  name                           String
+  description                    String
+  start                          DateTime
+  end                            DateTime
+  location                       String 
+  durationMinutes                Int
+  imageUrl                       String
+  createdAt                      DateTime                         @default(now())
+  updatedAt                      DateTime                         @updatedAt
+  VolunteerOpportunityEnrollment VolunteerOpportunityEnrollment[]
+}
+
+model VolunteerOpportunityEnrollment {
+  volunteer     Volunteer   @relation(fields: [volunteerId], references: [userId])
+  volunteerId   String
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id])
+  opportunityId String
+  adminApproved Boolean
+  didAttend     Boolean
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@id([volunteerId, opportunityId])
+  @@index([opportunityId])
+  @@index([volunteerId])
 }

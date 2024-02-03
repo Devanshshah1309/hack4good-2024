@@ -158,7 +158,6 @@ export class AppController {
 
   @Get('opportunities')
   async getOpportunities(@Req() req: RequireAuthProp<Request>) {
-    console.log(req.query);
     return {
       opportunities: await this.prisma.opportunity.findMany({
         orderBy: { start: 'asc' },
@@ -166,9 +165,49 @@ export class AppController {
     };
   }
 
+  @Get('opportunities/:id')
+  async getOpportunity(@Req() req: RequireAuthProp<Request>) {
+    const opportunity = await this.prisma.opportunity.findUnique({
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!opportunity)
+      throw new NotFoundException('No opportunity found with that id');
+    return {
+      opportunity,
+    };
+  }
+
+  @Post('opportunities/:id/enrollment')
+  async enrolOpportunity(@Req() req: RequireAuthProp<Request>) {
+    const existing =
+      await this.prisma.volunteerOpportunityEnrollment.findUnique({
+        where: {
+          volunteerId_opportunityId: {
+            volunteerId: req.auth.userId,
+            opportunityId: req.params.id,
+          },
+        },
+      });
+
+    if (existing)
+      throw new BadRequestException(
+        'You have already requested to enrol in this opportunity',
+      );
+
+    await this.prisma.volunteerOpportunityEnrollment.create({
+      data: {
+        volunteerId: req.auth.userId,
+        opportunityId: req.params.id,
+        adminApproved: false,
+        didAttend: false,
+      },
+    });
+  }
+
   @Get('admin/opportunities')
   async adminGetOpportunities(@Req() req: RequireAuthProp<Request>) {
-    console.log(req.query);
     return {
       opportunities: await this.prisma.opportunity.findMany({
         orderBy: { start: 'asc' },

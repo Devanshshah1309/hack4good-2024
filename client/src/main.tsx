@@ -11,7 +11,10 @@ import Dashboard from "./pages/Dashboard.tsx";
 import CreateProfile from "./pages/CreateProfile.tsx";
 import { RoutePath } from "./constants.ts";
 import CreateOpportunity from "./pages/CreateOpportunity.tsx";
+import AdminOpportunities from "./pages/AdminOpportunities.tsx";
+import AdminProfile from "./pages/AdminProfile.tsx";
 import Opportunities from "./pages/Opportunities.tsx";
+import AdminOpportunity from "./pages/AdminOpportunity.tsx";
 
 // Import Clerk publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -59,6 +62,10 @@ const router = createBrowserRouter([
     path: RoutePath.OPPORTUNITY_CREATE,
     element: <CreateOpportunity />,
   },
+  {
+    path: `${RoutePath.OPPORTUNITIES}/:opportunityId`,
+    element: <AdminOpportunity />
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

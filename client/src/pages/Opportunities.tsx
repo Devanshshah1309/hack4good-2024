@@ -18,12 +18,7 @@ export default function Opportunities() {
   const queryKey = "opportunities";
   const { data } = useQuery({
     queryKey: [queryKey],
-    queryFn: async () =>
-      authenticatedGet<{ opportunities: any[] }>(
-        "/opportunities",
-        (await getToken()) || "",
-        navigate
-      ),
+    queryFn: async () => authenticatedGet<{ opportunities: OpportunityResponse[] }>("/opportunities", (await getToken()) || "", navigate),
   });
 
   let content: OpportunityResponse[] = [];
@@ -36,11 +31,7 @@ export default function Opportunities() {
         <h2>Volunteering Opportunities</h2>
         {role === "ADMIN" && (
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              variant="contained"
-              color="success"
-              onClick={() => navigate(RoutePath.OPPORTUNITY_CREATE)}
-            >
+            <Button variant="contained" color="success" onClick={() => navigate(RoutePath.OPPORTUNITY_CREATE)}>
               Create New Opportunity
             </Button>
           </div>

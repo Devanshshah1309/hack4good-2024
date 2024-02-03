@@ -1,11 +1,13 @@
+import { ResidentialStatus } from "../../sharedTypes";
+
 export const RoutePath = {
   ROOT: "/",
   DASHBOARD: "/dashboard",
   PROFILE: "/profile",
   PROFILE_CREATE: "/profile/create",
   OPPORTUNITIES: "/opportunities",
-
   OPPORTUNITY_CREATE: "/opportunity/create",
+  
   ADMIN_PROFILE: "/admin/profile",
 } as const;
 
@@ -21,7 +23,7 @@ export const ALL_PREFERENCES = [
   "TEACHING STUDENTS",
 ] as const;
 
-export const RESIDENTIAL_STATUS_MAP = {
+export const RESIDENTIAL_STATUS_MAP: Record<ResidentialStatus, string> = {
   SINGAPORE_CITIZEN: "Singapore Citizen",
   SINGAPORE_PR: "Permanent Resident",
   EP: "Employment Pass",
@@ -29,7 +31,7 @@ export const RESIDENTIAL_STATUS_MAP = {
   LTVP: "Long Term Visit Pass",
   STUDENT_PASS: "Student Pass",
   VISITOR_VISA: "Visitor Visa",
-};
+} as const;
 
 export const PLACEHOLDER_IMAGE_URL =
   "https://static.wixstatic.com/media/f6709c_04d86e504f4d428da3e5c3398a7db723~mv2.jpg/v1/fit/w_2500,h_1330,al_c/f6709c_04d86e504f4d428da3e5c3398a7db723~mv2.jpg";

@@ -1,4 +1,6 @@
 export type UserRole = "VOLUNTEER" | "ADMIN";
+
+// Profile
 export type Gender = "M" | "F";
 export type Preference =
   | "WORKING_WITH_CHILDREN"
@@ -54,31 +56,25 @@ export type CreateProfileDataRequest = {
   postalCode: string;
   preferences: Preference[];
 };
-export interface UpdateOpportunityRequest {
+
+// Opportunity
+export type Opportunity = {
+  id: string;
   name: string;
   description: string;
   start: Date;
   end: Date;
   location: string;
   durationMinutes: number;
-}
-export interface CreateOpportunityRequest extends UpdateOpportunityRequest {
   imageUrl: string;
-}
+};
+export type CreateOpportunityRequest = Omit<Opportunity, "id">;
+export type UpdateOpportunityRequest = Omit<Opportunity, "id" | "imageUrl">;
 export type UpdateOpportunityImageRequest = {
   imageUrl: string;
 };
 
-export type OpportunityResponse = {
-  id: string;
-  name: string;
-  description: string;
-  start: string;
-  end: string;
-  location: string;
-  durationMinutes: number;
-  imageUrl: string;
-};
+export type OpportunityResponse = SwapDatesWithStrings<Opportunity>;
 
 // Utility types
 export type SwapDatesWithStrings<T> = {
