@@ -1,29 +1,29 @@
-import CssBaseline from "@mui/material/CssBaseline"; // must always be imported before Box
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
+import CssBaseline from '@mui/material/CssBaseline'; // must always be imported before Box
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
 // import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import { ThemeProvider } from "@emotion/react";
-import theme from "../Theme";
-import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
-import HistoryIcon from "@mui/icons-material/History";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { SignOutButton, useUser } from "@clerk/clerk-react";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { Link, useNavigate } from "react-router-dom";
-import { PLACEHOLDER_IMAGE_URL, RoutePath } from "../constants";
-import { useAuth } from "@clerk/clerk-react";
-import useUserRole from "../hooks/useUserRole";
-import { useEffect } from "react";
-import { Typography } from "@mui/material";
-import BigAtHeartLogo from "../../public/big-at-heart.png";
+import Toolbar from '@mui/material/Toolbar';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import { ThemeProvider } from '@emotion/react';
+import theme from '../Theme';
+import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
+import HistoryIcon from '@mui/icons-material/History';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { SignOutButton, useUser } from '@clerk/clerk-react';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { Link, useNavigate } from 'react-router-dom';
+import { PLACEHOLDER_IMAGE_URL, RoutePath } from '../constants';
+import { useAuth } from '@clerk/clerk-react';
+import useUserRole from '../hooks/useUserRole';
+import { useEffect } from 'react';
+import { Typography } from '@mui/material';
+import BigAtHeartLogo from '../../public/big-at-heart.png';
 
 const drawerWidth = 240;
 
@@ -42,16 +42,16 @@ export default function Sidebar() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <Drawer
           sx={{
             width: drawerWidth,
             flexShrink: 0,
-            "& .MuiDrawer-paper": {
+            '& .MuiDrawer-paper': {
               width: drawerWidth,
-              boxSizing: "border-box",
-              backgroundColor: "#81c784",
+              boxSizing: 'border-box',
+              backgroundColor: '#81c784',
             },
           }}
           variant="permanent"
@@ -59,20 +59,20 @@ export default function Sidebar() {
         >
           <Toolbar />
           <img src={BigAtHeartLogo} />
-          <Typography variant="h6" style={{ textAlign: "center" }}>
+          <Typography variant="h6" style={{ textAlign: 'center' }}>
             Volunteer Management Portal
           </Typography>
           {user?.emailAddresses[0].emailAddress && (
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: 'center' }}>
               <Typography variant="subtitle1">
                 {user?.emailAddresses[0].emailAddress}
               </Typography>
-              {role === "ADMIN" && "Admin Account"}
+              {role === 'ADMIN' && 'Admin Account'}
             </div>
           )}
           <Divider />
           <List>
-            {!isSignedIn && (
+            {!role && (
               <ListItem disablePadding>
                 <Link to={RoutePath.PROFILE_CREATE} className="sidebar-link">
                   <ListItemButton>
@@ -106,7 +106,7 @@ export default function Sidebar() {
                     </ListItemButton>
                   </Link>
                 </ListItem>
-                {role === "VOLUNTEER" && (
+                {role === 'VOLUNTEER' && (
                   <ListItem disablePadding>
                     <Link to={RoutePath.PROFILE} className="sidebar-link">
                       <ListItemButton>

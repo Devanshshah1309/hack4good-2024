@@ -1,13 +1,13 @@
-import { useAuth } from "@clerk/clerk-react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { authenticatedGet, authenticatedPut } from "../axios";
-import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
-import { ProfileDataResponse, ProfileDataRequest } from "../../../sharedTypes";
-import { RESIDENTIAL_STATUS_MAP, RoutePath } from "../constants";
-import useUserRole from "../hooks/useUserRole";
-import { Preference, ResidentialStatus } from "../../../sharedTypes";
+import { useAuth } from '@clerk/clerk-react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { authenticatedGet, authenticatedPut } from '../axios';
+import { useNavigate } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
+import { ProfileDataResponse, ProfileDataRequest } from '../../../sharedTypes';
+import { RESIDENTIAL_STATUS_MAP, RoutePath } from '../constants';
+import useUserRole from '../hooks/useUserRole';
+import { Preference, ResidentialStatus } from '../../../sharedTypes';
 import {
   Box,
   Button,
@@ -17,57 +17,56 @@ import {
   Paper,
   Snackbar,
   TextField,
-} from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { ALL_PREFERENCES } from "../constants";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import dayjs from "dayjs";
+} from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { ALL_PREFERENCES } from '../constants';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import dayjs from 'dayjs';
 
 function Profile() {
   const navigate = useNavigate();
-  const { isSignedIn, getToken } = useAuth();
+  const { getToken } = useAuth();
   const { role } = useUserRole();
 
-  if (!isSignedIn) navigate(RoutePath.ROOT);
-  if (role === "ADMIN") navigate(RoutePath.ADMIN_PROFILE);
+  if (role === 'ADMIN') navigate(RoutePath.ADMIN_PROFILE);
 
   // only these fields are editable by the user after creating a profile
   const [profileData, setProfileData] = useState<ProfileDataRequest>({
-    phone: "",
-    skills: "",
-    experience: "",
-    address: "",
-    postalCode: "",
+    phone: '',
+    skills: '',
+    experience: '',
+    address: '',
+    postalCode: '',
     preferences: [],
   });
   const [saving, setSaving] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [gender, setGender] = useState("");
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [gender, setGender] = useState('');
   const [residentialStatus, setResidentialStatus] =
-    useState<ResidentialStatus>("SINGAPORE_CITIZEN");
+    useState<ResidentialStatus>('SINGAPORE_CITIZEN');
   const [dateOfBirth, setDateOfBirth] = useState<string>(
-    new Date().toISOString()
+    new Date().toISOString(),
   );
   const [preferences, setPreferences] = useState<Preference[]>([]);
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
 
   const queryClient = useQueryClient();
-  const queryKey = "profile";
+  const queryKey = 'profile';
 
   const query = useQuery({
     queryKey: [queryKey],
     queryFn: async () => {
       const res = await authenticatedGet(
-        "/profile",
-        (await getToken()) ?? "",
-        navigate
+        '/profile',
+        (await getToken()) ?? '',
+        navigate,
       );
       const data = res.data as ProfileDataResponse;
       setProfileData({
@@ -77,7 +76,7 @@ function Profile() {
         address: data.volunteer.address,
         postalCode: data.volunteer.postalCode,
         preferences: data.volunteer.VolunteerPreference.map(
-          (pref) => pref.preference
+          (pref) => pref.preference,
         ),
       });
       setFirstName(data.volunteer.firstName);
@@ -91,14 +90,14 @@ function Profile() {
 
   const mutation = useMutation({
     mutationFn: async (data: ProfileDataRequest) => {
-      await authenticatedPut("/profile", data, (await getToken()) ?? "");
+      await authenticatedPut('/profile', data, (await getToken()) ?? '');
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] });
     },
     onError: () => {
       setErrorSnackbarOpen(true);
-      console.error("failed to save");
+      console.error('failed to save');
     },
     onSettled: () => {
       setSuccessSnackbarOpen(true);
@@ -106,7 +105,7 @@ function Profile() {
     },
   });
 
-  if (query.isLoading) return "Loading...";
+  // if (query.isLoading) return 'Loading...';
 
   return (
     <>
@@ -118,10 +117,10 @@ function Profile() {
             <Paper
               elevation={3}
               sx={{
-                backgroundColor: "#F5F5F5",
-                paddingTop: "0.5rem",
-                paddingBottom: "0.5rem",
-                width: "80vw",
+                backgroundColor: '#F5F5F5',
+                paddingTop: '0.5rem',
+                paddingBottom: '0.5rem',
+                width: '80vw',
               }}
             >
               <Grid
@@ -130,7 +129,7 @@ function Profile() {
                 spacing={2}
                 className="center"
                 minWidth="70vw"
-                alignItems={"center"}
+                alignItems={'center'}
                 justifyContent="flex-start"
               >
                 <Grid item xs={12} md={4}>
@@ -163,7 +162,7 @@ function Profile() {
                     <DatePicker
                       disabled
                       label="Date of Birth"
-                      sx={{ minWidth: "100%" }}
+                      sx={{ minWidth: '100%' }}
                       value={dayjs(new Date(dateOfBirth))}
                     />
                   </LocalizationProvider>
@@ -174,7 +173,7 @@ function Profile() {
                     fullWidth
                     id="gender"
                     disabled
-                    value={gender === "M" ? "Male" : "Female"}
+                    value={gender === 'M' ? 'Male' : 'Female'}
                   />
                 </Grid>
                 <Grid item xs={12} md={4}>
@@ -195,7 +194,7 @@ function Profile() {
                 spacing={2}
                 className="center"
                 minWidth="70vw"
-                alignItems={"center"}
+                alignItems={'center'}
               >
                 <Grid item xs={12} md={8}>
                   <TextField
@@ -238,8 +237,8 @@ function Profile() {
                     value={profileData.phone}
                     variant="outlined"
                     sx={{
-                      minWidth: "100%",
-                      minHeight: "100%",
+                      minWidth: '100%',
+                      minHeight: '100%',
                     }}
                     required
                     onChange={(e) => {
@@ -297,7 +296,7 @@ function Profile() {
                     }}
                     input={<OutlinedInput />}
                     renderValue={(selected) => (
-                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                         {Array.isArray(selected) &&
                           selected.map((value) => (
                             <Chip key={value} label={value} />
@@ -307,7 +306,7 @@ function Profile() {
                   >
                     {ALL_PREFERENCES.map((name) => (
                       <MenuItem key={name} value={name}>
-                        {name.split("_").join(" ")}
+                        {name.split('_').join(' ')}
                       </MenuItem>
                     ))}
                   </Select>
@@ -315,10 +314,10 @@ function Profile() {
               </Grid>
             </Paper>
           </form>
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Button
               className="center"
-              style={{ marginTop: "1rem" }}
+              style={{ marginTop: '1rem' }}
               variant="contained"
               color="success"
               onClick={() => {
@@ -334,7 +333,7 @@ function Profile() {
             open={successSnackbarOpen}
             ContentProps={{
               style: {
-                backgroundColor: "#2E7D32",
+                backgroundColor: '#2E7D32',
               },
             }}
             autoHideDuration={3000}
@@ -347,7 +346,7 @@ function Profile() {
             open={errorSnackbarOpen}
             ContentProps={{
               style: {
-                backgroundColor: "#D32F2F",
+                backgroundColor: '#D32F2F',
               },
             }}
             autoHideDuration={3000}

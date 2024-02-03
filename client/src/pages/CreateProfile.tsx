@@ -1,16 +1,16 @@
-import { useAuth } from "@clerk/clerk-react";
-import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { authenticatedPost } from "../axios";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from '@clerk/clerk-react';
+import { useMutation } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import { authenticatedPost } from '../axios';
+import { useNavigate } from 'react-router-dom';
 import {
   CreateProfileDataRequest,
   Gender,
   Preference,
   ResidentialStatus,
-} from "../../../sharedTypes";
-import { RESIDENTIAL_STATUS_MAP, RoutePath } from "../constants";
-import Sidebar from "../components/Sidebar";
+} from '../../../sharedTypes';
+import { RESIDENTIAL_STATUS_MAP, RoutePath } from '../constants';
+import Sidebar from '../components/Sidebar';
 import {
   Box,
   Button,
@@ -19,15 +19,15 @@ import {
   OutlinedInput,
   Paper,
   TextField,
-} from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { ALL_PREFERENCES } from "../constants";
-import useUserRole from "../hooks/useUserRole";
+} from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { ALL_PREFERENCES } from '../constants';
+import useUserRole from '../hooks/useUserRole';
 
 function CreateProfile() {
   const navigate = useNavigate();
@@ -41,33 +41,33 @@ function CreateProfile() {
   }, [isSignedIn, role]);
 
   // use Dayjs for date of birth
-  const [gender, setGender] = useState("");
-  const [residentialStatus, setResidentialStatus] = useState("");
+  const [gender, setGender] = useState('');
+  const [residentialStatus, setResidentialStatus] = useState('');
   const [preferences, setPreferences] = useState<Preference[]>([]);
 
   const [profileData, setProfileData] = useState<CreateProfileDataRequest>({
-    firstName: "David",
-    lastName: "Brown",
-    dateOfBirth: new Date("11 Apr 2001"),
-    gender: "M",
-    phone: "12345678",
-    residentialStatus: "SINGAPORE_CITIZEN",
-    skills: "many skills",
-    experience: "",
-    address: "",
-    postalCode: "",
+    firstName: '',
+    lastName: '',
+    dateOfBirth: new Date(),
+    gender: 'M',
+    phone: '',
+    residentialStatus: 'SINGAPORE_CITIZEN',
+    skills: '',
+    experience: '',
+    address: '',
+    postalCode: '',
     preferences: [],
   });
 
   const mutation = useMutation({
     mutationFn: async (data: CreateProfileDataRequest) => {
-      await authenticatedPost("/profile", data, (await getToken()) ?? "");
+      await authenticatedPost('/profile', data, (await getToken()) ?? '');
     },
     onSuccess: () => {
       navigate(RoutePath.DASHBOARD);
     },
     onError: () => {
-      console.error("failed to save");
+      console.error('failed to save');
     },
   });
 
@@ -81,10 +81,10 @@ function CreateProfile() {
             <Paper
               elevation={3}
               sx={{
-                backgroundColor: "#F5F5F5",
-                paddingTop: "0.5rem",
-                paddingBottom: "0.5rem",
-                width: "80vw",
+                backgroundColor: '#F5F5F5',
+                paddingTop: '0.5rem',
+                paddingBottom: '0.5rem',
+                width: '80vw',
               }}
             >
               <Grid
@@ -93,7 +93,7 @@ function CreateProfile() {
                 spacing={2}
                 className="center"
                 minWidth="70vw"
-                alignItems={"center"}
+                alignItems={'center'}
                 justifyContent="flex-start"
               >
                 <Grid item xs={12} md={4}>
@@ -130,7 +130,7 @@ function CreateProfile() {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Date of Birth"
-                      sx={{ minWidth: "100%" }}
+                      sx={{ minWidth: '100%' }}
                       onChange={(newValue) => {
                         setProfileData({
                           ...profileData,
@@ -143,7 +143,7 @@ function CreateProfile() {
                 <Grid item xs={12} md={4}>
                   <InputLabel id="gender">Gender</InputLabel>
                   <Select
-                    sx={{ width: "100%" }}
+                    sx={{ width: '100%' }}
                     fullWidth
                     value={gender}
                     label="Gender"
@@ -156,8 +156,8 @@ function CreateProfile() {
                       });
                     }}
                   >
-                    <MenuItem value={"M"}>Male</MenuItem>
-                    <MenuItem value={"F"}>Female</MenuItem>
+                    <MenuItem value={'M'}>Male</MenuItem>
+                    <MenuItem value={'F'}>Female</MenuItem>
                   </Select>
                 </Grid>
                 <Grid item xs={12} md={4}>
@@ -165,7 +165,7 @@ function CreateProfile() {
                     Residential Status
                   </InputLabel>
                   <Select
-                    sx={{ width: "100%" }}
+                    sx={{ width: '100%' }}
                     fullWidth
                     required
                     value={residentialStatus}
@@ -184,7 +184,7 @@ function CreateProfile() {
                         <MenuItem key={key} value={key}>
                           {value}
                         </MenuItem>
-                      )
+                      ),
                     )}
                   </Select>
                 </Grid>
@@ -196,7 +196,7 @@ function CreateProfile() {
                 spacing={2}
                 className="center"
                 minWidth="70vw"
-                alignItems={"center"}
+                alignItems={'center'}
               >
                 <Grid item xs={12} md={8}>
                   <TextField
@@ -236,8 +236,8 @@ function CreateProfile() {
                     type="number"
                     variant="outlined"
                     sx={{
-                      minWidth: "100%",
-                      minHeight: "100%",
+                      minWidth: '100%',
+                      minHeight: '100%',
                     }}
                     required
                     onChange={(e) => {
@@ -292,7 +292,7 @@ function CreateProfile() {
                     }}
                     input={<OutlinedInput />}
                     renderValue={(selected) => (
-                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                         {Array.isArray(selected) &&
                           selected.map((value) => (
                             <Chip key={value} label={value} />
@@ -302,7 +302,7 @@ function CreateProfile() {
                   >
                     {ALL_PREFERENCES.map((name) => (
                       <MenuItem key={name} value={name}>
-                        {name.split("_").join(" ")}
+                        {name.split('_').join(' ')}
                       </MenuItem>
                     ))}
                   </Select>
@@ -310,10 +310,10 @@ function CreateProfile() {
               </Grid>
             </Paper>
           </form>
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Button
               className="center"
-              style={{ marginTop: "1rem" }}
+              style={{ marginTop: '1rem' }}
               variant="contained"
               color="success"
               onClick={() => {

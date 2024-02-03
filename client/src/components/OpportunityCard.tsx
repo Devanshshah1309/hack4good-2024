@@ -1,5 +1,4 @@
-import React from "react";
-import { OpportunityResponse } from "../../../sharedTypes";
+import { OpportunityResponse } from '../../../sharedTypes';
 import {
   Card,
   CardActions,
@@ -7,14 +6,17 @@ import {
   CardContent,
   CardMedia,
   Typography,
-} from "@mui/material";
-import { PLACEHOLDER_IMAGE_URL } from "../constants";
+} from '@mui/material';
+import { PLACEHOLDER_IMAGE_URL } from '../constants';
+import useUserRole from '../hooks/useUserRole';
 
 interface OpportunityCardProps {
   opportunity: OpportunityResponse;
 }
 
 export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
+  const { role } = useUserRole();
+
   const start = new Date(opportunity.start);
   const end = new Date(opportunity.end);
 
@@ -27,10 +29,10 @@ export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
   return (
     <Card
       sx={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
       }}
     >
       <CardMedia
@@ -57,9 +59,11 @@ export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
           Total Volunteering Hours: {opportunity.durationMinutes / 60}
         </Typography>
       </CardContent>
-      <CardActions sx={{ alignSelf: "flex-end", justifySelf: "left" }}>
-        <Button size="small">Register</Button>
-      </CardActions>
+      {(!role || role === 'VOLUNTEER') && (
+        <CardActions sx={{ alignSelf: 'flex-end', justifySelf: 'left' }}>
+          <Button size="small">Register</Button>
+        </CardActions>
+      )}
     </Card>
   );
 }

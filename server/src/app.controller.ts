@@ -58,7 +58,10 @@ export class AppController {
 
   @Post('profile')
   async addProfile(@Req() req: RequireAuthProp<Request>) {
-    let user = await this.appService.getUser(req.auth.userId);
+    const [clerkUser, user] = await Promise.all([
+      clerkClient.users.getUser(req.auth.userId),
+      this.appService.getUser(req.auth.userId),
+    ]);
     if (user) {
       throw new BadRequestException('Profile already added');
     }
@@ -80,6 +83,7 @@ export class AppController {
     await this.prisma.user.create({
       data: {
         clerkUserId: req.auth.userId,
+        email: clerkUser.emailAddresses[0].emailAddress,
         role: 'VOLUNTEER',
         volunteer: {
           create: {
@@ -322,5 +326,52 @@ export class AppController {
         id: req.params.id,
       },
     });
+  }
+
+  @Get('admin/volunteers')
+  async adminGetVolunteers(@Req() req: RequireAuthProp<Request>) {
+    await this.appService.checkUserIsAdmin(req.auth.userId);
+
+    const clerkUsers = await clerkClient.users.getUserList();
+    const clerkDataMap = new Map();
+    for (const clerkUser of clerkUsers) {
+      clerkDataMap[clerkUser.id] = {
+        email: clerkUser.emailAddresses[0].emailAddress,
+        hasImage: clerkUser.hasImage,
+        imageUrl: clerkUser.imageUrl,
+      };
+    }
+
+    console.log(req.query);
+    let { search, sortBy, order } = req.query as {
+      search: string;
+      sortBy: string;
+      order: string;
+    };
+
+    let queryOrderBy = {};
+    if (sortBy === 'email') {
+      queryOrderBy = { [sortBy]: order };
+    } else {
+      queryOrderBy = { volunteer: { [sortBy]: order } };
+    }
+
+    const volunteers = await this.prisma.user.findMany({
+      where: {
+        role: 'VOLUNTEER',
+        OR: [
+          { email: { contains: search } },
+          { volunteer: { firstName: { contains: search } } },
+          { volunteer: { lastName: { contains: search } } },
+          { volunteer: { phone: { contains: search } } },
+          { volunteer: { skills: { contains: search } } },
+          { volunteer: { experience: { contains: search } } },
+        ],
+      },
+      include: { volunteer: true },
+      orderBy: queryOrderBy,
+    });
+
+    return volunteers;
   }
 }
