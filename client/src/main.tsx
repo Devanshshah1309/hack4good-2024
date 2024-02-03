@@ -11,9 +11,7 @@ import Dashboard from "./pages/Dashboard.tsx";
 import CreateProfile from "./pages/CreateProfile.tsx";
 import { RoutePath } from "./constants.ts";
 import CreateOpportunity from "./pages/CreateOpportunity.tsx";
-import AdminProfile from "./pages/AdminProfile.tsx";
 import Opportunities from "./pages/Opportunities.tsx";
-import { Create } from "@mui/icons-material";
 
 // Import Clerk publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -60,10 +58,6 @@ const router = createBrowserRouter([
   {
     path: RoutePath.OPPORTUNITY_CREATE,
     element: <CreateOpportunity />,
-  },
-  {
-    path: RoutePath.ADMIN_PROFILE,
-    element: <AdminProfile />,
   },
 ]);
 

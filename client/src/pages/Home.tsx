@@ -3,13 +3,14 @@ import Sidebar from "../components/Sidebar";
 import theme from "../Theme";
 import { ThemeProvider } from "@emotion/react";
 import { Button } from "@mui/material";
+import { RoutePath } from "../constants";
 
 function Home() {
   return (
     <>
       <ThemeProvider theme={theme}>
         <SignedOut>
-          <SignInButton>
+          <SignInButton afterSignUpUrl={RoutePath.PROFILE_CREATE}>
             <Button variant="contained" color="success">
               Sign In
             </Button>

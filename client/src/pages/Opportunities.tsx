@@ -3,7 +3,6 @@ import { authenticatedGet } from "../axios";
 import { useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import { useEffect } from "react";
 import useUserRole from "../hooks/useUserRole";
 import { RoutePath } from "../constants";
 import { Button } from "@mui/material";
@@ -35,15 +34,17 @@ export default function Opportunities() {
       <Sidebar />
       <div className="main">
         <h2>Volunteering Opportunities</h2>
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            variant="contained"
-            color="success"
-            onClick={() => navigate(RoutePath.OPPORTUNITY_CREATE)}
-          >
-            Create New Opportunity
-          </Button>
-        </div>
+        {role === "ADMIN" && (
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => navigate(RoutePath.OPPORTUNITY_CREATE)}
+            >
+              Create New Opportunity
+            </Button>
+          </div>
+        )}
         <Grid container spacing={3} style={{ width: "70vw" }}>
           {content.map((opp) => (
             <Grid item xs={4} key={opp.id}>
