@@ -5,7 +5,7 @@ export const RoutePath = {
   PROFILE_CREATE: "/profile/create",
   OPPORTUNITIES: "/opportunities",
 
-  ADMIN_DASHBOARD: "/admin/dashboard",
+  OPPORTUNITY_CREATE: "/opportunity/create",
   ADMIN_PROFILE: "/admin/profile",
 } as const;
 

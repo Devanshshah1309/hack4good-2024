@@ -2,16 +2,21 @@ import { SignInButton, SignedIn, SignedOut } from "@clerk/clerk-react";
 import Sidebar from "../components/Sidebar";
 import theme from "../Theme";
 import { ThemeProvider } from "@emotion/react";
+import { Button } from "@mui/material";
 
 function Home() {
   return (
     <>
       <ThemeProvider theme={theme}>
         <SignedOut>
-          <SignInButton />
+          <SignInButton>
+            <Button variant="contained" color="success">
+              Sign In
+            </Button>
+          </SignInButton>
           <div>
-            <h1>Start Volunteering Today!</h1>
-            <h3>
+            <h1 className="heading">Start Volunteering Today!</h1>
+            <h3 className="subheading">
               VOLUNASIA is that moment when you forget you're volunteering to
               help change lives, because it's changing yours.
             </h3>

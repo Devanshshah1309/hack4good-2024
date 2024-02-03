@@ -10,7 +10,14 @@ export type Preference =
   | "WORKING_WITH_MIGRANT_WORKERS"
   | "WORKING_WITH_HEALTHCARE_WORKERS"
   | "TEACHING STUDENTS";
-export type ResidentialStatus = "SINGAPORE_CITIZEN" | "SINGAPORE_PR" | "EP" | "DP" | "LTVP" | "STUDENT_PASS" | "VISITOR_VISA";
+export type ResidentialStatus =
+  | "SINGAPORE_CITIZEN"
+  | "SINGAPORE_PR"
+  | "EP"
+  | "DP"
+  | "LTVP"
+  | "STUDENT_PASS"
+  | "VISITOR_VISA";
 export type ProfileDataRequest = {
   phone: string;
   skills: string;
@@ -52,12 +59,24 @@ export interface UpdateOpportunityRequest {
   description: string;
   start: Date;
   end: Date;
+  location: string;
   durationMinutes: number;
 }
 export interface CreateOpportunityRequest extends UpdateOpportunityRequest {
   imageUrl: string;
 }
 export type UpdateOpportunityImageRequest = {
+  imageUrl: string;
+};
+
+export type OpportunityResponse = {
+  id: string;
+  name: string;
+  description: string;
+  start: string;
+  end: string;
+  location: string;
+  durationMinutes: number;
   imageUrl: string;
 };
 

@@ -180,8 +180,15 @@ export class AppController {
   async adminCreateOpportunity(@Req() req: RequireAuthProp<Request>) {
     await this.appService.checkUserIsAdmin(req.auth.userId);
 
-    const { name, description, start, end, durationMinutes, imageUrl } =
-      req.body as SwapDatesWithStrings<CreateOpportunityRequest>;
+    const {
+      name,
+      description,
+      start,
+      end,
+      location,
+      durationMinutes,
+      imageUrl,
+    } = req.body as SwapDatesWithStrings<CreateOpportunityRequest>;
 
     if (new Date(start) > new Date(end))
       throw new BadRequestException('start cannot be after end');
@@ -192,6 +199,7 @@ export class AppController {
         description,
         start,
         end,
+        location,
         durationMinutes,
         imageUrl,
       },
@@ -214,7 +222,7 @@ export class AppController {
     if (!opportunity)
       throw new NotFoundException('No opportunity found with that id');
 
-    const { name, description, start, end, durationMinutes } =
+    const { name, description, start, end, durationMinutes, location } =
       req.body as SwapDatesWithStrings<UpdateOpportunityRequest>;
     if (new Date(start) > new Date(end))
       throw new BadRequestException('start cannot be after end');
@@ -228,6 +236,7 @@ export class AppController {
         description,
         start,
         end,
+        location,
         durationMinutes,
       },
     });

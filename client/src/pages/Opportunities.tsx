@@ -13,13 +13,18 @@ export default function Opportunities() {
   const { role } = useUserRole();
 
   useEffect(() => {
-    if (role === "ADMIN") navigate(RoutePath.ADMIN_DASHBOARD);
+    if (role === "ADMIN") navigate(RoutePath.OPPORTUNITY_CREATE);
   }, [role]);
 
   const queryKey = "opportunities";
   const { data } = useQuery({
     queryKey: [queryKey],
-    queryFn: async () => authenticatedGet<{ opportunities: any[] }>("/opportunities", (await getToken()) || "", navigate),
+    queryFn: async () =>
+      authenticatedGet<{ opportunities: any[] }>(
+        "/opportunities",
+        (await getToken()) || "",
+        navigate
+      ),
   });
 
   let content: any = "loading...";
@@ -29,7 +34,7 @@ export default function Opportunities() {
     <div className="main-container">
       <Sidebar />
       <div className="main">
-        <h1>Opportunities</h1>
+        <h2>Opportunities</h2>
         <pre>response data: {JSON.stringify(content, undefined, 2)}</pre>
       </div>
     </div>
