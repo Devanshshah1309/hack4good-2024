@@ -13,7 +13,7 @@ export type Preference =
 export type ResidentialStatus =
   | "SINGAPORE_CITIZEN"
   | "SINGAPORE_PR"
-  | "EP_PEP_DP"
+  | "EP"
   | "DP"
   | "LTVP"
   | "STUDENT_PASS"

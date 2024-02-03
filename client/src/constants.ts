@@ -20,3 +20,13 @@ export const ALL_PREFERENCES = [
   "FUNDRAISING",
   "TEACHING STUDENTS",
 ] as const;
+
+export const RESIDENTIAL_STATUS_MAP = {
+  SINGAPORE_CITIZEN: "Singapore Citizen",
+  SINGAPORE_PR: "Permanent Resident",
+  EP: "Employment Pass",
+  DP: "Dependent Pass",
+  LTVP: "Long Term Visit Pass",
+  STUDENT_PASS: "Student Pass",
+  VISITOR_VISA: "Visitor Visa",
+};

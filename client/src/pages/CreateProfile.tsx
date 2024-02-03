@@ -3,10 +3,23 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { authenticatedPost } from "../axios";
 import { useNavigate } from "react-router-dom";
-import { CreateProfileDataRequest, Gender, Preference, ResidentialStatus } from "../../../sharedTypes";
-import { RoutePath } from "../constants";
+import {
+  CreateProfileDataRequest,
+  Gender,
+  Preference,
+  ResidentialStatus,
+} from "../../../sharedTypes";
+import { RESIDENTIAL_STATUS_MAP, RoutePath } from "../constants";
 import Sidebar from "../components/Sidebar";
-import { Box, Button, Chip, Grid, OutlinedInput, Paper, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Grid,
+  OutlinedInput,
+  Paper,
+  TextField,
+} from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -23,15 +36,9 @@ function CreateProfile() {
   if (!isSignedIn) navigate(RoutePath.ROOT);
   if (role === "ADMIN") navigate(RoutePath.ADMIN_DASHBOARD);
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   // use Dayjs for date of birth
   const [gender, setGender] = useState("");
   const [residentialStatus, setResidentialStatus] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [skills, setSkills] = useState("");
   const [preferences, setPreferences] = useState<Preference[]>([]);
 
   const [profileData, setProfileData] = useState<CreateProfileDataRequest>({
@@ -76,7 +83,15 @@ function CreateProfile() {
                 width: "80vw",
               }}
             >
-              <Grid container padding={2} spacing={2} className="center" minWidth="70vw" alignItems={"center"} justifyContent="flex-start">
+              <Grid
+                container
+                padding={2}
+                spacing={2}
+                className="center"
+                minWidth="70vw"
+                alignItems={"center"}
+                justifyContent="flex-start"
+              >
                 <Grid item xs={12} md={4}>
                   <TextField
                     id="first name"
@@ -142,7 +157,9 @@ function CreateProfile() {
                   </Select>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <InputLabel id="residential-status">Residential Status</InputLabel>
+                  <InputLabel id="residential-status">
+                    Residential Status
+                  </InputLabel>
                   <Select
                     sx={{ width: "100%" }}
                     fullWidth
@@ -153,21 +170,30 @@ function CreateProfile() {
                       setResidentialStatus(event.target.value as string);
                       setProfileData({
                         ...profileData,
-                        residentialStatus: event.target.value as ResidentialStatus,
+                        residentialStatus: event.target
+                          .value as ResidentialStatus,
                       });
                     }}
                   >
-                    <MenuItem value={"CITIZEN"}>Singapore Citizen</MenuItem>
-                    <MenuItem value={"PR"}>Permanent Resident</MenuItem>
-                    <MenuItem value={"EP"}>Employment Pass</MenuItem>
-                    <MenuItem value={"DP"}>Dependent Pass</MenuItem>
-                    <MenuItem value={"LTVP"}>Long Term Visitor Pass</MenuItem>
-                    <MenuItem value={"STUDENT"}>Student Pass</MenuItem>
-                    <MenuItem value={"VISITOR"}>Visitor</MenuItem>
+                    {Object.entries(RESIDENTIAL_STATUS_MAP).map(
+                      ([key, value]) => (
+                        <MenuItem key={key} value={key}>
+                          {value}
+                        </MenuItem>
+                      )
+                    )}
                   </Select>
                 </Grid>
               </Grid>
-              <Grid container paddingLeft={2} paddingRight={2} spacing={2} className="center" minWidth="70vw" alignItems={"center"}>
+              <Grid
+                container
+                paddingLeft={2}
+                paddingRight={2}
+                spacing={2}
+                className="center"
+                minWidth="70vw"
+                alignItems={"center"}
+              >
                 <Grid item xs={12} md={8}>
                   <TextField
                     id="address"
@@ -249,7 +275,10 @@ function CreateProfile() {
                     input={<OutlinedInput />}
                     renderValue={(selected) => (
                       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                        {Array.isArray(selected) && selected.map((value) => <Chip key={value} label={value} />)}
+                        {Array.isArray(selected) &&
+                          selected.map((value) => (
+                            <Chip key={value} label={value} />
+                          ))}
                       </Box>
                     )}
                   >
