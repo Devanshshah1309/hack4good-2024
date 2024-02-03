@@ -6,10 +6,12 @@ import Sidebar from "../components/Sidebar";
 import { useState } from "react";
 import { CreateOpportunityRequest } from "../../../sharedTypes";
 import axios from "axios";
+import useUserRole from "../hooks/useUserRole";
 
 export default function Opportunities() {
   const { getToken } = useAuth();
   const navigate = useNavigate();
+  const { role } = useUserRole();
 
   const queryKey = "opportunities";
 
@@ -74,19 +76,26 @@ export default function Opportunities() {
       <Sidebar />
       <div className="main">
         <pre>response data: {JSON.stringify(content, undefined, 2)}</pre>
-        <pre>useState data: {JSON.stringify(opp, undefined, 2)}</pre>
-        <input value={opp.name} placeholder="opportunity name" onChange={(e) => setOpp({ ...opp, name: e.target.value })} />
-        <input value={opp.description} placeholder="opportunity description" onChange={(e) => setOpp({ ...opp, description: e.target.value })} />
-        Upload image:
-        <input
-          type="file"
-          accept="image/png, image/jpeg"
-          onChange={(e) => {
-            setImgFile(e.target.files!.length === 0 ? null : e.target.files![0]);
-          }}
-        />
-        <pre>file details: {JSON.stringify(imgFile && { name: imgFile.name, type: imgFile.type, size: imgFile.size }, undefined, 2)}</pre>
-        <button onClick={() => mutation.mutate()}>Add opportunity</button>
+
+        {role === "ADMIN" && (
+          <>
+            <div style={{ backgroundColor: "lightgrey" }}>
+              <input value={opp.name} placeholder="opportunity name" onChange={(e) => setOpp({ ...opp, name: e.target.value })} />
+              <input value={opp.description} placeholder="opportunity description" onChange={(e) => setOpp({ ...opp, description: e.target.value })} />
+              Upload image:
+              <input
+                type="file"
+                accept="image/png, image/jpeg"
+                onChange={(e) => {
+                  setImgFile(e.target.files!.length === 0 ? null : e.target.files![0]);
+                }}
+              />
+              <pre>file details: {JSON.stringify(imgFile && { name: imgFile.name, type: imgFile.type, size: imgFile.size }, undefined, 2)}</pre>
+              <button onClick={() => mutation.mutate()}>Add opportunity</button>
+            </div>
+            <pre>useState data: {JSON.stringify(opp, undefined, 2)}</pre>
+          </>
+        )}
       </div>
     </div>
   );
