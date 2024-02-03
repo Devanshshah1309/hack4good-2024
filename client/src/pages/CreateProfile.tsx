@@ -77,7 +77,7 @@ function CreateProfile() {
             <Paper
               elevation={3}
               sx={{
-                backgroundColor: "#F5EEE6",
+                backgroundColor: "#F5F5F5",
                 paddingTop: "0.5rem",
                 paddingBottom: "0.5rem",
                 width: "80vw",

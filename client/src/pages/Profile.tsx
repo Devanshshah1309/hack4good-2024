@@ -25,7 +25,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { ALL_PREFERENCES } from "../constants";
-import dayjs, { Dayjs } from "dayjs";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import dayjs from "dayjs";
 
 function Profile() {
   const navigate = useNavigate();
@@ -117,7 +118,7 @@ function Profile() {
             <Paper
               elevation={3}
               sx={{
-                backgroundColor: "#F5EEE6",
+                backgroundColor: "#F5F5F5",
                 paddingTop: "0.5rem",
                 paddingBottom: "0.5rem",
                 width: "80vw",

@@ -42,8 +42,7 @@ export default function Sidebar() {
             "& .MuiDrawer-paper": {
               width: drawerWidth,
               boxSizing: "border-box",
-              backgroundColor: "#F5EEE6",
-              // justifyContent: "center",
+              backgroundColor: "#81c784",
             },
           }}
           variant="permanent"
