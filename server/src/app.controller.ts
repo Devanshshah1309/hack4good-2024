@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Controller,
+  ForbiddenException,
   Get,
   NotFoundException,
   Post,
@@ -12,12 +13,13 @@ import { Request } from 'express';
 import { PrismaService } from './prisma.service';
 import clerkClient, { RequireAuthProp } from '@clerk/clerk-sdk-node';
 import {
+  CreateOpportunityRequest,
   CreateProfileDataRequest,
   ProfileDataRequest,
   UserRole,
 } from '../../sharedTypes';
 
-@Controller()
+@Controller('api/v1')
 export class AppController {
   constructor(
     private readonly appService: AppService,
@@ -166,5 +168,29 @@ export class AppController {
     ]);
 
     return { ...userNew, email: clerkUser.emailAddresses[0].emailAddress };
+  }
+
+  @Get('opportunities')
+  async getOpportunities(@Req() req: RequireAuthProp<Request>) {
+    console.log(req.query);
+    return {
+      opportunities: await this.prisma.opportunity.findMany({
+        orderBy: { start: 'asc' },
+      }),
+    };
+  }
+
+  @Post('admin/opportunities')
+  async adminCreateOpportunity(@Req() req: RequireAuthProp<Request>) {
+    const user = await this.appService.getUser(req.auth.userId);
+    if (!user || user.role !== 'ADMIN') throw new ForbiddenException();
+
+    const opportunity = await this.prisma.opportunity.create({
+      data: req.body as CreateOpportunityRequest,
+    });
+
+    return {
+      opportunity,
+    };
   }
 }

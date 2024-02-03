@@ -44,3 +44,12 @@ model VolunteerPreference {
 
   @@id([volunteerId, preference])
 }
+
+model Opportunity {
+  id              String   @id @default(uuid())
+  name            String
+  description     String
+  start           DateTime
+  end             DateTime
+  durationMinutes Int
+}
