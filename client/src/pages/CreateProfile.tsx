@@ -260,6 +260,20 @@ function CreateProfile() {
                   />
                 </Grid>
                 <Grid item xs={12}>
+                  <TextField
+                    id="experience"
+                    label="Experience (e.g. I have volunteered as a math tutor for 2 years, etc.)"
+                    variant="outlined"
+                    fullWidth
+                    onChange={(e) => {
+                      setProfileData({
+                        ...profileData,
+                        experience: e.target.value,
+                      });
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
                   <InputLabel>Preferences</InputLabel>
                   <Select
                     multiple
