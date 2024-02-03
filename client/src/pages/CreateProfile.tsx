@@ -36,7 +36,7 @@ function CreateProfile() {
 
   useEffect(() => {
     if (!isSignedIn) navigate(RoutePath.ROOT);
-    if (role === "ADMIN") navigate(RoutePath.OPPORTUNITY_CREATE);
+    if (role === "ADMIN") navigate(RoutePath.OPPORTUNITIES);
   }, [isSignedIn, role]);
 
   // use Dayjs for date of birth
