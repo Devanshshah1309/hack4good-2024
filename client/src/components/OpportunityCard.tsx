@@ -6,9 +6,13 @@ import {
   CardContent,
   CardMedia,
   Typography,
+  Snackbar,
 } from '@mui/material';
 import { PLACEHOLDER_IMAGE_URL } from '../constants';
 import useUserRole from '../hooks/useUserRole';
+import { authenticatedPost } from '../axios';
+import { useAuth } from '@clerk/clerk-react';
+import { useState } from 'react';
 
 interface OpportunityCardProps {
   opportunity: OpportunityResponse;
@@ -16,6 +20,9 @@ interface OpportunityCardProps {
 
 export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
   const { role } = useUserRole();
+  const { getToken } = useAuth();
+  const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
+  const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
 
   const start = new Date(opportunity.start);
   const end = new Date(opportunity.end);
@@ -61,9 +68,51 @@ export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
       </CardContent>
       {(!role || role === 'VOLUNTEER') && (
         <CardActions sx={{ alignSelf: 'flex-end', justifySelf: 'left' }}>
-          <Button size="small">Register</Button>
+          <Button
+            size="small"
+            onClick={async () => {
+              try {
+                await authenticatedPost(
+                  `/opportunities/${opportunity.id}/enrol`,
+                  undefined,
+                  (await getToken()) || '',
+                );
+                setSuccessSnackbarOpen(true);
+              } catch (err) {
+                setErrorSnackbarOpen(true);
+              }
+            }}
+          >
+            Register
+          </Button>
         </CardActions>
       )}
+      <Snackbar
+        open={successSnackbarOpen}
+        ContentProps={{
+          style: {
+            backgroundColor: '#2E7D32',
+          },
+        }}
+        autoHideDuration={3000}
+        message="Submitted request to enrol!"
+        onClose={() => {
+          setSuccessSnackbarOpen(false);
+        }}
+      />
+      <Snackbar
+        open={errorSnackbarOpen}
+        ContentProps={{
+          style: {
+            backgroundColor: '#D32F2F',
+          },
+        }}
+        autoHideDuration={3000}
+        message="Failed to submit request!"
+        onClose={() => {
+          setErrorSnackbarOpen(false);
+        }}
+      />
     </Card>
   );
 }

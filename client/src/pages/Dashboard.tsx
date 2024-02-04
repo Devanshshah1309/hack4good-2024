@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { RoutePath } from '../constants';
 import Sidebar from '../components/Sidebar';
 import { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { authenticatedGet } from '../axios';
 
 function Dashboard() {
@@ -14,32 +13,32 @@ function Dashboard() {
     if (isLoaded && !isSignedIn) navigate(RoutePath.ROOT);
   }, [isSignedIn]);
 
-  const [query, setQuery] = useState('');
+  const [path, setPath] = useState('');
   const [data, setData] = useState([]);
   return (
     <>
       <div className="main-container">
         <Sidebar />
         <div className="main">
-          api.com/admin/volunteers
-          <input
-            placeholder="query"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            style={{ width: '400px' }}
-          />
-          <button
-            onClick={async () => {
-              const res = await authenticatedGet<any[]>(
-                '/admin/volunteers' + query,
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const res = await authenticatedGet<any>(
+                path,
                 (await getToken()) || '',
                 navigate,
               );
               setData(res.data);
             }}
           >
-            Go
-          </button>
+            api/v1
+            <input
+              value={path}
+              onChange={(e) => setPath(e.target.value)}
+              style={{ width: '400px' }}
+            />
+            <button type="submit">Submit</button>
+          </form>
           <pre>{JSON.stringify(data, undefined, 2)}</pre>
         </div>
       </div>

@@ -34,4 +34,9 @@ export class AppService {
     const user = await this.getUser(clerkUserId);
     if (!user || user.role !== 'ADMIN') throw new ForbiddenException();
   }
+
+  async checkUserIsVolunteer(clerkUserId: string) {
+    const user = await this.getUser(clerkUserId);
+    if (!user || user.role !== 'VOLUNTEER') throw new ForbiddenException();
+  }
 }

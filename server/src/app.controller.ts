@@ -183,8 +183,11 @@ export class AppController {
     };
   }
 
-  @Post('opportunities/:id/enrollment')
+  /** For volunteers to register for an opportunity */
+  @Post('opportunities/:id/enrol')
   async enrolOpportunity(@Req() req: RequireAuthProp<Request>) {
+    await this.appService.checkUserIsVolunteer(req.auth.userId);
+
     const existing =
       await this.prisma.volunteerOpportunityEnrollment.findUnique({
         where: {
@@ -212,10 +215,37 @@ export class AppController {
 
   @Get('admin/opportunities')
   async adminGetOpportunities(@Req() req: RequireAuthProp<Request>) {
+    await this.appService.checkUserIsAdmin(req.auth.userId);
     return {
       opportunities: await this.prisma.opportunity.findMany({
         orderBy: { start: 'asc' },
       }),
+    };
+  }
+
+  @Get('admin/opportunities/:id')
+  async adminGetOpportunity(@Req() req: RequireAuthProp<Request>) {
+    await this.appService.checkUserIsAdmin(req.auth.userId);
+
+    const opportunity = await this.prisma.opportunity.findUnique({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    if (!opportunity)
+      throw new NotFoundException('No opportunity found with that id');
+
+    const registrations =
+      await this.prisma.volunteerOpportunityEnrollment.findMany({
+        where: {
+          opportunityId: req.params.id,
+        },
+      });
+
+    return {
+      opportunity,
+      registrations,
     };
   }
 
