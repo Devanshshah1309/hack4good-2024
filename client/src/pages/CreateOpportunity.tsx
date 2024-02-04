@@ -1,33 +1,31 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { authenticatedGet, authenticatedPost } from "../axios";
-import { useAuth } from "@clerk/clerk-react";
-import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
-import { useEffect, useState } from "react";
-import {
-  CreateOpportunityRequest,
-  OpportunityResponse,
-} from "../../../sharedTypes";
-import axios from "axios";
-import useUserRole from "../hooks/useUserRole";
-import { RoutePath } from "../constants";
-import { Grid, Paper, Snackbar, TextField } from "@mui/material";
-import Button from "@mui/material/Button";
-import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { InputLabel } from "@material-ui/core";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { styled } from "@mui/material/styles";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { authenticatedPost } from '../axios';
+import { useAuth } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
+import { useEffect, useState } from 'react';
+import { CreateOpportunityRequest } from '../../../sharedTypes';
+import axios from 'axios';
+import useUserRole from '../hooks/useUserRole';
+import { QueryKey, RoutePath } from '../constants';
+import { Grid, Paper, Snackbar, TextField } from '@mui/material';
+import Button from '@mui/material/Button';
+import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { InputLabel } from '@material-ui/core';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
+import { Dayjs } from 'dayjs';
 
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
   height: 1,
-  overflow: "hidden",
-  position: "absolute",
+  overflow: 'hidden',
+  position: 'absolute',
   bottom: 0,
   left: 0,
-  whiteSpace: "nowrap",
+  whiteSpace: 'nowrap',
   width: 1,
 });
 
@@ -37,27 +35,15 @@ export default function CreateOpportunity() {
   const { role } = useUserRole();
 
   useEffect(() => {
-    if (role !== "ADMIN") navigate(RoutePath.DASHBOARD);
+    if (role !== 'ADMIN') navigate(RoutePath.DASHBOARD);
   }, [role]);
 
-  const queryKey = "opportunities";
-
-  const { data } = useQuery({
-    queryKey: [queryKey],
-    queryFn: async () =>
-      authenticatedGet<{ opportunities: OpportunityResponse[] }>(
-        "/admin/opportunities",
-        (await getToken()) || "",
-        navigate
-      ),
-  });
-
-  const [opp, setOpp] = useState<Omit<CreateOpportunityRequest, "imageUrl">>({
-    name: "",
-    description: "",
+  const [opp, setOpp] = useState<Omit<CreateOpportunityRequest, 'imageUrl'>>({
+    name: '',
+    description: '',
     start: new Date(),
     end: new Date(),
-    location: "",
+    location: '',
     durationMinutes: 0,
   });
   const [imgFile, setImgFile] = useState<File | null>(null);
@@ -65,10 +51,10 @@ export default function CreateOpportunity() {
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
 
   async function uploadImageFileToCloudinary(): Promise<CreateOpportunityRequest> {
-    const oppCopy: CreateOpportunityRequest = { ...opp, imageUrl: "" };
+    const oppCopy: CreateOpportunityRequest = { ...opp, imageUrl: '' };
 
     if (!imgFile) {
-      console.log("file is", imgFile);
+      console.log('file is', imgFile);
       return oppCopy;
     }
 
@@ -78,10 +64,10 @@ export default function CreateOpportunity() {
     // check if .env variable has been read correctly
     console.log(uploadPreset);
 
-    console.log("Uploading file...");
+    console.log('Uploading file...');
     const formData = new FormData();
-    formData.append("file", imgFile);
-    formData.append("upload_preset", uploadPreset);
+    formData.append('file', imgFile);
+    formData.append('upload_preset', uploadPreset);
 
     const res = await axios.post<{
       secure_url: string;
@@ -99,24 +85,21 @@ export default function CreateOpportunity() {
     mutationFn: async () => {
       const oppCopy = await uploadImageFileToCloudinary();
       await authenticatedPost(
-        "/admin/opportunities",
+        '/admin/opportunities',
         oppCopy,
-        (await getToken()) ?? ""
+        (await getToken()) ?? '',
       );
     },
     onSuccess: () => {
       setSuccessSnackbarOpen(true);
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      queryClient.invalidateQueries({ queryKey: [QueryKey.OPPORTUNITIES] });
     },
     onError: () => {
       setErrorSnackbarOpen(true);
-      console.error("failed to create");
+      console.error('failed to create');
     },
     onSettled: () => {},
   });
-
-  let content: any = "loading...";
-  if (data) content = data.data.opportunities;
 
   return (
     <div className="main-container">
@@ -124,16 +107,16 @@ export default function CreateOpportunity() {
       <div className="main">
         <h2>Create Volunteering Opportunity</h2>
 
-        {role === "ADMIN" && (
+        {role === 'ADMIN' && (
           <>
             <form>
               <Paper
                 elevation={3}
                 sx={{
-                  backgroundColor: "#F5F5F5",
-                  paddingTop: "0.5rem",
-                  paddingBottom: "0.5rem",
-                  width: "80vw",
+                  backgroundColor: '#F5F5F5',
+                  paddingTop: '0.5rem',
+                  paddingBottom: '0.5rem',
+                  width: '80vw',
                 }}
               >
                 <Grid
@@ -142,7 +125,7 @@ export default function CreateOpportunity() {
                   spacing={2}
                   className="center"
                   minWidth="70vw"
-                  alignItems={"center"}
+                  alignItems={'center'}
                   justifyContent="flex-start"
                 >
                   <Grid item xs={4}>
@@ -171,7 +154,7 @@ export default function CreateOpportunity() {
                     <TextField
                       value={
                         opp.durationMinutes === 0
-                          ? ""
+                          ? ''
                           : opp.durationMinutes / 60
                       }
                       variant="outlined"
@@ -203,8 +186,8 @@ export default function CreateOpportunity() {
                     <InputLabel>Start Date and Time</InputLabel>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DateTimePicker
-                        sx={{ width: "100%" }}
-                        onChange={(newValue) => {
+                        sx={{ width: '100%' }}
+                        onChange={(newValue: Dayjs | null) => {
                           if (newValue) {
                             setOpp({ ...opp, start: newValue.toDate() });
                           }
@@ -216,8 +199,8 @@ export default function CreateOpportunity() {
                     <InputLabel>End Date and Time</InputLabel>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DateTimePicker
-                        sx={{ width: "100%" }}
-                        onChange={(newValue) => {
+                        sx={{ width: '100%' }}
+                        onChange={(newValue: Dayjs | null) => {
                           if (newValue) {
                             setOpp({ ...opp, end: newValue.toDate() });
                           }
@@ -245,7 +228,7 @@ export default function CreateOpportunity() {
                           setImgFile(
                             e.target.files!.length === 0
                               ? null
-                              : e.target.files![0]
+                              : e.target.files![0],
                           );
                         }}
                       />
@@ -254,10 +237,10 @@ export default function CreateOpportunity() {
                 </Grid>
               </Paper>
             </form>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
               <Button
                 className="center"
-                style={{ marginTop: "1rem" }}
+                style={{ marginTop: '1rem' }}
                 variant="contained"
                 color="success"
                 onClick={() => {
@@ -270,7 +253,7 @@ export default function CreateOpportunity() {
                 open={successSnackbarOpen}
                 ContentProps={{
                   style: {
-                    backgroundColor: "#2E7D32",
+                    backgroundColor: '#2E7D32',
                   },
                 }}
                 autoHideDuration={3000}
@@ -283,7 +266,7 @@ export default function CreateOpportunity() {
                 open={errorSnackbarOpen}
                 ContentProps={{
                   style: {
-                    backgroundColor: "#D32F2F",
+                    backgroundColor: '#D32F2F',
                   },
                 }}
                 autoHideDuration={3000}

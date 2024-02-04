@@ -5,7 +5,7 @@ import { authenticatedGet, authenticatedPut } from '../axios';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import { ProfileDataResponse, ProfileDataRequest } from '../../../sharedTypes';
-import { RESIDENTIAL_STATUS_MAP, RoutePath } from '../constants';
+import { QueryKey, RESIDENTIAL_STATUS_MAP, RoutePath } from '../constants';
 import useUserRole from '../hooks/useUserRole';
 import { Preference, ResidentialStatus } from '../../../sharedTypes';
 import {
@@ -25,7 +25,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { ALL_PREFERENCES } from '../constants';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import dayjs from 'dayjs';
 
 function Profile() {
@@ -33,7 +32,7 @@ function Profile() {
   const { getToken } = useAuth();
   const { role } = useUserRole();
 
-  if (role === 'ADMIN') navigate(RoutePath.ADMIN_PROFILE);
+  if (role === 'ADMIN') navigate(RoutePath.ROOT);
 
   // only these fields are editable by the user after creating a profile
   const [profileData, setProfileData] = useState<ProfileDataRequest>({
@@ -58,10 +57,9 @@ function Profile() {
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
 
   const queryClient = useQueryClient();
-  const queryKey = 'profile';
 
   const query = useQuery({
-    queryKey: [queryKey],
+    queryKey: [QueryKey.PROFILE],
     queryFn: async () => {
       const res = await authenticatedGet(
         '/profile',
@@ -93,7 +91,7 @@ function Profile() {
       await authenticatedPut('/profile', data, (await getToken()) ?? '');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      queryClient.invalidateQueries({ queryKey: [QueryKey.PROFILE] });
     },
     onError: () => {
       setErrorSnackbarOpen(true);

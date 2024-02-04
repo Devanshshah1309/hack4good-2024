@@ -1,24 +1,28 @@
-import { useQuery } from "@tanstack/react-query";
-import { authenticatedGet } from "../axios";
-import { useAuth } from "@clerk/clerk-react";
-import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
-import useUserRole from "../hooks/useUserRole";
-import { RoutePath } from "../constants";
-import { Button } from "@mui/material";
-import { Grid } from "@material-ui/core";
-import { OpportunityResponse } from "../../../sharedTypes";
-import OpportunityCard from "../components/OpportunityCard";
+import { useQuery } from '@tanstack/react-query';
+import { authenticatedGet } from '../axios';
+import { useAuth } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
+import useUserRole from '../hooks/useUserRole';
+import { QueryKey, RoutePath } from '../constants';
+import { Button, CircularProgress } from '@mui/material';
+import { Grid } from '@material-ui/core';
+import { OpportunityResponse } from '../../../sharedTypes';
+import OpportunityCard from '../components/OpportunityCard';
 
 export default function Opportunities() {
   const { getToken } = useAuth();
   const navigate = useNavigate();
   const { role } = useUserRole();
 
-  const queryKey = "opportunities";
   const { data } = useQuery({
-    queryKey: [queryKey],
-    queryFn: async () => authenticatedGet<{ opportunities: OpportunityResponse[] }>("/opportunities", (await getToken()) || "", navigate),
+    queryKey: [QueryKey.OPPORTUNITIES],
+    queryFn: async () =>
+      authenticatedGet<{ opportunities: OpportunityResponse[] }>(
+        '/opportunities',
+        (await getToken()) || '',
+        navigate,
+      ),
   });
 
   let content: OpportunityResponse[] = [];
@@ -29,21 +33,24 @@ export default function Opportunities() {
       <Sidebar />
       <div className="main">
         <h2>Volunteering Opportunities</h2>
-        {role === "ADMIN" && (
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button variant="contained" color="success" onClick={() => navigate(RoutePath.OPPORTUNITY_CREATE)}>
+        {role === 'ADMIN' && (
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => navigate(RoutePath.OPPORTUNITY_CREATE)}
+            >
               Create New Opportunity
             </Button>
           </div>
         )}
-        <Grid container spacing={3} style={{ width: "70vw" }}>
+        <Grid container spacing={3} style={{ width: '70vw' }}>
           {content.map((opp) => (
             <Grid item xs={4} key={opp.id}>
-              <OpportunityCard opportunity={opp} />
+              <OpportunityCard opportunity={opp} userRole={role} />
             </Grid>
           ))}
         </Grid>
-        {/* <pre>response data: {JSON.stringify(content, undefined, 2)}</pre> */}
       </div>
     </div>
   );

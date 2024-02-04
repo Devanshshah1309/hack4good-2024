@@ -66,7 +66,28 @@ export type UpdateOpportunityRequest = Omit<Opportunity, "id" | "imageUrl">;
 export type UpdateOpportunityImageRequest = {
   imageUrl: string;
 };
-export type OpportunityResponse = SwapDatesWithStrings<Opportunity>;
+export type OpportunityResponse = SwapDatesWithStrings<Opportunity> & {
+  VolunteerOpportunityEnrollment?: Enrollment[];
+};
+
+// Enrollment
+export type Enrollment = {
+  volunteerId: string;
+  opportunityId: string;
+  adminApproved: boolean;
+  didAttend: boolean;
+};
+export type EnrollmentWithVolunteer = Enrollment & {
+  volunteer: {
+    firstName: string;
+    lastName: string;
+    gender: Gender;
+    phone: string;
+    user: {
+      email: string;
+    };
+  };
+};
 
 // Utility types
 export type SwapDatesWithStrings<T> = {
