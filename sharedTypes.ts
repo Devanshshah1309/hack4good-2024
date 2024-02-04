@@ -12,7 +12,14 @@ export type Preference =
   | "WORKING_WITH_MIGRANT_WORKERS"
   | "WORKING_WITH_HEALTHCARE_WORKERS"
   | "TEACHING STUDENTS";
-export type ResidentialStatus = "SINGAPORE_CITIZEN" | "SINGAPORE_PR" | "EP" | "DP" | "LTVP" | "STUDENT_PASS" | "VISITOR_VISA";
+export type ResidentialStatus =
+  | "SINGAPORE_CITIZEN"
+  | "SINGAPORE_PR"
+  | "EP"
+  | "DP"
+  | "LTVP"
+  | "STUDENT_PASS"
+  | "VISITOR_VISA";
 export type ProfileDataRequest = {
   phone: string;
   skills: string;
@@ -67,6 +74,19 @@ export type UpdateOpportunityImageRequest = {
   imageUrl: string;
 };
 export type OpportunityResponse = SwapDatesWithStrings<Opportunity>;
+
+export type AdminGetVolunteers = {
+  clerkUserId: string;
+  createdAt: string;
+  email: string;
+  role: UserRole;
+  updatedAt: string;
+  volunteer: CreateProfileDataRequest & {
+    userId: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+};
 
 // Utility types
 export type SwapDatesWithStrings<T> = {

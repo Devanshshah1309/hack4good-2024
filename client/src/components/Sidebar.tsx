@@ -23,7 +23,9 @@ import { useAuth } from '@clerk/clerk-react';
 import useUserRole from '../hooks/useUserRole';
 import { useEffect } from 'react';
 import { Typography } from '@mui/material';
-import BigAtHeartLogo from '../../public/big-at-heart.png';
+import BigAtHeartLogo from '../assets/big-at-heart.png';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 const drawerWidth = 240;
 
@@ -59,9 +61,11 @@ export default function Sidebar() {
         >
           <Toolbar />
           <img src={BigAtHeartLogo} />
-          <Typography variant="h6" style={{ textAlign: 'center' }}>
-            Volunteer Management Portal
-          </Typography>
+          {role === 'ADMIN' && (
+            <Typography variant="h6" style={{ textAlign: 'center' }}>
+              Volunteer Management Portal
+            </Typography>
+          )}
           {user?.emailAddresses[0].emailAddress && (
             <div style={{ textAlign: 'center' }}>
               <Typography variant="subtitle1">
@@ -90,9 +94,9 @@ export default function Sidebar() {
                   <Link to={RoutePath.DASHBOARD} className="sidebar-link">
                     <ListItemButton>
                       <ListItemIcon>
-                        <HistoryIcon />
+                        <DashboardIcon />
                       </ListItemIcon>
-                      <ListItemText primary="Volunteering History" />
+                      <ListItemText primary="Dashboard" />
                     </ListItemButton>
                   </Link>
                 </ListItem>
@@ -106,6 +110,18 @@ export default function Sidebar() {
                     </ListItemButton>
                   </Link>
                 </ListItem>
+                {role === 'ADMIN' && (
+                  <ListItem disablePadding>
+                    <Link to={RoutePath.VOLUNTEERS} className="sidebar-link">
+                      <ListItemButton>
+                        <ListItemIcon>
+                          <GroupsIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Volunteers" />
+                      </ListItemButton>
+                    </Link>
+                  </ListItem>
+                )}
                 {role === 'VOLUNTEER' && (
                   <ListItem disablePadding>
                     <Link to={RoutePath.PROFILE} className="sidebar-link">
