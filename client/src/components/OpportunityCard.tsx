@@ -1,4 +1,4 @@
-import { OpportunityResponse } from '../../../sharedTypes';
+import { OpportunityResponse, UserRole } from '../../../sharedTypes';
 import {
   Card,
   CardActions,
@@ -8,19 +8,24 @@ import {
   Typography,
   Snackbar,
 } from '@mui/material';
-import { PLACEHOLDER_IMAGE_URL } from '../constants';
-import useUserRole from '../hooks/useUserRole';
+import { PLACEHOLDER_IMAGE_URL, QueryKey, RoutePath } from '../constants';
 import { authenticatedPost } from '../axios';
 import { useAuth } from '@clerk/clerk-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface OpportunityCardProps {
   opportunity: OpportunityResponse;
+  userRole: UserRole | null;
 }
 
-export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
-  const { role } = useUserRole();
+export default function OpportunityCard({
+  opportunity,
+  userRole,
+}: OpportunityCardProps) {
   const { getToken } = useAuth();
+  const queryClient = useQueryClient();
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
 
@@ -33,7 +38,7 @@ export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
   const endDate = end.toLocaleDateString();
   const endTime = end.toLocaleTimeString();
 
-  return (
+  const card = (
     <Card
       sx={{
         height: '100%',
@@ -66,26 +71,37 @@ export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
           Total Volunteering Hours: {opportunity.durationMinutes / 60}
         </Typography>
       </CardContent>
-      {(!role || role === 'VOLUNTEER') && (
-        <CardActions sx={{ alignSelf: 'flex-end', justifySelf: 'left' }}>
-          <Button
-            size="small"
-            onClick={async () => {
-              try {
-                await authenticatedPost(
-                  `/opportunities/${opportunity.id}/enrol`,
-                  undefined,
-                  (await getToken()) || '',
-                );
-                setSuccessSnackbarOpen(true);
-              } catch (err) {
-                setErrorSnackbarOpen(true);
-              }
-            }}
-          >
-            Register
-          </Button>
-        </CardActions>
+      {userRole === 'VOLUNTEER' && (
+        <>
+          <CardActions sx={{ alignSelf: 'flex-end', justifySelf: 'left' }}>
+            <Button
+              size="small"
+              onClick={async () => {
+                try {
+                  await authenticatedPost(
+                    `/opportunities/${opportunity.id}/enrol`,
+                    undefined,
+                    (await getToken()) || '',
+                  );
+                  setSuccessSnackbarOpen(true);
+                  queryClient.invalidateQueries({
+                    queryKey: [QueryKey.OPPORTUNITIES],
+                  });
+                } catch (err) {
+                  setErrorSnackbarOpen(true);
+                }
+              }}
+            >
+              Register
+            </Button>
+          </CardActions>
+          {!opportunity.VolunteerOpportunityEnrollment ||
+          opportunity.VolunteerOpportunityEnrollment.length === 0
+            ? ''
+            : opportunity.VolunteerOpportunityEnrollment[0].adminApproved
+            ? 'enrollment approved by admin'
+            : 'enrollment NOT YET approved'}
+        </>
       )}
       <Snackbar
         open={successSnackbarOpen}
@@ -114,5 +130,11 @@ export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
         }}
       />
     </Card>
+  );
+
+  return userRole === 'ADMIN' ? (
+    <Link to={`${RoutePath.OPPORTUNITIES}/${opportunity.id}`}>{card}</Link>
+  ) : (
+    card
   );
 }

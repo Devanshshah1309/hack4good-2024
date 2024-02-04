@@ -162,15 +162,33 @@ export class AppController {
 
   @Get('opportunities')
   async getOpportunities(@Req() req: RequireAuthProp<Request>) {
+    const role = (
+      await this.prisma.user.findUnique({
+        where: { clerkUserId: req.auth.userId },
+      })
+    )?.role as UserRole;
+
     return {
       opportunities: await this.prisma.opportunity.findMany({
         orderBy: { start: 'asc' },
+        include:
+          role === 'ADMIN'
+            ? undefined
+            : {
+                VolunteerOpportunityEnrollment: {
+                  where: {
+                    volunteerId: req.auth.userId,
+                  },
+                },
+              },
       }),
     };
   }
 
   @Get('opportunities/:id')
   async getOpportunity(@Req() req: RequireAuthProp<Request>) {
+    await this.appService.checkUserIsVolunteer(req.auth.userId);
+
     const opportunity = await this.prisma.opportunity.findUnique({
       where: {
         id: req.params.id,
@@ -178,8 +196,20 @@ export class AppController {
     });
     if (!opportunity)
       throw new NotFoundException('No opportunity found with that id');
+
+    const enrollment =
+      await this.prisma.volunteerOpportunityEnrollment.findUnique({
+        where: {
+          volunteerId_opportunityId: {
+            volunteerId: req.auth.userId,
+            opportunityId: req.params.id,
+          },
+        },
+      });
+
     return {
       opportunity,
+      enrollment,
     };
   }
 
@@ -213,16 +243,6 @@ export class AppController {
     });
   }
 
-  @Get('admin/opportunities')
-  async adminGetOpportunities(@Req() req: RequireAuthProp<Request>) {
-    await this.appService.checkUserIsAdmin(req.auth.userId);
-    return {
-      opportunities: await this.prisma.opportunity.findMany({
-        orderBy: { start: 'asc' },
-      }),
-    };
-  }
-
   @Get('admin/opportunities/:id')
   async adminGetOpportunity(@Req() req: RequireAuthProp<Request>) {
     await this.appService.checkUserIsAdmin(req.auth.userId);
@@ -236,16 +256,31 @@ export class AppController {
     if (!opportunity)
       throw new NotFoundException('No opportunity found with that id');
 
-    const registrations =
+    const enrollments =
       await this.prisma.volunteerOpportunityEnrollment.findMany({
         where: {
           opportunityId: req.params.id,
+        },
+        include: {
+          volunteer: {
+            select: {
+              user: {
+                select: {
+                  email: true,
+                },
+              },
+              firstName: true,
+              lastName: true,
+              gender: true,
+              phone: true,
+            },
+          },
         },
       });
 
     return {
       opportunity,
-      registrations,
+      enrollments,
     };
   }
 
@@ -354,6 +389,80 @@ export class AppController {
     await this.prisma.opportunity.delete({
       where: {
         id: req.params.id,
+      },
+    });
+  }
+
+  @Put('admin/opportunities/:opportunityId/enrollments/:volunteerId/approval')
+  async adminUpdateEnrollmentApproval(@Req() req: RequireAuthProp<Request>) {
+    await this.appService.checkUserIsAdmin(req.auth.userId);
+
+    const enrollment =
+      await this.prisma.volunteerOpportunityEnrollment.findUnique({
+        where: {
+          volunteerId_opportunityId: {
+            opportunityId: req.params.opportunityId,
+            volunteerId: req.params.volunteerId,
+          },
+        },
+      });
+
+    if (!enrollment)
+      throw new NotFoundException(
+        'No enrollment found from that user for that opportunity',
+      );
+
+    const adminApproved = req.body.adminApproved as boolean | undefined;
+    if (adminApproved === undefined)
+      throw new BadRequestException(
+        'Please specify boolean value adminApproved',
+      );
+
+    await this.prisma.volunteerOpportunityEnrollment.update({
+      where: {
+        volunteerId_opportunityId: {
+          opportunityId: req.params.opportunityId,
+          volunteerId: req.params.volunteerId,
+        },
+      },
+      data: {
+        adminApproved,
+      },
+    });
+  }
+
+  @Put('admin/opportunities/:opportunityId/enrollments/:volunteerId/attendance')
+  async adminUpdateEnrollmentAttendance(@Req() req: RequireAuthProp<Request>) {
+    await this.appService.checkUserIsAdmin(req.auth.userId);
+
+    const enrollment =
+      await this.prisma.volunteerOpportunityEnrollment.findUnique({
+        where: {
+          volunteerId_opportunityId: {
+            opportunityId: req.params.opportunityId,
+            volunteerId: req.params.volunteerId,
+          },
+        },
+      });
+
+    if (!enrollment)
+      throw new NotFoundException(
+        'No enrollment found from that user for that opportunity',
+      );
+
+    const didAttend = req.body.didAttend as boolean | undefined;
+    if (didAttend === undefined)
+      throw new BadRequestException('Please specify boolean value didAttend');
+
+    await this.prisma.volunteerOpportunityEnrollment.update({
+      where: {
+        volunteerId_opportunityId: {
+          opportunityId: req.params.opportunityId,
+          volunteerId: req.params.volunteerId,
+        },
+      },
+      data: {
+        didAttend,
       },
     });
   }

@@ -1,19 +1,29 @@
-import { useAuth } from "@clerk/clerk-react";
-import { UserRole } from "../../../sharedTypes";
-import { useQuery } from "@tanstack/react-query";
-import { authenticatedGet } from "../axios";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from '@clerk/clerk-react';
+import { UserRole } from '../../../sharedTypes';
+import { useQuery } from '@tanstack/react-query';
+import { authenticatedGet } from '../axios';
+import { useNavigate } from 'react-router-dom';
+import { QueryKey } from '../constants';
 
 export default function useUserRole() {
   const { getToken } = useAuth();
   const navigate = useNavigate();
 
   const { isPending, error, data } = useQuery({
-    queryKey: ["userRole"],
-    queryFn: async () => authenticatedGet<{ role: UserRole | null }>("/role", (await getToken()) ?? "", navigate),
+    queryKey: [QueryKey.USER_ROLE],
+    queryFn: async () =>
+      authenticatedGet<{ role: UserRole | null }>(
+        '/role',
+        (await getToken()) ?? '',
+        navigate,
+      ),
   });
 
-  const returnObj: { loading: boolean; role: UserRole | null; error: Error | null } = {
+  const returnObj: {
+    loading: boolean;
+    role: UserRole | null;
+    error: Error | null;
+  } = {
     loading: true,
     role: null,
     error: null,

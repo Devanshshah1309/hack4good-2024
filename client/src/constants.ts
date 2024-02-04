@@ -5,10 +5,10 @@ export const RoutePath = {
   DASHBOARD: '/dashboard',
   PROFILE: '/profile',
   PROFILE_CREATE: '/profile/create',
-  OPPORTUNITIES: '/opportunities',
-  OPPORTUNITY_CREATE: '/opportunity/create',
   VOLUNTEERS: '/volunteers',
-  ADMIN_PROFILE: '/admin/profile',
+  OPPORTUNITIES: '/opportunities',
+  OPPORTUNITY: '/opportunities/:opportunityId',
+  OPPORTUNITY_CREATE: '/opportunity/create',
 } as const;
 
 export const ALL_PREFERENCES = [
@@ -31,6 +31,12 @@ export const RESIDENTIAL_STATUS_MAP: Record<ResidentialStatus, string> = {
   LTVP: 'Long Term Visit Pass',
   STUDENT_PASS: 'Student Pass',
   VISITOR_VISA: 'Visitor Visa',
+} as const;
+
+export const QueryKey = {
+  USER_ROLE: 'userRole',
+  OPPORTUNITIES: 'opportunities',
+  PROFILE: 'profile',
 } as const;
 
 export const PLACEHOLDER_IMAGE_URL =
