@@ -127,10 +127,44 @@ export default function OpportunityPage() {
     },
     {
       field: 'didAttend',
-      headerName: 'Mark Attendance',
+      headerName: 'Attendance',
       width: 150,
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: (params) => {
+        const onClick = async (e) => {
+          e.stopPropagation();
+          const volunteerId = params.row.id;
+          const enrollment = data?.data.enrollments.find(
+            (enrollment) => enrollment.volunteerId === volunteerId,
+          );
+          if (enrollment) {
+            await authenticatedPut(
+              `/admin/opportunities/${enrollment.opportunityId}/enrollments/${enrollment.volunteerId}/attendance`,
+              { didAttend: !enrollment.didAttend },
+              (await getToken()) || '',
+            );
+            queryClient.invalidateQueries({
+              queryKey: [QueryKey.OPPORTUNITIES, opportunityId],
+            });
+          }
+        };
+        if (params.row.adminApproved === false) return '';
+        return (
+          <Button
+            onClick={onClick}
+            color={params.value ? 'success' : 'error'}
+            style={{
+              border: 'none',
+              borderRadius: '5px',
+              padding: '5px',
+              cursor: 'pointer',
+            }}
+          >
+            {params.value ? <DoneIcon /> : <CloseIcon />}
+          </Button>
+        );
+      },
     },
   ];
 

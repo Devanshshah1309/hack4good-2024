@@ -40,9 +40,9 @@ export default function OpportunityCard({
 
   // local date and time for both start and end
   const startDate = start.toLocaleDateString();
-  const startTime = start.toLocaleTimeString();
+  const startTime = start.toLocaleTimeString().substring(0, 5); // remove seconds
   const endDate = end.toLocaleDateString();
-  const endTime = end.toLocaleTimeString();
+  const endTime = end.toLocaleTimeString().substring(0, 5); // remove seconds
 
   // check whether user has already enrolled
   const enrollmentStatus: Enrollment[] | undefined =
