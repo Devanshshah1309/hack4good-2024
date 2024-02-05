@@ -170,6 +170,9 @@ export class AppController {
 
     return {
       opportunities: await this.prisma.opportunity.findMany({
+        where: {
+          archive: role === 'ADMIN' ? undefined : false,
+        },
         orderBy: { start: 'asc' },
         include:
           role === 'ADMIN'
@@ -296,6 +299,7 @@ export class AppController {
       location,
       durationMinutes,
       imageUrl,
+      archive,
     } = req.body as SwapDatesWithStrings<CreateOpportunityRequest>;
 
     if (new Date(start) > new Date(end))
@@ -310,6 +314,7 @@ export class AppController {
         location,
         durationMinutes,
         imageUrl,
+        archive,
       },
     });
 
@@ -330,8 +335,15 @@ export class AppController {
     if (!opportunity)
       throw new NotFoundException('No opportunity found with that id');
 
-    const { name, description, start, end, durationMinutes, location } =
-      req.body as SwapDatesWithStrings<UpdateOpportunityRequest>;
+    const {
+      name,
+      description,
+      start,
+      end,
+      durationMinutes,
+      location,
+      archive,
+    } = req.body as SwapDatesWithStrings<UpdateOpportunityRequest>;
     if (new Date(start) > new Date(end))
       throw new BadRequestException('start cannot be after end');
 
@@ -346,6 +358,7 @@ export class AppController {
         end,
         location,
         durationMinutes,
+        archive,
       },
     });
 

@@ -193,8 +193,29 @@ export default function OpportunityPage() {
             sx={{ maxWidth: '80vw', boxShadow: 2, border: 2 }}
           />
         )}
+
+        {data && (
+          <button
+            onClick={async () => {
+              await authenticatedPut(
+                `/admin/opportunities/${opportunityId}`,
+                {
+                  ...data.data.opportunity,
+                  archive: !data.data.opportunity.archive,
+                },
+                (await getToken()) || '',
+              );
+              queryClient.invalidateQueries({
+                queryKey: [QueryKey.OPPORTUNITIES, opportunityId],
+              });
+            }}
+          >
+            test PUT button (toggle "archive")
+          </button>
+        )}
+
         <pre>{data && JSON.stringify(data.data, undefined, 2)}</pre>
-        {data &&
+        {/* {data &&
           data.data.enrollments.map((enrollment) => (
             <div
               key={enrollment.volunteerId}
@@ -241,7 +262,7 @@ export default function OpportunityPage() {
                 mark attendance
               </button>
             </div>
-          ))}
+          ))} */}
       </div>
     </div>
   );

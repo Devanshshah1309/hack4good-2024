@@ -12,14 +12,7 @@ export type Preference =
   | "WORKING_WITH_MIGRANT_WORKERS"
   | "WORKING_WITH_HEALTHCARE_WORKERS"
   | "TEACHING STUDENTS";
-export type ResidentialStatus =
-  | "SINGAPORE_CITIZEN"
-  | "SINGAPORE_PR"
-  | "EP"
-  | "DP"
-  | "LTVP"
-  | "STUDENT_PASS"
-  | "VISITOR_VISA";
+export type ResidentialStatus = "SINGAPORE_CITIZEN" | "SINGAPORE_PR" | "EP" | "DP" | "LTVP" | "STUDENT_PASS" | "VISITOR_VISA";
 export type ProfileDataRequest = {
   phone: string;
   skills: string;
@@ -67,6 +60,7 @@ export type Opportunity = {
   location: string;
   durationMinutes: number;
   imageUrl: string;
+  archive: boolean;
 };
 export type CreateOpportunityRequest = Omit<Opportunity, "id">;
 export type UpdateOpportunityRequest = Omit<Opportunity, "id" | "imageUrl">;

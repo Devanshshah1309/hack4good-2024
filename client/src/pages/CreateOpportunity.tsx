@@ -38,7 +38,9 @@ export default function CreateOpportunity() {
     if (role !== 'ADMIN') navigate(RoutePath.DASHBOARD);
   }, [role]);
 
-  const [opp, setOpp] = useState<Omit<CreateOpportunityRequest, 'imageUrl'>>({
+  const [opp, setOpp] = useState<
+    Omit<CreateOpportunityRequest, 'imageUrl' | 'archive'>
+  >({
     name: '',
     description: '',
     start: new Date(),
@@ -51,7 +53,11 @@ export default function CreateOpportunity() {
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
 
   async function uploadImageFileToCloudinary(): Promise<CreateOpportunityRequest> {
-    const oppCopy: CreateOpportunityRequest = { ...opp, imageUrl: '' };
+    const oppCopy: CreateOpportunityRequest = {
+      ...opp,
+      imageUrl: '',
+      archive: false,
+    };
 
     if (!imgFile) {
       console.log('file is', imgFile);

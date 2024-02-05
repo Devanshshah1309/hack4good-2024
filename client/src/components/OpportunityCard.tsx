@@ -72,12 +72,16 @@ export default function OpportunityCard({
           <Typography gutterBottom variant="h5" component="div">
             {opportunity.name}
           </Typography>
-          {enrollmentStatus && enrollmentStatus[0].adminApproved && (
-            <DoneAllIcon color="success" />
-          )}
-          {enrollmentStatus && !enrollmentStatus[0].adminApproved && (
-            <AutorenewIcon color="secondary" />
-          )}
+          {enrollmentStatus &&
+            enrollmentStatus.length > 0 &&
+            enrollmentStatus[0].adminApproved && (
+              <DoneAllIcon color="success" />
+            )}
+          {enrollmentStatus &&
+            enrollmentStatus.length > 0 &&
+            !enrollmentStatus[0].adminApproved && (
+              <AutorenewIcon color="secondary" />
+            )}
         </div>
         <Typography variant="subtitle1" color="text.secondary" align="left">
           {opportunity.description}
@@ -97,9 +101,9 @@ export default function OpportunityCard({
           <CardActions sx={{ alignSelf: 'flex-end', justifySelf: 'left' }}>
             <Button
               size="small"
-              disabled={!enrollmentStatus ? false : true}
+              disabled={enrollmentStatus && enrollmentStatus.length > 0}
               color={
-                !enrollmentStatus
+                !enrollmentStatus || enrollmentStatus.length === 0
                   ? 'primary'
                   : enrollmentStatus[0].adminApproved
                   ? 'success'
@@ -121,7 +125,7 @@ export default function OpportunityCard({
                 }
               }}
             >
-              {!enrollmentStatus
+              {!enrollmentStatus || enrollmentStatus.length === 0
                 ? 'Register'
                 : enrollmentStatus[0].adminApproved
                 ? 'Registered!'
