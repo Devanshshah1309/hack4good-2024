@@ -170,9 +170,6 @@ export class AppController {
 
     return {
       opportunities: await this.prisma.opportunity.findMany({
-        where: {
-          archive: role === 'ADMIN' ? undefined : false,
-        },
         orderBy: { start: 'asc' },
         include:
           role === 'ADMIN'
