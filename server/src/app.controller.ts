@@ -427,6 +427,7 @@ export class AppController {
       },
       data: {
         adminApproved,
+        didAttend: !adminApproved ? false : undefined,
       },
     });
   }
