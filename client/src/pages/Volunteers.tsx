@@ -12,7 +12,7 @@ import {
   GridColDef,
   GridColumnHeaderParams,
 } from '@mui/x-data-grid';
-import { RESIDENTIAL_STATUS_MAP } from '../constants';
+import { RESIDENTIAL_STATUS_MAP, RoutePath } from '../constants';
 import { Typography } from '@mui/material';
 
 export default function Volunteers() {
@@ -29,7 +29,7 @@ export default function Volunteers() {
         navigate,
       ),
   });
-  if (role !== 'ADMIN') return;
+  if (role !== 'ADMIN') navigate(RoutePath.OPPORTUNITIES);
   let content: AdminGetVolunteers[] = [];
   if (data) content = data.data;
 

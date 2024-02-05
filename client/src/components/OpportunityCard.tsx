@@ -1,4 +1,8 @@
-import { OpportunityResponse, UserRole } from '../../../sharedTypes';
+import {
+  Enrollment,
+  OpportunityResponse,
+  UserRole,
+} from '../../../sharedTypes';
 import {
   Card,
   CardActions,
@@ -14,6 +18,8 @@ import { useAuth } from '@clerk/clerk-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 
 interface OpportunityCardProps {
   opportunity: OpportunityResponse;
@@ -24,7 +30,7 @@ export default function OpportunityCard({
   opportunity,
   userRole,
 }: OpportunityCardProps) {
-  const { getToken } = useAuth();
+  const { getToken, userId } = useAuth();
   const queryClient = useQueryClient();
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
@@ -37,6 +43,13 @@ export default function OpportunityCard({
   const startTime = start.toLocaleTimeString();
   const endDate = end.toLocaleDateString();
   const endTime = end.toLocaleTimeString();
+
+  // check whether user has already enrolled
+  const enrollmentStatus: Enrollment[] | undefined =
+    opportunity.VolunteerOpportunityEnrollment &&
+    opportunity.VolunteerOpportunityEnrollment.filter(
+      (enrollment) => enrollment.volunteerId === userId,
+    );
 
   const card = (
     <Card
@@ -55,9 +68,17 @@ export default function OpportunityCard({
         title={opportunity.name}
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {opportunity.name}
-        </Typography>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Typography gutterBottom variant="h5" component="div">
+            {opportunity.name}
+          </Typography>
+          {enrollmentStatus && enrollmentStatus[0].adminApproved && (
+            <DoneAllIcon color="success" />
+          )}
+          {enrollmentStatus && !enrollmentStatus[0].adminApproved && (
+            <AutorenewIcon color="secondary" />
+          )}
+        </div>
         <Typography variant="subtitle1" color="text.secondary" align="left">
           {opportunity.description}
         </Typography>
@@ -76,6 +97,14 @@ export default function OpportunityCard({
           <CardActions sx={{ alignSelf: 'flex-end', justifySelf: 'left' }}>
             <Button
               size="small"
+              disabled={!enrollmentStatus ? false : true}
+              color={
+                !enrollmentStatus
+                  ? 'primary'
+                  : enrollmentStatus[0].adminApproved
+                  ? 'success'
+                  : 'secondary'
+              }
               onClick={async () => {
                 try {
                   await authenticatedPost(
@@ -92,15 +121,13 @@ export default function OpportunityCard({
                 }
               }}
             >
-              Register
+              {!enrollmentStatus
+                ? 'Register'
+                : enrollmentStatus[0].adminApproved
+                ? 'Registered!'
+                : 'Pending Approval'}
             </Button>
           </CardActions>
-          {!opportunity.VolunteerOpportunityEnrollment ||
-          opportunity.VolunteerOpportunityEnrollment.length === 0
-            ? ''
-            : opportunity.VolunteerOpportunityEnrollment[0].adminApproved
-            ? 'enrollment approved by admin'
-            : 'enrollment NOT YET approved'}
         </>
       )}
       <Snackbar
