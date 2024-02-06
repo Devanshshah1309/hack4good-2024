@@ -13,14 +13,13 @@ import {
   Snackbar,
 } from '@mui/material';
 import { PLACEHOLDER_IMAGE_URL, QueryKey, RoutePath } from '../constants';
-import { authenticatedPost, authenticatedPut } from '../axios';
+import { authenticatedPost } from '../axios';
 import { useAuth } from '@clerk/clerk-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
-import { extractDateAndTime } from '../utils';
 interface OpportunityCardProps {
   opportunity: OpportunityResponse;
   userRole: UserRole | null;
@@ -72,16 +71,22 @@ export default function OpportunityCard({
           <Typography gutterBottom variant="h5" component="div">
             {opportunity.name}
           </Typography>
+          {/* user is volunteer, enrollment is approved */}
           {enrollmentStatus &&
             enrollmentStatus.length > 0 &&
             enrollmentStatus[0].adminApproved && (
               <DoneAllIcon color="success" />
             )}
+          {/* user is volunteer, enrollment is pending approval */}
           {enrollmentStatus &&
             enrollmentStatus.length > 0 &&
             !enrollmentStatus[0].adminApproved && (
               <AutorenewIcon color="secondary" />
             )}
+          {/* user is admin */}
+          {opportunity._count && (
+            <p>{opportunity._count.VolunteerOpportunityEnrollment} pending</p>
+          )}
         </div>
         <Typography variant="subtitle1" color="text.secondary" align="left">
           {opportunity.description}

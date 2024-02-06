@@ -73,7 +73,10 @@ export type UpdateOpportunityImageRequest = {
   imageUrl: string;
 };
 export type OpportunityResponse = SwapDatesWithStrings<Opportunity> & {
+  /**  only for volunteer user*/
   VolunteerOpportunityEnrollment?: Enrollment[];
+  /** only for admin user */
+  _count?: { VolunteerOpportunityEnrollment: number };
 };
 
 // Enrollment

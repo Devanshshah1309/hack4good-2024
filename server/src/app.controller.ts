@@ -159,6 +159,7 @@ export class AppController {
     ]);
   }
 
+  // Returns different shape depending on whether request is made from volunteer or admin user
   @Get('opportunities')
   async getOpportunities(@Req() req: RequireAuthProp<Request>) {
     const role = (
@@ -172,14 +173,26 @@ export class AppController {
         orderBy: { start: 'asc' },
         include:
           role === 'ADMIN'
-            ? undefined
-            : {
-                VolunteerOpportunityEnrollment: {
-                  where: {
-                    volunteerId: req.auth.userId,
+            ? {
+                _count: {
+                  select: {
+                    VolunteerOpportunityEnrollment: {
+                      where: {
+                        adminApproved: false,
+                      },
+                    },
                   },
                 },
-              },
+              }
+            : role === 'VOLUNTEER'
+              ? {
+                  VolunteerOpportunityEnrollment: {
+                    where: {
+                      volunteerId: req.auth.userId,
+                    },
+                  },
+                }
+              : undefined,
       }),
     };
   }
