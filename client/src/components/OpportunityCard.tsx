@@ -11,6 +11,7 @@ import {
   CardMedia,
   Typography,
   Snackbar,
+  Badge,
 } from '@mui/material';
 import { PLACEHOLDER_IMAGE_URL, QueryKey, RoutePath } from '../constants';
 import { authenticatedPost } from '../axios';
@@ -20,6 +21,7 @@ import { Link } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
+import PersonIcon from '@mui/icons-material/Person';
 interface OpportunityCardProps {
   opportunity: OpportunityResponse;
   userRole: UserRole | null;
@@ -84,9 +86,15 @@ export default function OpportunityCard({
               <AutorenewIcon color="secondary" />
             )}
           {/* user is admin */}
-          {opportunity._count && (
-            <p>{opportunity._count.VolunteerOpportunityEnrollment} pending</p>
-          )}
+          {opportunity._count &&
+            opportunity._count.VolunteerOpportunityEnrollment !== 0 && (
+              <Badge
+                badgeContent={opportunity._count.VolunteerOpportunityEnrollment}
+                color="primary"
+              >
+                <PersonIcon color="action" />
+              </Badge>
+            )}
         </div>
         <Typography variant="subtitle1" color="text.secondary" align="left">
           {opportunity.description}
