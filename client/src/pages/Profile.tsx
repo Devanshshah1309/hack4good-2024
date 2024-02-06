@@ -4,7 +4,10 @@ import { useState } from 'react';
 import { authenticatedGet, authenticatedPut } from '../axios';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
-import { ProfileDataResponse, UpdateProfileDataRequest } from '../../../sharedTypes';
+import {
+  ProfileDataResponse,
+  UpdateProfileDataRequest,
+} from '../../../sharedTypes';
 import { QueryKey, RESIDENTIAL_STATUS_MAP, RoutePath } from '../constants';
 import useUserRole from '../hooks/useUserRole';
 import { Preference, ResidentialStatus } from '../../../sharedTypes';
@@ -23,7 +26,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import { ALL_PREFERENCES } from '../constants';
 import dayjs from 'dayjs';
 
@@ -52,7 +55,6 @@ function Profile() {
   const [dateOfBirth, setDateOfBirth] = useState<string>(
     new Date().toISOString(),
   );
-  const [preferences, setPreferences] = useState<Preference[]>([]);
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
 
@@ -284,9 +286,8 @@ function Profile() {
                   <Select
                     multiple
                     fullWidth
-                    value={preferences as string[]}
-                    onChange={(event: SelectChangeEvent) => {
-                      setPreferences(event.target.value as Preference[]); // for display
+                    value={profileData.preferences}
+                    onChange={(event) => {
                       setProfileData({
                         ...profileData,
                         preferences: event.target.value as Preference[],
