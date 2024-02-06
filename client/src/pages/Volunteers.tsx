@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { authenticatedGet } from '../axios';
 import { useAuth } from '@clerk/clerk-react';
 import useUserRole from '../hooks/useUserRole';
@@ -17,6 +17,7 @@ import {
 import { RESIDENTIAL_STATUS_MAP, RoutePath } from '../constants';
 import { Typography } from '@mui/material';
 import { renderCellExpand } from '../utils';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 export default function Volunteers() {
   const { getToken } = useAuth();
@@ -51,7 +52,7 @@ export default function Volunteers() {
       skills: user.volunteer.skills,
       experience: user.volunteer.experience,
       dateOfBirth: user.volunteer.dateOfBirth,
-      preferences: user.volunteer.preferences,
+      preferences: user.volunteer.VolunteerPreference,
     };
   });
 
@@ -66,16 +67,38 @@ export default function Volunteers() {
 
   const cols: GridColDef[] = [
     {
+      field: 'Actions',
+      headerName: 'Actions',
+      width: 100,
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderHeader: COLUMN_RENDER_HEADER,
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => {
+        return (
+          <VisibilityIcon
+            sx={{ display: 'block', margin: 'auto' }}
+            onClick={() => {
+              navigation;
+              navigate(`${RoutePath.VOLUNTEERS}/${params.row.id}`, {
+                state: { userId: params.row.id },
+              });
+            }}
+            style={{ cursor: 'pointer' }}
+          />
+        );
+      },
+    },
+    {
       field: 'firstName',
       headerName: 'First Name',
-      width: 100,
+      width: 150,
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
     },
     {
       field: 'lastName',
       headerName: 'Last Name',
-      width: 100,
+      width: 150,
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
     },
