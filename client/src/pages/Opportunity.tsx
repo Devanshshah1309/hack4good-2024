@@ -6,7 +6,7 @@ import Sidebar from '../components/Sidebar';
 import {
   EnrollmentWithVolunteer,
   Opportunity,
-  OpportunityResponse,
+  SwapDatesWithStrings,
 } from '../../../sharedTypes';
 import { QueryKey } from '../constants';
 import {
@@ -30,7 +30,7 @@ export default function OpportunityPage() {
     queryKey: [QueryKey.OPPORTUNITIES, opportunityId],
     queryFn: async () => {
       return await authenticatedGet<{
-        opportunity: Opportunity;
+        opportunity: SwapDatesWithStrings<Opportunity>;
         enrollments: EnrollmentWithVolunteer[];
       }>(
         `/admin/opportunities/${opportunityId}`,
