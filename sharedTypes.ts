@@ -89,7 +89,9 @@ export type EnrollmentWithVolunteer = Enrollment & {
     };
   };
 };
-
+export type EnrollmentWithOpportunity = Enrollment & {
+  opportunity: Opportunity;
+};
 export type AdminGetVolunteers = {
   clerkUserId: string;
   createdAt: string;
@@ -101,6 +103,9 @@ export type AdminGetVolunteers = {
     createdAt: string;
     updatedAt: string;
   };
+};
+export type AdminGetVolunteer = AdminGetVolunteers & {
+  enrollments: EnrollmentWithOpportunity[];
 };
 
 // Utility types
