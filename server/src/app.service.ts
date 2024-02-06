@@ -16,12 +16,15 @@ export class AppService {
   async getVolunteerUser(clerkUserId: string) {
     const user = await this.prisma.user.findUnique({
       where: {
+        role: 'VOLUNTEER',
         clerkUserId,
       },
       include: {
         volunteer: {
           include: {
-            VolunteerPreference: true,
+            VolunteerPreference: {
+              select: { preference: true },
+            },
           },
         },
       },

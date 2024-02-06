@@ -13,7 +13,7 @@ export type Preference =
   | "WORKING_WITH_HEALTHCARE_WORKERS"
   | "TEACHING STUDENTS";
 export type ResidentialStatus = "SINGAPORE_CITIZEN" | "SINGAPORE_PR" | "EP" | "DP" | "LTVP" | "STUDENT_PASS" | "VISITOR_VISA";
-export type ProfileDataRequest = {
+export type UpdateProfileDataRequest = {
   phone: string;
   skills: string;
   experience: string;
@@ -22,18 +22,23 @@ export type ProfileDataRequest = {
   preferences: Preference[];
 };
 export type ProfileDataResponse = {
+  clerkUserId: string;
+  email: string;
+  role: UserRole;
+  createdAt: string;
+  updatedAt: string;
   volunteer: {
-    VolunteerPreference: { volunteerId: string; preference: Preference }[];
-    phone: string;
-    skills: string;
-    experience: string;
-    address: string;
-    postalCode: string;
     firstName: string;
     lastName: string;
     dateOfBirth: string;
     gender: Gender;
+    phone: string;
     residentialStatus: ResidentialStatus;
+    skills: string;
+    experience: string;
+    address: string;
+    postalCode: string;
+    VolunteerPreference: { preference: Preference }[];
   };
 };
 export type CreateProfileDataRequest = {
@@ -92,18 +97,7 @@ export type EnrollmentWithVolunteer = Enrollment & {
 export type EnrollmentWithOpportunity = Enrollment & {
   opportunity: Opportunity;
 };
-export type AdminGetVolunteers = {
-  clerkUserId: string;
-  createdAt: string;
-  email: string;
-  role: UserRole;
-  updatedAt: string;
-  volunteer: CreateProfileDataRequest & {
-    userId: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-};
+export type AdminGetVolunteers = ProfileDataResponse;
 export type AdminGetVolunteer = AdminGetVolunteers & {
   enrollments: EnrollmentWithOpportunity[];
 };

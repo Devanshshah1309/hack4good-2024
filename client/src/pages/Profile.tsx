@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { authenticatedGet, authenticatedPut } from '../axios';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
-import { ProfileDataResponse, ProfileDataRequest } from '../../../sharedTypes';
+import { ProfileDataResponse, UpdateProfileDataRequest } from '../../../sharedTypes';
 import { QueryKey, RESIDENTIAL_STATUS_MAP, RoutePath } from '../constants';
 import useUserRole from '../hooks/useUserRole';
 import { Preference, ResidentialStatus } from '../../../sharedTypes';
@@ -35,7 +35,7 @@ function Profile() {
   if (role === 'ADMIN') navigate(RoutePath.ROOT);
 
   // only these fields are editable by the user after creating a profile
-  const [profileData, setProfileData] = useState<ProfileDataRequest>({
+  const [profileData, setProfileData] = useState<UpdateProfileDataRequest>({
     phone: '',
     skills: '',
     experience: '',
@@ -87,7 +87,7 @@ function Profile() {
   });
 
   const mutation = useMutation({
-    mutationFn: async (data: ProfileDataRequest) => {
+    mutationFn: async (data: UpdateProfileDataRequest) => {
       await authenticatedPut('/profile', data, (await getToken()) ?? '');
     },
     onSuccess: () => {

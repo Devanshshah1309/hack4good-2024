@@ -15,7 +15,7 @@ import clerkClient, { RequireAuthProp } from '@clerk/clerk-sdk-node';
 import {
   CreateOpportunityRequest,
   CreateProfileDataRequest,
-  ProfileDataRequest,
+  UpdateProfileDataRequest,
   UserRole,
   SwapDatesWithStrings,
   UpdateOpportunityRequest,
@@ -43,17 +43,16 @@ export class AppController {
 
   @Get('profile')
   async getProfile(@Req() req: RequireAuthProp<Request>) {
-    const [clerkUser, user] = await Promise.all([
-      clerkClient.users.getUser(req.auth.userId),
-      this.appService.getVolunteerUser(req.auth.userId),
-    ]);
+    await this.appService.checkUserIsVolunteer(req.auth.userId);
+
+    const user = await this.appService.getVolunteerUser(req.auth.userId);
 
     if (!user) {
       // user has created account with Clerk, but it does not exist in database yet
       throw new NotFoundException('Profile has not been added yet');
     }
 
-    return { ...user, email: clerkUser.emailAddresses[0].emailAddress };
+    return { ...user };
   }
 
   @Post('profile')
@@ -117,7 +116,7 @@ export class AppController {
     }
 
     const { phone, skills, experience, address, postalCode, preferences } =
-      req.body as SwapDatesWithStrings<ProfileDataRequest>;
+      req.body as SwapDatesWithStrings<UpdateProfileDataRequest>;
 
     const deleteVolunteerPreferences =
       this.prisma.volunteerPreference.deleteMany({
@@ -482,44 +481,15 @@ export class AppController {
   async adminGetVolunteers(@Req() req: RequireAuthProp<Request>) {
     await this.appService.checkUserIsAdmin(req.auth.userId);
 
-    const clerkUsers = await clerkClient.users.getUserList();
-    const clerkDataMap = new Map();
-    for (const clerkUser of clerkUsers) {
-      clerkDataMap[clerkUser.id] = {
-        email: clerkUser.emailAddresses[0].emailAddress,
-        hasImage: clerkUser.hasImage,
-        imageUrl: clerkUser.imageUrl,
-      };
-    }
-
-    console.log(req.query);
-    let { search, sortBy, order } = req.query as {
-      search: string;
-      sortBy: string;
-      order: string;
-    };
-
-    let queryOrderBy = {};
-    if (sortBy === 'email') {
-      queryOrderBy = { [sortBy]: order };
-    } else {
-      queryOrderBy = { volunteer: { [sortBy]: order } };
-    }
-
     const volunteers = await this.prisma.user.findMany({
       where: {
         role: 'VOLUNTEER',
-        OR: [
-          { email: { contains: search } },
-          { volunteer: { firstName: { contains: search } } },
-          { volunteer: { lastName: { contains: search } } },
-          { volunteer: { phone: { contains: search } } },
-          { volunteer: { skills: { contains: search } } },
-          { volunteer: { experience: { contains: search } } },
-        ],
       },
-      include: { volunteer: true },
-      orderBy: queryOrderBy,
+      include: {
+        volunteer: {
+          include: { VolunteerPreference: { select: { preference: true } } },
+        },
+      },
     });
 
     return volunteers;
@@ -529,13 +499,7 @@ export class AppController {
   async adminGetVolunteer(@Req() req: RequireAuthProp<Request>) {
     await this.appService.checkUserIsAdmin(req.auth.userId);
 
-    const volunteer = await this.prisma.user.findUnique({
-      where: {
-        role: 'VOLUNTEER',
-        clerkUserId: req.params.id,
-      },
-      include: { volunteer: true },
-    });
+    const volunteer = await this.appService.getVolunteerUser(req.params.id);
 
     if (!volunteer)
       throw new NotFoundException('No volunteer found with that userId');
