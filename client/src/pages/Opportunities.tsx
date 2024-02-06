@@ -27,6 +27,9 @@ export default function Opportunities() {
 
   let content: OpportunityResponse[] = [];
   if (data) content = data.data.opportunities;
+  // filter out archived opportunities
+  content = content.filter((opp) => opp.archive === false);
+  console.log(content);
 
   return (
     <div className="main-container">
