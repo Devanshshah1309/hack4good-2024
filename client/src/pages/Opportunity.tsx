@@ -3,17 +3,23 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { authenticatedGet, authenticatedPut } from '../axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
-import { EnrollmentWithVolunteer, Opportunity } from '../../../sharedTypes';
+import {
+  EnrollmentWithVolunteer,
+  Opportunity,
+  OpportunityResponse,
+} from '../../../sharedTypes';
 import { QueryKey } from '../constants';
 import {
   DataGrid,
   GridRowsProp,
   GridColDef,
   GridColumnHeaderParams,
+  GridToolbar,
 } from '@mui/x-data-grid';
 import { Button, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
+import { extractDateAndTime, renderCellExpand } from '../utils';
 
 export default function OpportunityPage() {
   const navigate = useNavigate();
@@ -33,6 +39,9 @@ export default function OpportunityPage() {
       );
     },
   });
+
+  const start = extractDateAndTime(data?.data.opportunity.start);
+  const end = extractDateAndTime(data?.data.opportunity.end);
 
   const rows: GridRowsProp = data?.data.enrollments.map((enrollment) => {
     return {
@@ -77,6 +86,7 @@ export default function OpportunityPage() {
       width: 200,
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: renderCellExpand,
     },
     {
       field: 'phone',
@@ -174,12 +184,63 @@ export default function OpportunityPage() {
     <div className="main-container">
       <Sidebar />
       <div className="main">
-        <h2>Opportunity</h2>
+        <Typography variant="h4" align="center" paddingTop="2rem">
+          Opportunity Details
+        </Typography>
+        {data && (
+          <>
+            {data && (
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={async () => {
+                    await authenticatedPut(
+                      `/admin/opportunities/${opportunityId}`,
+                      {
+                        ...data.data.opportunity,
+                        archive: !data.data.opportunity.archive,
+                      },
+                      (await getToken()) || '',
+                    );
+                    queryClient.invalidateQueries({
+                      queryKey: [QueryKey.OPPORTUNITIES, opportunityId],
+                    });
+                  }}
+                >
+                  Archive Opportunity
+                </Button>
+              </div>
+            )}
+            <Typography variant="h6">
+              Name: {data.data.opportunity.name}
+            </Typography>
+            <Typography variant="subtitle1">
+              Description: {data.data.opportunity.description}
+            </Typography>
+            <Typography variant="subtitle1">
+              Location: {data.data.opportunity.location}
+            </Typography>
+            <Typography variant="subtitle1">
+              Start: {start.dateString} {start.timeString}
+            </Typography>
+            <Typography variant="subtitle1">
+              End: {end.dateString} {end.timeString}
+            </Typography>
+            <Typography variant="subtitle1">
+              Volunteering Hours: {data.data.opportunity.durationMinutes / 60}
+            </Typography>
+          </>
+        )}
+        <Typography variant="h5" align="center" paddingTop="2rem">
+          Volunteer Enrollments
+        </Typography>
         {data && (
           <DataGrid
             rows={rows || []}
             columns={cols}
             autoHeight
+            slots={{ toolbar: GridToolbar }}
             slotProps={{
               toolbar: {
                 showQuickFilter: true,
@@ -192,26 +253,6 @@ export default function OpportunityPage() {
             }}
             sx={{ maxWidth: '80vw', boxShadow: 2, border: 2 }}
           />
-        )}
-
-        {data && (
-          <button
-            onClick={async () => {
-              await authenticatedPut(
-                `/admin/opportunities/${opportunityId}`,
-                {
-                  ...data.data.opportunity,
-                  archive: !data.data.opportunity.archive,
-                },
-                (await getToken()) || '',
-              );
-              queryClient.invalidateQueries({
-                queryKey: [QueryKey.OPPORTUNITIES, opportunityId],
-              });
-            }}
-          >
-            test PUT button (toggle "archive")
-          </button>
         )}
 
         <pre>{data && JSON.stringify(data.data, undefined, 2)}</pre>

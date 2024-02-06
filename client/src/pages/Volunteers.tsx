@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authenticatedGet } from '../axios';
 import { useAuth } from '@clerk/clerk-react';
@@ -11,9 +11,12 @@ import {
   GridRowsProp,
   GridColDef,
   GridColumnHeaderParams,
+  GridToolbar,
+  GridRenderCellParams,
 } from '@mui/x-data-grid';
 import { RESIDENTIAL_STATUS_MAP, RoutePath } from '../constants';
 import { Typography } from '@mui/material';
+import { renderCellExpand } from '../utils';
 
 export default function Volunteers() {
   const { getToken } = useAuth();
@@ -29,7 +32,9 @@ export default function Volunteers() {
         navigate,
       ),
   });
-  if (role !== 'ADMIN') navigate(RoutePath.OPPORTUNITIES);
+  useEffect(() => {
+    if (role !== 'ADMIN') navigate(RoutePath.OPPORTUNITIES);
+  }, [role, navigate]);
   let content: AdminGetVolunteers[] = [];
   if (data) content = data.data;
 
@@ -43,6 +48,10 @@ export default function Volunteers() {
         RESIDENTIAL_STATUS_MAP[user.volunteer.residentialStatus],
       address: user.volunteer.address,
       gender: user.volunteer.gender,
+      skills: user.volunteer.skills,
+      experience: user.volunteer.experience,
+      dateOfBirth: user.volunteer.dateOfBirth,
+      preferences: user.volunteer.preferences,
     };
   });
 
@@ -59,23 +68,24 @@ export default function Volunteers() {
     {
       field: 'firstName',
       headerName: 'First Name',
-      width: 150,
+      width: 100,
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
     },
     {
       field: 'lastName',
       headerName: 'Last Name',
-      width: 150,
+      width: 100,
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
     },
     {
       field: 'email',
       headerName: 'Email',
-      width: 200,
+      width: 250,
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: renderCellExpand,
     },
     {
       field: 'residentialStatus',
@@ -90,6 +100,7 @@ export default function Volunteers() {
       width: 200,
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: renderCellExpand,
     },
     {
       field: 'gender',
@@ -98,7 +109,42 @@ export default function Volunteers() {
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
     },
+    {
+      field: 'dateOfBirth',
+      headerName: 'Date of Birth',
+      width: 150,
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: (params) => {
+        return new Date(params.value as string).toLocaleDateString();
+      },
+    },
+    {
+      field: 'skills',
+      headerName: 'Skills',
+      width: 200,
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: renderCellExpand,
+    },
+    {
+      field: 'experience',
+      headerName: 'Experience',
+      width: 200,
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: renderCellExpand,
+    },
+    // {
+    //   field: 'preferences',
+    //   headerName: 'Preferences',
+    //   width: 200,
+    //   headerClassName: COLUMN_HEADER_CLASSNAME,
+    //   renderHeader: COLUMN_RENDER_HEADER,
+    //   renderCell: renderCellExpand,
+    // },
   ];
+  console.log(content);
   return (
     <div className="main-container">
       <Sidebar />
@@ -111,6 +157,7 @@ export default function Volunteers() {
             rows={rows}
             columns={cols}
             autoHeight
+            slots={{ toolbar: GridToolbar }}
             slotProps={{
               toolbar: {
                 showQuickFilter: true,
