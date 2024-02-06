@@ -129,7 +129,7 @@ export default function Sidebar() {
                         <ListItemIcon>
                           <AccountBoxIcon />
                         </ListItemIcon>
-                        <ListItemText primary="My Account" />
+                        <ListItemText primary="My Profile" />
                       </ListItemButton>
                     </Link>
                   </ListItem>

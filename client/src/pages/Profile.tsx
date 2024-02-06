@@ -5,6 +5,7 @@ import { authenticatedGet, authenticatedPut } from '../axios';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import {
+  AdminGetVolunteer,
   ProfileDataResponse,
   UpdateProfileDataRequest,
 } from '../../../sharedTypes';
@@ -20,6 +21,7 @@ import {
   Paper,
   Snackbar,
   TextField,
+  Typography,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -29,10 +31,17 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { ALL_PREFERENCES } from '../constants';
 import dayjs from 'dayjs';
+import {
+  DataGrid,
+  GridColumnHeaderParams,
+  GridToolbar,
+} from '@mui/x-data-grid';
 
+// this page should be almost identical to
+// volunteers/:id
 function Profile() {
   const navigate = useNavigate();
-  const { getToken } = useAuth();
+  const { getToken, userId } = useAuth();
   const { role } = useUserRole();
 
   if (role === 'ADMIN') navigate(RoutePath.ROOT);
@@ -105,14 +114,101 @@ function Profile() {
     },
   });
 
-  // if (query.isLoading) return 'Loading...';
+  const queryKey = 'volunteer';
+
+  const { data } = useQuery({
+    queryKey: [queryKey],
+    queryFn: async () =>
+      authenticatedGet<AdminGetVolunteer>(
+        `/admin/volunteers/${userId}`,
+        (await getToken()) || '',
+        navigate,
+      ),
+  });
+  const content = data && data?.data;
+  if (!content) return 'Loading...';
+  const attendedOpportunities = content.enrollments.filter(
+    (opp) => opp.didAttend,
+  );
+  const rows: GridRowsProp = attendedOpportunities.map((enrollment) => {
+    return {
+      id: enrollment.opportunityId,
+      opportunity: enrollment.opportunity.name,
+      start: enrollment.opportunity.start,
+      end: enrollment.opportunity.end,
+      duration: enrollment.opportunity.durationMinutes,
+      adminApproved: enrollment.adminApproved,
+      didAttend: enrollment.didAttend,
+    };
+  });
+
+  const COLUMN_HEADER_CLASSNAME: string = 'data-grid-header';
+  const COLUMN_RENDER_HEADER = (params: GridColumnHeaderParams) => {
+    return (
+      <Typography variant="body1" fontWeight="bold">
+        {params.colDef.headerName}
+      </Typography>
+    );
+  };
+
+  const cols: GridColDef[] = [
+    {
+      field: 'opportunity',
+      headerName: 'Opportunity',
+      flex: 1,
+      renderHeader: COLUMN_RENDER_HEADER,
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'start',
+      headerName: 'Start',
+      flex: 1,
+      renderHeader: COLUMN_RENDER_HEADER,
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderCell: (params: GridRenderCellParams) => {
+        const datetime = extractDateAndTime(params.value);
+        return `${datetime.dateString} ${datetime.timeString}`;
+      },
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'end',
+      headerName: 'End',
+      flex: 1,
+      renderHeader: COLUMN_RENDER_HEADER,
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderCell: (params: GridRenderCellParams) => {
+        const datetime = extractDateAndTime(params.value);
+        return `${datetime.dateString} ${datetime.timeString}`;
+      },
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'duration',
+      headerName: 'Volunteering Hours',
+      flex: 1,
+      renderHeader: COLUMN_RENDER_HEADER,
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderCell: (params: GridRenderCellParams) => {
+        return params.value / 60;
+      },
+      align: 'center',
+      headerAlign: 'center',
+    },
+  ];
 
   return (
     <>
       <div className="main-container">
         <Sidebar />
         <div className="main">
-          <h2>My Account</h2>
+          <Typography variant="h4" align="center" margin="2rem">
+            My Profile
+          </Typography>
           <form>
             <Paper
               elevation={3}
@@ -327,6 +423,9 @@ function Profile() {
               Save Changes
             </Button>
           </div>
+          <Typography variant="h5" align="center" margin="2rem">
+            Volunteering History
+          </Typography>
           {saving && <h3>Saving...</h3>}
           <Snackbar
             open={successSnackbarOpen}
@@ -354,6 +453,25 @@ function Profile() {
               setErrorSnackbarOpen(false);
             }}
           />
+          {content && (
+            <DataGrid
+              rows={rows}
+              columns={cols}
+              autoHeight
+              slots={{ toolbar: GridToolbar }}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                },
+              }}
+              getRowClassName={(params) => {
+                return params.indexRelativeToCurrentPage % 2 === 0
+                  ? 'row-even'
+                  : 'row-odd';
+              }}
+              sx={{ maxWidth: '80vw', boxShadow: 2, border: 2 }}
+            />
+          )}
           <pre>
             Response data:
             <br />

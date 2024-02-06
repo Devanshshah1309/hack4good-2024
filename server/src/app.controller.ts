@@ -510,7 +510,9 @@ export class AppController {
 
   @Get('admin/volunteers/:id')
   async adminGetVolunteer(@Req() req: RequireAuthProp<Request>) {
-    await this.appService.checkUserIsAdmin(req.auth.userId);
+    // allow volunteer to access their own profile data
+    req.auth.userId === req.params.id ||
+      (await this.appService.checkUserIsAdmin(req.auth.userId));
 
     const volunteer = await this.appService.getVolunteerUser(req.params.id);
 

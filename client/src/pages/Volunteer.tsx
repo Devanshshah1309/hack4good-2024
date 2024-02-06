@@ -22,6 +22,7 @@ import { extractDateAndTime } from '../utils';
 
 export default function Volunteer() {
   const { role } = useUserRole();
+  const { userId } = useAuth();
   const queryKey = 'volunteer';
   const { getToken } = useAuth();
   const navigate = useNavigate();
@@ -36,7 +37,8 @@ export default function Volunteer() {
       ),
   });
   useEffect(() => {
-    if (role !== 'ADMIN') navigate(RoutePath.OPPORTUNITIES);
+    if (role !== 'ADMIN' && userId !== params.volunteerId)
+      navigate(RoutePath.OPPORTUNITIES);
   }, [role, navigate]);
   const content = data && data?.data;
 
