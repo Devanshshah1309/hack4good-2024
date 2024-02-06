@@ -14,11 +14,12 @@ import {
   GridRowsProp,
   GridColDef,
   GridColumnHeaderParams,
+  GridToolbar,
 } from '@mui/x-data-grid';
 import { Button, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
-import { extractDateAndTime } from '../utils';
+import { extractDateAndTime, renderCellExpand } from '../utils';
 
 export default function OpportunityPage() {
   const navigate = useNavigate();
@@ -85,6 +86,7 @@ export default function OpportunityPage() {
       width: 200,
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: renderCellExpand,
     },
     {
       field: 'phone',
@@ -225,6 +227,9 @@ export default function OpportunityPage() {
             <Typography variant="subtitle1">
               End: {end.dateString} {end.timeString}
             </Typography>
+            <Typography variant="subtitle1">
+              Volunteering Hours: {data.data.opportunity.durationMinutes / 60}
+            </Typography>
           </>
         )}
         <Typography variant="h5" align="center" paddingTop="2rem">
@@ -235,6 +240,7 @@ export default function OpportunityPage() {
             rows={rows || []}
             columns={cols}
             autoHeight
+            slots={{ toolbar: GridToolbar }}
             slotProps={{
               toolbar: {
                 showQuickFilter: true,
