@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import useUserRole from '../hooks/useUserRole';
 import { QueryKey, RoutePath } from '../constants';
-import { Button, CircularProgress } from '@mui/material';
+import { Button, CircularProgress, Typography } from '@mui/material';
 import { Grid } from '@material-ui/core';
 import { OpportunityResponse } from '../../../sharedTypes';
 import OpportunityCard from '../components/OpportunityCard';
@@ -35,7 +35,9 @@ export default function Opportunities() {
     <div className="main-container">
       <Sidebar />
       <div className="main">
-        <h2>Volunteering Opportunities</h2>
+        <Typography variant="h4" align="center" margin="2rem">
+          Volunteering Opportunities
+        </Typography>
         {role === 'ADMIN' && (
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button

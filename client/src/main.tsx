@@ -15,6 +15,7 @@ import Opportunities from './pages/Opportunities.tsx';
 import Volunteers from './pages/Volunteers.tsx';
 import OpportunityPage from './pages/Opportunity.tsx';
 import Volunteer from './pages/Volunteer.tsx';
+import History from './pages/History.tsx';
 
 // Import Clerk publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -57,10 +58,14 @@ const router = createBrowserRouter([
     element: <Opportunities />,
   },
   {
-    path: RoutePath.VOLUNTEER, // shown to both volunteers and admins
-    element: <Volunteer />,
+    path: RoutePath.HISTORY,
+    element: <History />,
   },
   // ----- admin routes -----
+  {
+    path: RoutePath.VOLUNTEER,
+    element: <Volunteer />,
+  },
   {
     path: RoutePath.OPPORTUNITY,
     element: <OpportunityPage />,

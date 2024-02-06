@@ -123,16 +123,28 @@ export default function Sidebar() {
                   </ListItem>
                 )}
                 {role === 'VOLUNTEER' && (
-                  <ListItem disablePadding>
-                    <Link to={RoutePath.PROFILE} className="sidebar-link">
-                      <ListItemButton>
-                        <ListItemIcon>
-                          <AccountBoxIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="My Profile" />
-                      </ListItemButton>
-                    </Link>
-                  </ListItem>
+                  <>
+                    <ListItem disablePadding>
+                      <Link to={RoutePath.HISTORY} className="sidebar-link">
+                        <ListItemButton>
+                          <ListItemIcon>
+                            <HistoryIcon />
+                          </ListItemIcon>
+                          <ListItemText primary="Volunteering History" />
+                        </ListItemButton>
+                      </Link>
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <Link to={RoutePath.PROFILE} className="sidebar-link">
+                        <ListItemButton>
+                          <ListItemIcon>
+                            <AccountBoxIcon />
+                          </ListItemIcon>
+                          <ListItemText primary="My Profile" />
+                        </ListItemButton>
+                      </Link>
+                    </ListItem>
+                  </>
                 )}
                 <ListItem disablePadding>
                   <SignOutButton

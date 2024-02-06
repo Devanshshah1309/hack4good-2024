@@ -4,6 +4,7 @@ export const RoutePath = {
   ROOT: '/',
   DASHBOARD: '/dashboard',
   PROFILE: '/profile',
+  HISTORY: '/history',
   PROFILE_CREATE: '/profile/create',
   VOLUNTEERS: '/volunteers',
   OPPORTUNITIES: '/opportunities',
