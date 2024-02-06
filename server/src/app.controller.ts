@@ -524,4 +524,32 @@ export class AppController {
 
     return volunteers;
   }
+
+  @Get('admin/volunteers/:id')
+  async adminGetVolunteer(@Req() req: RequireAuthProp<Request>) {
+    await this.appService.checkUserIsAdmin(req.auth.userId);
+
+    const volunteer = await this.prisma.user.findUnique({
+      where: {
+        role: 'VOLUNTEER',
+        clerkUserId: req.params.id,
+      },
+      include: { volunteer: true },
+    });
+
+    if (!volunteer)
+      throw new NotFoundException('No volunteer found with that userId');
+
+    const enrollments =
+      await this.prisma.volunteerOpportunityEnrollment.findMany({
+        where: {
+          volunteerId: req.params.id,
+        },
+        include: {
+          opportunity: true,
+        },
+      });
+
+    return { ...volunteer, enrollments };
+  }
 }
