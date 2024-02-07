@@ -43,6 +43,12 @@ function Profile() {
 
   // only these fields are editable by the user after creating a profile
   const [profileData, setProfileData] = useState<UpdateProfileDataRequest>({
+    occupation: '',
+    school: '',
+    educationBackground: '',
+    driving: false,
+    ownsVehicle: false,
+    commitmentLevel: '',
     phone: '',
     skills: '',
     experience: '',
@@ -74,6 +80,12 @@ function Profile() {
       );
       const data = res.data as ProfileDataResponse;
       setProfileData({
+        occupation: data.volunteer.occupation,
+        school: data.volunteer.school,
+        educationBackground: data.volunteer.educationBackground,
+        driving: data.volunteer.driving,
+        ownsVehicle: data.volunteer.ownsVehicle,
+        commitmentLevel: data.volunteer.occupation,
         phone: data.volunteer.phone,
         skills: data.volunteer.skills,
         experience: data.volunteer.experience,

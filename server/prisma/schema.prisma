@@ -29,6 +29,12 @@ model Volunteer {
   lastName                       String
   dateOfBirth                    DateTime
   gender                         String
+  occupation                     String
+  school                         String
+  educationBackground            String
+  driving                        Boolean
+  ownsVehicle                    Boolean
+  commitmentLevel                String
   phone                          String
   residentialStatus              String
   skills                         String

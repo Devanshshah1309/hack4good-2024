@@ -70,6 +70,12 @@ export class AppController {
       lastName,
       dateOfBirth,
       gender,
+      occupation,
+      school,
+      educationBackground,
+      driving,
+      ownsVehicle,
+      commitmentLevel,
       phone,
       residentialStatus,
       skills,
@@ -92,6 +98,12 @@ export class AppController {
             dateOfBirth,
             experience,
             gender,
+            occupation,
+            school,
+            educationBackground,
+            driving,
+            ownsVehicle,
+            commitmentLevel,
             phone,
             postalCode,
             residentialStatus,
@@ -115,8 +127,20 @@ export class AppController {
       throw new NotFoundException('Profile has not been added yet');
     }
 
-    const { phone, skills, experience, address, postalCode, preferences } =
-      req.body as SwapDatesWithStrings<UpdateProfileDataRequest>;
+    const {
+      occupation,
+      school,
+      educationBackground,
+      driving,
+      ownsVehicle,
+      commitmentLevel,
+      phone,
+      skills,
+      experience,
+      address,
+      postalCode,
+      preferences,
+    } = req.body as SwapDatesWithStrings<UpdateProfileDataRequest>;
 
     const deleteVolunteerPreferences =
       this.prisma.volunteerPreference.deleteMany({
@@ -135,16 +159,23 @@ export class AppController {
         volunteer: {
           update: {
             data: {
-              address,
-              experience,
+              occupation,
+              school,
+              educationBackground,
+              driving,
+              ownsVehicle,
+              commitmentLevel,
               phone,
-              postalCode,
+              experience,
               skills,
+              address,
+              postalCode,
             },
           },
         },
       },
     });
+
     const addVolunteerPreferences = this.prisma.volunteerPreference.createMany({
       data: preferences.map((pref) => ({
         volunteerId: req.auth.userId,
@@ -530,5 +561,21 @@ export class AppController {
       });
 
     return { ...volunteer, enrollments };
+  }
+
+  @Get('admin/report-data')
+  async adminGetReportData(@Req() req: RequireAuthProp<Request>) {
+    await this.appService.checkUserIsAdmin(req.auth.userId);
+
+    const a = await this.prisma.volunteer.findMany({
+      include: {
+        VolunteerPreference: {
+          select: {
+            preference: true,
+          },
+        },
+        VolunteerOpportunityEnrollment: {},
+      },
+    });
   }
 }
