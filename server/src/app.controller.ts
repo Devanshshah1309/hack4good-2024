@@ -567,15 +567,58 @@ export class AppController {
   async adminGetReportData(@Req() req: RequireAuthProp<Request>) {
     await this.appService.checkUserIsAdmin(req.auth.userId);
 
-    const a = await this.prisma.volunteer.findMany({
-      include: {
-        VolunteerPreference: {
-          select: {
-            preference: true,
+    const [volunteers, opportunities, enrollments] = await Promise.all([
+      this.prisma.volunteer.findMany({
+        include: {
+          VolunteerPreference: {
+            select: {
+              preference: true,
+            },
+          },
+          VolunteerOpportunityEnrollment: {
+            include: {
+              opportunity: true,
+            },
           },
         },
-        VolunteerOpportunityEnrollment: {},
-      },
-    });
+      }),
+      this.prisma.opportunity.findMany({
+        include: {
+          VolunteerOpportunityEnrollment: {
+            include: {
+              volunteer: {
+                include: {
+                  VolunteerPreference: {
+                    select: {
+                      preference: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      }),
+      this.prisma.volunteerOpportunityEnrollment.findMany({
+        include: {
+          opportunity: true,
+          volunteer: {
+            include: {
+              VolunteerPreference: {
+                select: {
+                  preference: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+    ]);
+
+    return {
+      volunteers,
+      opportunities,
+      enrollments,
+    };
   }
 }
