@@ -14,10 +14,14 @@ import Sidebar from '../components/Sidebar';
 import {
   Box,
   Button,
+  Checkbox,
   Chip,
+  FormControlLabel,
   Grid,
   OutlinedInput,
   Paper,
+  Radio,
+  RadioGroup,
   TextField,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -28,6 +32,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { ALL_PREFERENCES } from '../constants';
 import useUserRole from '../hooks/useUserRole';
+import { Input } from '@material-ui/core';
 
 function CreateProfile() {
   const navigate = useNavigate();
@@ -105,7 +110,7 @@ function CreateProfile() {
                 <Grid item xs={12} md={4}>
                   <TextField
                     id="first name"
-                    label="First Name"
+                    label="First Name (as in NRIC/Passport)"
                     variant="outlined"
                     onChange={(e) => {
                       setProfileData({
@@ -121,7 +126,7 @@ function CreateProfile() {
                   <TextField
                     id="last name"
                     fullWidth
-                    label="Last Name"
+                    label="Last Name (as in NRIC/Passport)"
                     variant="outlined"
                     required
                     onChange={(e) => {
@@ -146,8 +151,10 @@ function CreateProfile() {
                     />
                   </LocalizationProvider>
                 </Grid>
-                <Grid item xs={12} md={4}>
-                  <InputLabel id="gender">Gender</InputLabel>
+                <Grid item xs={12} md={3}>
+                  <InputLabel id="gender" required>
+                    Gender
+                  </InputLabel>
                   <Select
                     sx={{ width: '100%' }}
                     fullWidth
@@ -166,8 +173,8 @@ function CreateProfile() {
                     <MenuItem value={'F'}>Female</MenuItem>
                   </Select>
                 </Grid>
-                <Grid item xs={12} md={4}>
-                  <InputLabel id="residential-status">
+                <Grid item xs={12} md={3}>
+                  <InputLabel id="residential-status" required>
                     Residential Status
                   </InputLabel>
                   <Select
@@ -193,6 +200,81 @@ function CreateProfile() {
                       ),
                     )}
                   </Select>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <InputLabel sx={{ width: '100%', alignContent: 'center' }}>
+                      Can you drive?
+                    </InputLabel>
+                    <RadioGroup
+                      row
+                      sx={{ width: '100%' }}
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                      value={profileData.driving ? 'Yes' : 'No'}
+                    >
+                      <FormControlLabel
+                        value="Yes"
+                        control={<Radio />}
+                        label="Yes"
+                        onChange={() => {
+                          setProfileData({
+                            ...profileData,
+                            driving: true,
+                          });
+                        }}
+                      />
+                      <FormControlLabel
+                        value="No"
+                        control={<Radio />}
+                        label="No"
+                        onChange={() => {
+                          setProfileData({
+                            ...profileData,
+                            driving: false,
+                          });
+                        }}
+                      />
+                    </RadioGroup>
+                  </div>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <InputLabel>Do you own a vehicle?</InputLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                    value={profileData.ownsVehicle ? 'Yes' : 'No'}
+                  >
+                    <FormControlLabel
+                      value="Yes"
+                      control={<Radio />}
+                      label="Yes"
+                      onChange={() => {
+                        setProfileData({
+                          ...profileData,
+                          ownsVehicle: true,
+                        });
+                      }}
+                    />
+                    <FormControlLabel
+                      value="No"
+                      control={<Radio />}
+                      label="No"
+                      onChange={() => {
+                        setProfileData({
+                          ...profileData,
+                          ownsVehicle: false,
+                        });
+                      }}
+                    />
+                  </RadioGroup>
                 </Grid>
               </Grid>
               <Grid
@@ -238,7 +320,7 @@ function CreateProfile() {
                 <Grid item xs={12} md={4} height="100%">
                   <TextField
                     id="phone"
-                    label="Phone"
+                    label="Phone Number (for WhatsApp)"
                     type="number"
                     variant="outlined"
                     sx={{
@@ -279,6 +361,63 @@ function CreateProfile() {
                       setProfileData({
                         ...profileData,
                         experience: e.target.value,
+                      });
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    id="occupation"
+                    label="Occupation (e.g. engineer, student, etc.)"
+                    variant="outlined"
+                    fullWidth
+                    required
+                    onChange={(e) => {
+                      setProfileData({
+                        ...profileData,
+                        occupation: e.target.value,
+                      });
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    id="school"
+                    label="School/University Name (if applicable)"
+                    variant="outlined"
+                    fullWidth
+                    onChange={(e) => {
+                      setProfileData({
+                        ...profileData,
+                        school: e.target.value,
+                      });
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    id="education-background"
+                    label="Education Background (e.g. Diploma in Business)"
+                    variant="outlined"
+                    fullWidth
+                    onChange={(e) => {
+                      setProfileData({
+                        ...profileData,
+                        educationBackground: e.target.value,
+                      });
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    id="commitment-level"
+                    label="Availability (e.g. I'm generally free on saturdays)"
+                    variant="outlined"
+                    fullWidth
+                    onChange={(e) => {
+                      setProfileData({
+                        ...profileData,
+                        commitmentLevel: e.target.value,
                       });
                     }}
                   />
