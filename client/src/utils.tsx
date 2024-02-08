@@ -140,3 +140,13 @@ export function getAge(dateString: string) {
   }
   return age;
 }
+
+// capitalize only first letter of each word
+export function capitalizeFirstLetter(s: string) {
+  return s.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
+}
+
+// replace _ with ' ' and capitalize first letter of each word
+export function formatEnum(s: string) {
+  return capitalizeFirstLetter(s.split('_').join(' '));
+}

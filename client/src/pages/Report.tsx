@@ -18,8 +18,9 @@ import {
   Title,
 } from 'chart.js';
 import { Pie, Bar } from 'react-chartjs-2';
-import { getAge } from '../utils';
+import { formatEnum, getAge } from '../utils';
 import { RESIDENTIAL_STATUS_MAP } from '../constants';
+import Volunteer from './Volunteer';
 
 ChartJS.register(
   ArcElement,
@@ -105,14 +106,16 @@ export default function ReportPage() {
   });
 
   // PREFERENCES DATA
-  const allVolunteerPreferences = data?.data.volunteers.flatMap(
-    (volunteer) => volunteer.preferences,
-  );
-    const preferences = new Map<string, number>();
-    allVolunteerPreferences.forEach((preference) => {
-        preferences.set(preference, (preferences.get(preference) || 0) + 1);
-        }
+  const preferences = new Map<string, number>();
 
+  data?.data.volunteers
+    .flatMap((volunteer) => volunteer.VolunteerPreference)
+    .forEach((preference) => {
+      preferences.set(
+        preference.preference,
+        (preferences.get(preference.preference) || 0) + 1,
+      );
+    });
 
   return (
     <>
@@ -125,7 +128,13 @@ export default function ReportPage() {
           <Typography variant="h5" align="center">
             Volunteer Distribution
           </Typography>
-          <Grid container spacing={2} maxWidth="80vw">
+          <Grid
+            container
+            spacing={2}
+            maxWidth="80vw"
+            display="flex"
+            justifyContent="center"
+          >
             <Grid item xs={12} md={4}>
               <Pie
                 data={genderData}
@@ -202,6 +211,47 @@ export default function ReportPage() {
                     title: {
                       display: true,
                       text: 'By Residential Status',
+                    },
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Pie
+                data={{
+                  labels: Array.from(preferences.keys()).map(formatEnum),
+                  datasets: [
+                    {
+                      label: '# Volunteers',
+                      data: Array.from(preferences.values()),
+                      backgroundColor: [
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(210, 130, 150, 0.2)',
+                      ],
+                      borderColor: [
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(210, 130, 150, 1)',
+                      ],
+                      borderWidth: 1,
+                    },
+                  ],
+                }}
+                title="By Preferences"
+                options={{
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'By Preferences',
                     },
                   },
                 }}

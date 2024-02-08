@@ -40,26 +40,29 @@ export type ProfileDataResponse = {
   role: UserRole;
   createdAt: string;
   updatedAt: string;
-  volunteer: {
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    gender: Gender;
-    occupation: string;
-    school: string;
-    educationBackground: string;
-    driving: boolean;
-    ownsVehicle: boolean;
-    commitmentLevel: string;
-    phone: string;
-    residentialStatus: ResidentialStatus;
-    skills: string;
-    experience: string;
-    address: string;
-    postalCode: string;
-    VolunteerPreference: { preference: Preference }[];
-  };
+  volunteer: Volunteer;
 };
+
+type Volunteer = {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  gender: Gender;
+  occupation: string;
+  school: string;
+  educationBackground: string;
+  driving: boolean;
+  ownsVehicle: boolean;
+  commitmentLevel: string;
+  phone: string;
+  residentialStatus: ResidentialStatus;
+  skills: string;
+  experience: string;
+  address: string;
+  postalCode: string;
+  VolunteerPreference: { preference: Preference }[];
+};
+
 export type CreateProfileDataRequest = UpdateProfileDataRequest & {
   firstName: string;
   lastName: string;
@@ -119,7 +122,7 @@ export type AdminGetVolunteer = AdminGetVolunteers & {
 };
 
 export type ReportDataResponse = {
-  volunteers: CreateProfileDataRequest[];
+  volunteers: Volunteer[];
   opportunities: OpportunityResponse[];
   enrollments: EnrollmentWithVolunteer[];
 };
