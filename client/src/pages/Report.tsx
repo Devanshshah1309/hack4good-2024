@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { authenticatedGet } from '../axios';
 import { useQuery } from '@tanstack/react-query';
 import { ReportDataResponse } from '../../../sharedTypes';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Paper, Typography } from '@mui/material';
 import Sidebar from '../components/Sidebar';
 import {
   Chart as ChartJS,
@@ -16,16 +16,24 @@ import {
   LinearScale,
   BarElement,
   Title,
+  PointElement,
+  LineElement,
 } from 'chart.js';
-import { Pie, Bar } from 'react-chartjs-2';
-import { formatEnum, getAge } from '../utils';
+import { Pie, Bar, Line } from 'react-chartjs-2';
+import {
+  formatEnum,
+  getAge,
+  getDifferenceInMonths,
+  getPastNMonths,
+} from '../utils';
 import { RESIDENTIAL_STATUS_MAP } from '../constants';
-import Volunteer from './Volunteer';
 
 ChartJS.register(
   ArcElement,
   Tooltip,
   Legend,
+  PointElement,
+  LineElement,
   CategoryScale,
   LinearScale,
   BarElement,
@@ -34,14 +42,14 @@ ChartJS.register(
 
 export default function ReportPage() {
   const { role } = useUserRole();
-  const { userId, getToken } = useAuth();
+  const { getToken } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
     if (role !== 'ADMIN') navigate('/opportunities');
   }, [role, navigate]);
   const queryKey = 'report';
   const { data } = useQuery({
-    queryKey: ['report'],
+    queryKey: [queryKey],
     queryFn: async () =>
       authenticatedGet<ReportDataResponse>(
         `/admin/report-data`,
@@ -75,7 +83,6 @@ export default function ReportPage() {
   };
 
   // AGE DATA
-
   const ageLabels = [
     '10-20',
     '20-30',
@@ -107,7 +114,6 @@ export default function ReportPage() {
 
   // PREFERENCES DATA
   const preferences = new Map<string, number>();
-
   data?.data.volunteers
     .flatMap((volunteer) => volunteer.VolunteerPreference)
     .forEach((preference) => {
@@ -117,6 +123,34 @@ export default function ReportPage() {
       );
     });
 
+  // OPPOURTUNITIES DATA
+  // show number of opportunities in the past 6 months
+  const opportunities = Array(6).fill(0);
+  data?.data.opportunities.forEach((opportunity) => {
+    const date = new Date(opportunity.start);
+    const diff = getDifferenceInMonths(date);
+    if (diff < 6) {
+      opportunities[diff]++;
+    }
+  });
+
+  // show number of enrollments (marked didAttend) in the past 6 months
+  // create map from opportunity id to start date
+  const opportunityIdToStartDate = new Map<string, Date>();
+  data?.data.opportunities.forEach((opportunity) => {
+    opportunityIdToStartDate.set(opportunity.id, new Date(opportunity.start));
+  });
+  const enrollments = Array(6).fill(0);
+  data?.data.enrollments.forEach((enrollment) => {
+    if (!enrollment.didAttend) return;
+    const date = opportunityIdToStartDate.get(enrollment.opportunityId);
+    if (date) {
+      const diff = getDifferenceInMonths(date);
+      if (diff < 6) {
+        enrollments[diff]++;
+      }
+    }
+  });
   return (
     <>
       <div className="main-container">
@@ -126,7 +160,7 @@ export default function ReportPage() {
             Reports
           </Typography>
           <Typography variant="h5" align="center">
-            Volunteer Distribution
+            Volunteer Statistics
           </Typography>
           <Grid
             container
@@ -216,7 +250,7 @@ export default function ReportPage() {
                 }}
               />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <Pie
                 data={{
                   labels: Array.from(preferences.keys()).map(formatEnum),
@@ -258,7 +292,84 @@ export default function ReportPage() {
               />
             </Grid>
           </Grid>
-          <pre>{JSON.stringify(data?.data, null, 2)}</pre>
+          <Typography variant="h5" align="center" margin="2rem">
+            Opportunities Statistics
+          </Typography>
+          <Grid
+            container
+            spacing={2}
+            maxWidth="80vw"
+            display="flex"
+            justifyContent="center"
+            marginBottom="2rem"
+          >
+            <Grid item xs={12} md={6}>
+              <Line
+                id="1231"
+                data={{
+                  labels: getPastNMonths(6),
+                  datasets: [
+                    {
+                      label: '# Opportunities',
+                      data: opportunities,
+                      fill: false,
+                      backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                      borderColor: 'rgba(255, 159, 64, 0.2)',
+                      borderWidth: 1,
+                    },
+                  ],
+                }}
+                title="Opportunities"
+                options={{
+                  scales: {
+                    y: {
+                      suggestedMin: 0,
+                      suggestedMax: 100,
+                    },
+                  },
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'Opportunities in the Past 6 Months',
+                    },
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Line
+                data={{
+                  labels: getPastNMonths(6),
+                  datasets: [
+                    {
+                      label: '# Attendance',
+                      data: enrollments,
+                      fill: false,
+                      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                      borderColor: 'rgba(75, 192, 192, 0.2)',
+                      borderWidth: 1,
+                    },
+                  ],
+                }}
+                title="Enrollments"
+                options={{
+                  scales: {
+                    y: {
+                      suggestedMin: 0,
+                      suggestedMax: 100,
+                    },
+                  },
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: 'Attendance for the Past 6 Months',
+                    },
+                  },
+                }}
+              />
+            </Grid>
+          </Grid>
+          {/* <pre>{JSON.stringify(data?.data, null, 2)}</pre> */}
         </div>
       </div>
     </>

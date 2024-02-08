@@ -150,3 +150,39 @@ export function capitalizeFirstLetter(s: string) {
 export function formatEnum(s: string) {
   return capitalizeFirstLetter(s.split('_').join(' '));
 }
+
+// assumes date is in the past
+export function getDifferenceInMonths(date: Date): number {
+  const currrentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+  const givenMonth = date.getMonth();
+  const givenYear = date.getFullYear();
+  return (currentYear - givenYear) * 12 + currrentMonth - givenMonth;
+}
+const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+export function getPastNMonths(n: number): string[] {
+  const today = new Date().getMonth() - 1;
+  const currentYear = new Date().getFullYear();
+  const pastMonths = [];
+  for (let i = 0; i < n; i++) {
+    pastMonths.push(
+      months[(today - i + 12) % 12] +
+        ' ' +
+        (today - i < 0 ? currentYear - 1 : currentYear),
+    );
+  }
+  return pastMonths.reverse();
+}
