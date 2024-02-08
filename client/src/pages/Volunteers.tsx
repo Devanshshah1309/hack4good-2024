@@ -16,8 +16,10 @@ import {
 } from '@mui/x-data-grid';
 import { RESIDENTIAL_STATUS_MAP, RoutePath } from '../constants';
 import { Typography } from '@mui/material';
-import { renderCellExpand } from '../utils';
+import { formatEnum, renderCellExpand } from '../utils';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function Volunteers() {
   const { getToken } = useAuth();
@@ -45,14 +47,23 @@ export default function Volunteers() {
       firstName: user.volunteer.firstName,
       lastName: user.volunteer.lastName,
       email: user.email,
+      phone: user.volunteer.phone,
       residentialStatus:
         RESIDENTIAL_STATUS_MAP[user.volunteer.residentialStatus],
       address: user.volunteer.address,
-      gender: user.volunteer.gender,
+      gender: user.volunteer.gender === 'M' ? 'Male' : 'Female',
       skills: user.volunteer.skills,
       experience: user.volunteer.experience,
       dateOfBirth: user.volunteer.dateOfBirth,
-      preferences: user.volunteer.VolunteerPreference,
+      occupation: user.volunteer.occupation,
+      driving: user.volunteer.driving,
+      vehicle: user.volunteer.ownsVehicle,
+      education: user.volunteer.educationBackground,
+      school: user.volunteer.school,
+      commitmentLevel: user.volunteer.commitmentLevel,
+      preferences: user.volunteer.VolunteerPreference.map((pref) => {
+        return formatEnum(pref.preference);
+      }).join(', '),
     };
   });
 
@@ -70,9 +81,10 @@ export default function Volunteers() {
       field: 'Actions',
       headerName: 'Actions',
       width: 100,
+      align: 'center',
+      headerAlign: 'center',
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
-      headerAlign: 'center',
       renderCell: (params: GridRenderCellParams) => {
         return (
           <VisibilityIcon
@@ -92,6 +104,8 @@ export default function Volunteers() {
       field: 'firstName',
       headerName: 'First Name',
       width: 150,
+      align: 'center',
+      headerAlign: 'center',
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
     },
@@ -99,6 +113,8 @@ export default function Volunteers() {
       field: 'lastName',
       headerName: 'Last Name',
       width: 150,
+      align: 'center',
+      headerAlign: 'center',
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
     },
@@ -106,21 +122,36 @@ export default function Volunteers() {
       field: 'email',
       headerName: 'Email',
       width: 250,
+      align: 'center',
+      headerAlign: 'center',
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
       renderCell: renderCellExpand,
     },
     {
+      field: 'phone',
+      headerName: 'Phone Number',
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderHeader: COLUMN_RENDER_HEADER,
+    },
+    {
       field: 'residentialStatus',
       headerName: 'Residential Status',
       width: 200,
+      align: 'center',
+      headerAlign: 'center',
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
     },
     {
       field: 'address',
       headerName: 'Address',
-      width: 200,
+      width: 250,
+      align: 'center',
+      headerAlign: 'center',
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
       renderCell: renderCellExpand,
@@ -129,13 +160,17 @@ export default function Volunteers() {
       field: 'gender',
       headerName: 'Gender',
       width: 100,
+      align: 'center',
+      headerAlign: 'center',
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
     },
     {
       field: 'dateOfBirth',
       headerName: 'Date of Birth',
-      width: 150,
+      align: 'center',
+      width: 200,
+      headerAlign: 'center',
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
       renderCell: (params) => {
@@ -143,9 +178,83 @@ export default function Volunteers() {
       },
     },
     {
+      field: 'occupation',
+      headerName: 'Occupation',
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: renderCellExpand,
+    },
+    {
+      field: 'driving',
+      headerName: 'Can Drive',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: (params) => {
+        return params.value ? (
+          <CheckIcon color="success" />
+        ) : (
+          <CloseIcon color="error" />
+        );
+      },
+    },
+    {
+      field: 'vehicle',
+      headerName: 'Owns Vehicle',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: (params) => {
+        return params.value ? (
+          <CheckIcon color="success" />
+        ) : (
+          <CloseIcon color="error" />
+        );
+      },
+    },
+    {
+      field: 'education',
+      headerName: 'Education',
+      width: 250,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: renderCellExpand,
+    },
+    {
+      field: 'school',
+      headerName: 'School',
+      width: 250,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: renderCellExpand,
+    },
+    {
+      field: 'commitmentLevel',
+      headerName: 'Commitment Level',
+      width: 250,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: renderCellExpand,
+    },
+    {
       field: 'skills',
       headerName: 'Skills',
-      width: 200,
+      width: 250,
+      align: 'center',
+      headerAlign: 'center',
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
       renderCell: renderCellExpand,
@@ -153,21 +262,24 @@ export default function Volunteers() {
     {
       field: 'experience',
       headerName: 'Experience',
-      width: 200,
+      width: 250,
+      align: 'center',
+      headerAlign: 'center',
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
       renderCell: renderCellExpand,
     },
-    // {
-    //   field: 'preferences',
-    //   headerName: 'Preferences',
-    //   width: 200,
-    //   headerClassName: COLUMN_HEADER_CLASSNAME,
-    //   renderHeader: COLUMN_RENDER_HEADER,
-    //   renderCell: renderCellExpand,
-    // },
+    {
+      field: 'preferences',
+      headerName: 'Preferences',
+      width: 250,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderHeader: COLUMN_RENDER_HEADER,
+      renderCell: renderCellExpand,
+    },
   ];
-  console.log(content);
   return (
     <div className="main-container">
       <Sidebar />

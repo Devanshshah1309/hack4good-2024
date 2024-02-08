@@ -24,6 +24,11 @@ body {
   background-color: #f3d7ca;
 }
 
+.data-grid-cell {
+  text-align: center;
+  width: 100%;
+}
+
 a {
   font-weight: 500;
   color: #1a1a1a;

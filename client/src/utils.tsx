@@ -92,6 +92,7 @@ const GridCellExpand = React.memo(function GridCellExpand(
       />
       <Box
         ref={cellValue}
+        className="data-grid-cell"
         sx={{
           whiteSpace: 'nowrap',
           overflow: 'hidden',

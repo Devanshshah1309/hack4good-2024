@@ -47,6 +47,12 @@ export default function History() {
     };
   });
 
+  let totalHoursVolunteered = 0;
+  attendedOpportunities.forEach((enrollment) => {
+    totalHoursVolunteered += enrollment.opportunity.durationMinutes;
+  });
+  totalHoursVolunteered = totalHoursVolunteered / 60;
+
   const COLUMN_HEADER_CLASSNAME: string = 'data-grid-header';
   const COLUMN_RENDER_HEADER = (params: GridColumnHeaderParams) => {
     return (
@@ -60,7 +66,7 @@ export default function History() {
     {
       field: 'download',
       headerName: 'Download Certificate',
-      flex: 1,
+      width: 200,
       renderHeader: COLUMN_RENDER_HEADER,
       headerClassName: COLUMN_HEADER_CLASSNAME,
       align: 'center',
@@ -72,7 +78,7 @@ export default function History() {
     {
       field: 'opportunity',
       headerName: 'Opportunity',
-      flex: 1,
+      width: 200,
       renderHeader: COLUMN_RENDER_HEADER,
       headerClassName: COLUMN_HEADER_CLASSNAME,
       align: 'center',
@@ -81,7 +87,7 @@ export default function History() {
     {
       field: 'start',
       headerName: 'Start',
-      flex: 1,
+      width: 200,
       renderHeader: COLUMN_RENDER_HEADER,
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderCell: (params: GridRenderCellParams) => {
@@ -94,7 +100,7 @@ export default function History() {
     {
       field: 'end',
       headerName: 'End',
-      flex: 1,
+      width: 200,
       renderHeader: COLUMN_RENDER_HEADER,
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderCell: (params: GridRenderCellParams) => {
@@ -107,7 +113,7 @@ export default function History() {
     {
       field: 'duration',
       headerName: 'Volunteering Hours',
-      flex: 1,
+      width: 200,
       renderHeader: COLUMN_RENDER_HEADER,
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderCell: (params: GridRenderCellParams) => {
@@ -126,23 +132,32 @@ export default function History() {
             Volunteering History
           </Typography>
           {content && (
-            <DataGrid
-              rows={rows}
-              columns={cols}
-              autoHeight
-              slots={{ toolbar: GridToolbar }}
-              slotProps={{
-                toolbar: {
-                  showQuickFilter: true,
-                },
-              }}
-              getRowClassName={(params) => {
-                return params.indexRelativeToCurrentPage % 2 === 0
-                  ? 'row-even'
-                  : 'row-odd';
-              }}
-              sx={{ width: '80vw', boxShadow: 2, border: 2 }}
-            />
+            <>
+              <DataGrid
+                rows={rows}
+                columns={cols}
+                autoHeight
+                slots={{ toolbar: GridToolbar }}
+                slotProps={{
+                  toolbar: {
+                    showQuickFilter: true,
+                  },
+                }}
+                getRowClassName={(params) => {
+                  return params.indexRelativeToCurrentPage % 2 === 0
+                    ? 'row-even'
+                    : 'row-odd';
+                }}
+                sx={{
+                  maxWidth: '80vw',
+                  boxShadow: 2,
+                  border: 2,
+                }}
+              />
+              <Typography variant="h6" align="center" margin="2rem">
+                Total Volunteering Hours: {totalHoursVolunteered}
+              </Typography>
+            </>
           )}
         </div>
       </div>

@@ -53,7 +53,7 @@ function CreateProfile() {
   const [profileData, setProfileData] = useState<CreateProfileDataRequest>({
     firstName: '',
     lastName: '',
-    dateOfBirth: new Date(),
+    dateOfBirth: new Date().toUTCString(),
     gender: 'M',
     occupation: '',
     school: '',
