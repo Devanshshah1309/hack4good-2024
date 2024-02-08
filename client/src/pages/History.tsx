@@ -11,7 +11,7 @@ import {
 } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
 import { AdminGetVolunteer } from '../../../sharedTypes';
-import { authenticatedGet } from '../axios';
+import { API_BASE_URL, authenticatedGet } from '../axios';
 import { extractDateAndTime } from '../utils';
 import { useNavigate } from 'react-router-dom';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -72,7 +72,14 @@ export default function History() {
       align: 'center',
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams) => {
-        return <DownloadIcon />;
+        return (
+          <a
+            href={`${API_BASE_URL}/certificate/volunteer/${userId}/opportunities/${params.row.id}`}
+            target="_blank"
+          >
+            <DownloadIcon />
+          </a>
+        );
       },
     },
     {

@@ -7,9 +7,11 @@ import {
   Post,
   Put,
   Req,
+  Res,
+  StreamableFile,
 } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { PrismaService } from './prisma.service';
 import clerkClient, { RequireAuthProp } from '@clerk/clerk-sdk-node';
 import {
@@ -21,6 +23,8 @@ import {
   UpdateOpportunityRequest,
   UpdateOpportunityImageRequest,
 } from '../../sharedTypes';
+import dayjs from 'dayjs';
+import { createReadStream } from 'fs';
 
 @Controller('api/v1')
 export class AppController {
@@ -254,6 +258,55 @@ export class AppController {
       opportunity,
       enrollment,
     };
+  }
+
+  @Get('certificate/volunteer/:volunteerId/opportunities/:opportunityId/')
+  async getCertificate(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const enrollment =
+      await this.prisma.volunteerOpportunityEnrollment.findUnique({
+        where: {
+          volunteerId_opportunityId: {
+            opportunityId: req.params.opportunityId,
+            volunteerId: req.params.volunteerId,
+          },
+        },
+        include: {
+          opportunity: true,
+          volunteer: true,
+        },
+      });
+
+    if (!enrollment)
+      throw new NotFoundException('no enrollment for this opportunity');
+
+    if (!enrollment.adminApproved || !enrollment.didAttend)
+      throw new BadRequestException('You did not attend this opportunity');
+
+    const oppStartDate = dayjs(enrollment.opportunity.start).format(
+      'DD/MM/YYYY',
+    );
+    const oppEndDate = dayjs(enrollment.opportunity.end).format('DD/MM/YYYY');
+
+    const filePath = await this.appService.generateCertificate({
+      volunteer: `${enrollment.volunteer.firstName} ${enrollment.volunteer.lastName}`,
+      hours: (enrollment.opportunity.durationMinutes / 60).toFixed(0),
+      event: enrollment.opportunity.name,
+      date:
+        oppStartDate === oppEndDate
+          ? `on ${oppStartDate}`
+          : `from ${oppStartDate} to ${oppEndDate}`,
+      generatedTime: new Date().toLocaleString(),
+    });
+
+    const stream = createReadStream(filePath);
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'attachment; filename="certificate.pdf"',
+    });
+    return new StreamableFile(stream);
   }
 
   /** For volunteers to register for an opportunity */

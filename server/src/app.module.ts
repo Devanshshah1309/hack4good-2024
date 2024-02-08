@@ -1,4 +1,5 @@
 import {
+  Logger,
   MiddlewareConsumer,
   Module,
   NestModule,
@@ -24,7 +25,7 @@ declare global {
 @Module({
   imports: [],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService, PrismaService, Logger],
 })
 export class AppModule implements NestModule {
   /** This middleware throws UnauthorizedException. It should run after ClerkExpressWithAuth middleware. */
@@ -46,6 +47,7 @@ export class AppModule implements NestModule {
         ClerkExpressWithAuth({ onError: (err) => console.log(err) }), // Clerk middleware to set the "auth" key in Request object
         this.authMiddleware,
       )
+      .exclude('api/v1/certificate/(.*)')
       .forRoutes('*');
   }
 }

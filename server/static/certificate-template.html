@@ -1,0 +1,110 @@
+<html>
+  <head>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      html,
+      body {
+        position: relative;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--color-red);
+
+        --color-pink: #fcf0f5;
+        --color-red: #c0281f;
+        --color-peach: rgb(255, 224, 219);
+      }
+
+      .paper {
+        position: relative;
+        height: 95%;
+        width: 95%;
+        background-color: var(--color-peach);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      .volunteer-name {
+        font-size: 3em;
+      }
+
+      .volunteer-name-container {
+        border-bottom: 1px solid black;
+        width: 700px;
+        display: flex;
+        justify-content: center;
+        margin-top: 24px;
+        margin-bottom: 32px;
+      }
+
+      h1 {
+        font-size: 4.5em;
+        margin-bottom: 10px;
+      }
+
+      h2 {
+        margin-bottom: 40px;
+        font-size: 2em;
+      }
+
+      p {
+        font-size: 1.25em;
+        max-width: 100%;
+      }
+
+      .logo {
+        margin-block: 24px;
+        margin-inline: 84px;
+      }
+
+      .bottom-text {
+        font-size: 1em;
+      }
+
+      .signatures-section {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+      }
+
+      .signature {
+        width: 200px;
+        height: 80px;
+        padding-top: 6px;
+        border-top: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="paper">
+      <h1>CERTIFICATE</h1>
+      <h2>OF PARTICIPATION</h2>
+      <p>This certificate is awarded to</p>
+      <div class="volunteer-name-container">
+        <p class="volunteer-name">{{volunteer}}</p>
+      </div>
+      <p>for {{hours}} hours of participation in {{event}} {{date}}</p>
+      <div class="signatures-section">
+        <div class="signature"><p>Co-founder</p></div>
+        <img
+          class="logo"
+          src="https://github.com/yusiangeng/image-for-h4g/assets/96862218/93f4c277-8f8c-44c2-b858-bc6aed9dd3d1"
+          width="250"
+        />
+        <div class="signature"><p>Director</p></div>
+      </div>
+      <em class="bottom-text"
+        >This certificate was generated on {{generatedTime}}</em
+      >
+    </div>
+  </body>
+</html>
