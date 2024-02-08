@@ -11,6 +11,7 @@ export const RoutePath = {
   OPPORTUNITY: '/opportunities/:opportunityId',
   OPPORTUNITY_CREATE: '/opportunity/create',
   VOLUNTEER: '/volunteers/:volunteerId',
+  REPORT: '/report',
 } as const;
 
 export const ALL_PREFERENCES = [

@@ -12,7 +12,14 @@ export type Preference =
   | "WORKING_WITH_MIGRANT_WORKERS"
   | "WORKING_WITH_HEALTHCARE_WORKERS"
   | "TEACHING STUDENTS";
-export type ResidentialStatus = "SINGAPORE_CITIZEN" | "SINGAPORE_PR" | "EP" | "DP" | "LTVP" | "STUDENT_PASS" | "VISITOR_VISA";
+export type ResidentialStatus =
+  | "SINGAPORE_CITIZEN"
+  | "SINGAPORE_PR"
+  | "EP"
+  | "DP"
+  | "LTVP"
+  | "STUDENT_PASS"
+  | "VISITOR_VISA";
 export type UpdateProfileDataRequest = {
   occupation: string;
   school: string;
@@ -56,7 +63,7 @@ export type ProfileDataResponse = {
 export type CreateProfileDataRequest = UpdateProfileDataRequest & {
   firstName: string;
   lastName: string;
-  dateOfBirth: Date;
+  dateOfBirth: string;
   gender: Gender;
   residentialStatus: ResidentialStatus;
 };
@@ -109,6 +116,12 @@ export type EnrollmentWithOpportunity = Enrollment & {
 export type AdminGetVolunteers = ProfileDataResponse;
 export type AdminGetVolunteer = AdminGetVolunteers & {
   enrollments: EnrollmentWithOpportunity[];
+};
+
+export type ReportDataResponse = {
+  volunteers: CreateProfileDataRequest[];
+  opportunities: OpportunityResponse[];
+  enrollments: EnrollmentWithVolunteer[];
 };
 
 // Utility types

@@ -8,7 +8,7 @@ import { CreateOpportunityRequest } from '../../../sharedTypes';
 import axios from 'axios';
 import useUserRole from '../hooks/useUserRole';
 import { QueryKey, RoutePath } from '../constants';
-import { Grid, Paper, Snackbar, TextField } from '@mui/material';
+import { Grid, Paper, Snackbar, TextField, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -111,7 +111,9 @@ export default function CreateOpportunity() {
     <div className="main-container">
       <Sidebar />
       <div className="main">
-        <h2>Create Volunteering Opportunity</h2>
+        <Typography variant="h4" align="center" margin="2rem">
+          Create Volunteering Opportunity
+        </Typography>
 
         {role === 'ADMIN' && (
           <>

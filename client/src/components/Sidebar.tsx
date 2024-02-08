@@ -26,6 +26,7 @@ import { Typography } from '@mui/material';
 import BigAtHeartLogo from '../assets/big-at-heart.png';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import GroupsIcon from '@mui/icons-material/Groups';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 
 const drawerWidth = 240;
 
@@ -111,16 +112,28 @@ export default function Sidebar() {
                   </Link>
                 </ListItem>
                 {role === 'ADMIN' && (
-                  <ListItem disablePadding>
-                    <Link to={RoutePath.VOLUNTEERS} className="sidebar-link">
-                      <ListItemButton>
-                        <ListItemIcon>
-                          <GroupsIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Volunteers" />
-                      </ListItemButton>
-                    </Link>
-                  </ListItem>
+                  <>
+                    <ListItem disablePadding>
+                      <Link to={RoutePath.VOLUNTEERS} className="sidebar-link">
+                        <ListItemButton>
+                          <ListItemIcon>
+                            <GroupsIcon />
+                          </ListItemIcon>
+                          <ListItemText primary="Volunteers" />
+                        </ListItemButton>
+                      </Link>
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <Link to={RoutePath.REPORT} className="sidebar-link">
+                        <ListItemButton>
+                          <ListItemIcon>
+                            <AssessmentIcon />
+                          </ListItemIcon>
+                          <ListItemText primary="Reports" />
+                        </ListItemButton>
+                      </Link>
+                    </ListItem>
+                  </>
                 )}
                 {role === 'VOLUNTEER' && (
                   <>

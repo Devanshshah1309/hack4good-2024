@@ -23,6 +23,7 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Typography,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -32,7 +33,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { ALL_PREFERENCES } from '../constants';
 import useUserRole from '../hooks/useUserRole';
-import { Input } from '@material-ui/core';
 
 function CreateProfile() {
   const navigate = useNavigate();
@@ -87,7 +87,9 @@ function CreateProfile() {
       <div className="main-container">
         <Sidebar />
         <div className="main">
-          <h2>Create Profile</h2>
+          <Typography variant="h4" align="center" margin="2rem">
+            Create Profile
+          </Typography>
           <form>
             <Paper
               elevation={3}

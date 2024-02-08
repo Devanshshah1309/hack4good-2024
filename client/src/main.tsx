@@ -16,6 +16,7 @@ import Volunteers from './pages/Volunteers.tsx';
 import OpportunityPage from './pages/Opportunity.tsx';
 import Volunteer from './pages/Volunteer.tsx';
 import History from './pages/History.tsx';
+import ReportPage from './pages/Report.tsx';
 
 // Import Clerk publishable key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
   {
     path: RoutePath.VOLUNTEERS,
     element: <Volunteers />,
+  },
+  {
+    path: RoutePath.REPORT,
+    element: <ReportPage />,
   },
 ]);
 
