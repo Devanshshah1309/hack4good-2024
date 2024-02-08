@@ -7,7 +7,11 @@ export function extractDateAndTime(date: string | undefined) {
     return { dateString: '', timeString: '' };
   }
   const dateObj = new Date(date);
-  const dateString = dateObj.toLocaleDateString();
+  const dateString = dateObj.toLocaleDateString('en-GB', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
   const timeString = dateObj.toLocaleTimeString().substring(0, 5); // remove seconds
   return { dateString, timeString };
 }

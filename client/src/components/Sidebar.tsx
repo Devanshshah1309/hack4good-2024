@@ -92,16 +92,6 @@ export default function Sidebar() {
             {isSignedIn && (
               <>
                 <ListItem disablePadding>
-                  <Link to={RoutePath.DASHBOARD} className="sidebar-link">
-                    <ListItemButton>
-                      <ListItemIcon>
-                        <DashboardIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Dashboard" />
-                    </ListItemButton>
-                  </Link>
-                </ListItem>
-                <ListItem disablePadding>
                   <Link to={RoutePath.OPPORTUNITIES} className="sidebar-link">
                     <ListItemButton>
                       <ListItemIcon>

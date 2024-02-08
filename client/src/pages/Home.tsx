@@ -1,12 +1,20 @@
-import { SignInButton, SignedIn, SignedOut } from '@clerk/clerk-react';
+import { SignInButton, SignedIn, SignedOut, useAuth } from '@clerk/clerk-react';
 import Sidebar from '../components/Sidebar';
 import theme from '../Theme';
 import { ThemeProvider } from '@emotion/react';
 import { Button } from '@mui/material';
 import { RoutePath } from '../constants';
 import { Typography } from '@material-ui/core';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function Home() {
+  const { isSignedIn } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSignedIn) navigate(RoutePath.OPPORTUNITIES);
+  }, [isSignedIn, navigate]);
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -54,12 +62,14 @@ function Home() {
           </div>
         </SignedOut>
         <SignedIn>
-          <div className="main-container">
-            <Sidebar />
-            <div className="main">
-              <h1 className="center">Welcome!</h1>
+          <>
+            <div className="main-container">
+              <Sidebar />
+              <div className="main">
+                <h1 className="center">Welcome!</h1>
+              </div>
             </div>
-          </div>
+          </>
         </SignedIn>
       </ThemeProvider>
     </>

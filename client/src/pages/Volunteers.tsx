@@ -174,7 +174,11 @@ export default function Volunteers() {
       headerClassName: COLUMN_HEADER_CLASSNAME,
       renderHeader: COLUMN_RENDER_HEADER,
       renderCell: (params) => {
-        return new Date(params.value as string).toLocaleDateString();
+        return new Date(params.value as string).toLocaleDateString('en-GB', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        });
       },
     },
     {

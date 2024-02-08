@@ -43,10 +43,6 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: RoutePath.DASHBOARD,
-    element: <Dashboard />,
-  },
-  {
     path: RoutePath.PROFILE,
     element: <Profile />,
   },

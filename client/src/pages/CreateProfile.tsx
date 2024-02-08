@@ -14,7 +14,6 @@ import Sidebar from '../components/Sidebar';
 import {
   Box,
   Button,
-  Checkbox,
   Chip,
   FormControlLabel,
   Grid,
