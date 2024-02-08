@@ -39,7 +39,7 @@ export default function Volunteer() {
   useEffect(() => {
     if (role !== 'ADMIN' && userId !== params.volunteerId)
       navigate(RoutePath.OPPORTUNITIES);
-  }, [role, navigate]);
+  }, [role, navigate, userId, params.volunteerId]);
   const content = data && data?.data;
 
   const rows: GridRowsProp = content?.enrollments.map((enrollment) => {
@@ -53,6 +53,15 @@ export default function Volunteer() {
       didAttend: enrollment.didAttend,
     };
   });
+
+  let totalHoursVolunteered = 0;
+  content?.enrollments
+    .filter((enrollment) => {
+      return enrollment.didAttend;
+    })
+    .forEach((enrollment) => {
+      totalHoursVolunteered += enrollment.opportunity.durationMinutes;
+    });
 
   const COLUMN_HEADER_CLASSNAME: string = 'data-grid-header';
   const COLUMN_RENDER_HEADER = (params: GridColumnHeaderParams) => {
@@ -159,24 +168,29 @@ export default function Volunteer() {
         <Typography variant="h4" align="center" margin="2rem">
           Volunteering History
         </Typography>
-        {content?.enrollments && (
-          <DataGrid
-            rows={rows}
-            columns={cols}
-            autoHeight
-            slots={{ toolbar: GridToolbar }}
-            slotProps={{
-              toolbar: {
-                showQuickFilter: true,
-              },
-            }}
-            getRowClassName={(params) => {
-              return params.indexRelativeToCurrentPage % 2 === 0
-                ? 'row-even'
-                : 'row-odd';
-            }}
-            sx={{ maxWidth: '80vw', boxShadow: 2, border: 2 }}
-          />
+        {rows && (
+          <>
+            <DataGrid
+              rows={rows}
+              columns={cols}
+              autoHeight
+              slots={{ toolbar: GridToolbar }}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                },
+              }}
+              getRowClassName={(params) => {
+                return params.indexRelativeToCurrentPage % 2 === 0
+                  ? 'row-even'
+                  : 'row-odd';
+              }}
+              sx={{ maxWidth: '80vw', boxShadow: 2, border: 2 }}
+            />
+            <Typography variant="h6" align="center" margin="2rem">
+              Total Hours Volunteered: {totalHoursVolunteered / 60}
+            </Typography>
+          </>
         )}
         <pre>{JSON.stringify(content, null, 2)}</pre>
       </div>
