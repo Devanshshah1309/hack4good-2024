@@ -110,7 +110,7 @@ export default function OpportunityCard({
           {opportunity.description}
         </Typography>
         <Typography variant="subtitle1" color="text.secondary">
-          {opportunity.location}
+          Location: {opportunity.location}
         </Typography>
         <Typography variant="body2" color="text.secondary" align="left">
           {startDate} {startTime} to {endDate} {endTime}

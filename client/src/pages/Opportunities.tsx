@@ -45,6 +45,7 @@ export default function Opportunities() {
               variant="contained"
               color="success"
               onClick={() => navigate(RoutePath.OPPORTUNITY_CREATE)}
+              style={{ marginBottom: '1rem' }}
             >
               Create New Opportunity
             </Button>
