@@ -1,9 +1,14 @@
-import axios, { AxiosError } from "axios";
-import { RoutePath } from "./constants";
+import axios, { AxiosError } from 'axios';
+import { RoutePath } from './constants';
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:3000/api/v1";
+export const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:3000/api/v1';
 
-export async function authenticatedGet<T>(path: string, bearerToken: string, navigate: (path: string) => void) {
+export async function authenticatedGet<T>(
+  path: string,
+  bearerToken: string,
+  navigate: (path: string) => void,
+) {
   try {
     const res = await axios.get<T>(API_BASE_URL + path, {
       headers: { Authorization: `Bearer ${bearerToken}` },
@@ -17,14 +22,28 @@ export async function authenticatedGet<T>(path: string, bearerToken: string, nav
   }
 }
 
-export async function authenticatedPost(path: string, data: any, bearerToken: string) {
+export async function authenticatedPost(
+  path: string,
+  data: any,
+  bearerToken: string,
+) {
   return axios.post(API_BASE_URL + path, data, {
     headers: { Authorization: `Bearer ${bearerToken}` },
   });
 }
 
-export async function authenticatedPut(path: string, data: any, bearerToken: string) {
+export async function authenticatedPut(
+  path: string,
+  data: any,
+  bearerToken: string,
+) {
   return axios.put(API_BASE_URL + path, data, {
+    headers: { Authorization: `Bearer ${bearerToken}` },
+  });
+}
+
+export async function authenticatedDelete(path: string, bearerToken: string) {
+  return axios.delete(API_BASE_URL + path, {
     headers: { Authorization: `Bearer ${bearerToken}` },
   });
 }
