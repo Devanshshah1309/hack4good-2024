@@ -171,7 +171,7 @@ Oh, and did we mention that our entire tech stack is **completely free**! We don
 - **MySQL**: A popular open-source relational database management system
 - **PlanetScale**: A cloud-hosted database service that provides a fully managed MySQL database
 
-In particular, we use **Clerk** for authentication. Clerk is a third-party service that provides authentication and user management, along with integration with popular identity providers such as Google, Facebook, and more
+In particular, we use **Clerk** for authentication. Clerk is a third-party service that provides authentication and user management, along with integration with popular identity providers such as Google, Facebook, and more. This means that we never have to worry about the security of our authentication system, and we can focus on building the core features of our application. It also means that **we also don't store any passwords in our database**, which is a huge security win!
 
 # Appendix
 
