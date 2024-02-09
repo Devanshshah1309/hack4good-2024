@@ -75,7 +75,9 @@ function CreateProfile() {
     mutationFn: async (data: CreateProfileDataRequest) => {
       await authenticatedPost('/profile', data, (await getToken()) ?? '');
     },
-    onSuccess: () => {},
+    onSuccess: () => {
+      navigate(RoutePath.OPPORTUNITIES);
+    },
     onError: () => {
       setErrorSnackbarOpen(true);
       console.error('failed to save');

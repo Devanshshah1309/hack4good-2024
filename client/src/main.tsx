@@ -30,6 +30,9 @@ if (!import.meta.env.VITE_CLOUDINARY_IMAGE_UPLOAD_URL) {
 if (!import.meta.env.VITE_CLOUDINARY_IMAGE_UPLOAD_PRESET) {
   throw new Error('Missing env var VITE_CLOUDINARY_IMAGE_UPLOAD_PRESET');
 }
+if (!import.meta.env.VITE_CLOUDINARY_IMAGE_UPLOAD_FOLDER) {
+  throw new Error('Missing env var VITE_CLOUDINARY_IMAGE_UPLOAD_FOLDER');
+}
 
 // react query
 const queryClient = new QueryClient();
