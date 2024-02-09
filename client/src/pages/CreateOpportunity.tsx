@@ -229,7 +229,7 @@ export default function CreateOpportunity() {
                       <input
                         type="file"
                         hidden
-                        accept="image/png, image/jpeg"
+                        accept="image/png, image/jpeg, image/webp"
                         onChange={(e) => {
                           setImgFile(
                             e.target.files!.length === 0

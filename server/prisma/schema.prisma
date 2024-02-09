@@ -29,17 +29,17 @@ model Volunteer {
   lastName                       String
   dateOfBirth                    DateTime
   gender                         String
-  occupation                     String
-  school                         String
-  educationBackground            String
+  occupation                     String                           @db.VarChar(1000)
+  school                         String                           @db.VarChar(1000)
+  educationBackground            String                           @db.VarChar(1000)
   driving                        Boolean
   ownsVehicle                    Boolean
-  commitmentLevel                String
+  commitmentLevel                String                           @db.VarChar(1000)
   phone                          String
   residentialStatus              String
-  skills                         String
-  experience                     String
-  address                        String
+  skills                         String                           @db.VarChar(1000)
+  experience                     String                           @db.VarChar(1000)
+  address                        String                           @db.VarChar(1000)
   postalCode                     String
   VolunteerPreference            VolunteerPreference[]
   VolunteerOpportunityEnrollment VolunteerOpportunityEnrollment[]
@@ -60,11 +60,11 @@ model VolunteerPreference {
 
 model Opportunity {
   id                             String                           @id @default(uuid())
-  name                           String
-  description                    String
+  name                           String                           @db.VarChar(1000)
+  description                    String                           @db.VarChar(1000)
   start                          DateTime
   end                            DateTime
-  location                       String
+  location                       String                           @db.VarChar(1000)
   durationMinutes                Int
   imageUrl                       String
   createdAt                      DateTime                         @default(now())
