@@ -164,10 +164,13 @@ export default function ReportPage() {
   data?.data.opportunities.forEach((opportunity) => {
     const date = new Date(opportunity.start);
     const diff = getDifferenceInMonths(date);
-    if (diff < 6) {
-      opportunities[diff]++;
+    console.log(diff, date);
+    if (diff <= 0) return;
+    if (diff <= 6) {
+      opportunities[diff - 1]++;
     }
   });
+  opportunities.reverse();
 
   // show number of enrollments (marked didAttend) in the past 6 months
   // create map from opportunity id to start date
@@ -181,11 +184,13 @@ export default function ReportPage() {
     const date = opportunityIdToStartDate.get(enrollment.opportunityId);
     if (date) {
       const diff = getDifferenceInMonths(date);
-      if (diff < 6) {
-        enrollments[diff]++;
+      if (diff <= 0) return;
+      if (diff <= 6) {
+        enrollments[diff - 1]++;
       }
     }
   });
+  enrollments.reverse();
   return (
     <>
       <div className="main-container">
@@ -375,7 +380,7 @@ export default function ReportPage() {
                       data: opportunities,
                       fill: false,
                       backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                      borderColor: 'rgba(255, 159, 64, 0.2)',
+                      borderColor: 'rgba(255, 159, 64, 1)',
                       borderWidth: 1,
                     },
                   ],
@@ -385,7 +390,7 @@ export default function ReportPage() {
                   scales: {
                     y: {
                       suggestedMin: 0,
-                      suggestedMax: 20,
+                      suggestedMax: 10,
                     },
                   },
                   plugins: {
@@ -408,7 +413,7 @@ export default function ReportPage() {
                       data: enrollments,
                       fill: false,
                       backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                      borderColor: 'rgba(75, 192, 192, 0.2)',
+                      borderColor: 'rgba(75, 192, 192, 1)',
                       borderWidth: 1,
                     },
                   ],
@@ -417,7 +422,7 @@ export default function ReportPage() {
                   scales: {
                     y: {
                       suggestedMin: 0,
-                      suggestedMax: 100,
+                      suggestedMax: 20,
                     },
                   },
                   plugins: {
