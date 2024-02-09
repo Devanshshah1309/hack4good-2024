@@ -1,6 +1,10 @@
 import { useAuth } from '@clerk/clerk-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { authenticatedGet, authenticatedPut } from '../axios';
+import {
+  authenticatedGet,
+  authenticatedPut,
+  authenticatedDelete,
+} from '../axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import {
@@ -208,6 +212,7 @@ export default function OpportunityPage() {
                 <Button
                   color="warning"
                   variant="contained"
+                  style={{ margin: '1rem' }}
                   onClick={async () => {
                     await authenticatedPut(
                       `/admin/opportunities/${opportunityId}`,
@@ -224,6 +229,20 @@ export default function OpportunityPage() {
                   }}
                 >
                   Archive Opportunity
+                </Button>
+                <Button
+                  color="error"
+                  variant="contained"
+                  style={{ margin: '1rem' }}
+                  onClick={async () => {
+                    await authenticatedDelete(
+                      `/admin/opportunities/${opportunityId}`,
+                      (await getToken()) || '',
+                    );
+                    navigate('/opportunities');
+                  }}
+                >
+                  Delete Opportunity
                 </Button>
               </div>
             )}
