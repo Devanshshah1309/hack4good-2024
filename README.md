@@ -2,6 +2,8 @@
 Welcome to VolunTech Connect! 🚀
 </h1>
 
+![Admin View](./assets/home.png)
+
 VolunTech Connect is a platform that helps Non-Profit Organisations such as [Big At Heart](https://www.bigatheart.org/) to effortlessly manage volunteers, create opportunities for volunteers to sign up for, and so much more! 🌟
 
 Say goodbye 👋 to the days of manually managing volunteers and opportunities. VolunTech Connect is here to help you automate and streamline the process. 🚀
@@ -11,11 +13,6 @@ Built with ❤️ by Joe and Devansh.
 **Table of Contents**
 
 - [Core Features](#core-features)
-  - [Volunteer](#volunteer)
-    - [Sign up and Create Profile](#sign-up-and-create-profile)
-    - [Register for Opportunities](#register-for-opportunities)
-    - [View Personal Volunteering History](#view-personal-volunteering-history)
-    - [Download Certificates ⭐️](#download-certificates-️)
   - [Admin](#admin)
     - [Create Opportunities](#create-opportunities)
     - [Approve Volunteer Registrations](#approve-volunteer-registrations)
@@ -24,6 +21,11 @@ Built with ❤️ by Joe and Devansh.
     - [Manage Volunteers](#manage-volunteers)
     - [View Volunteer's Details and History](#view-volunteers-details-and-history)
     - [View Summary Statistics ⭐️](#view-summary-statistics-️)
+  - [Volunteer](#volunteer)
+    - [Sign up and Create Profile](#sign-up-and-create-profile)
+    - [Register for Opportunities](#register-for-opportunities)
+    - [View Personal Volunteering History](#view-personal-volunteering-history)
+    - [Download Certificates ⭐️](#download-certificates-️)
 - [Tech Stack](#tech-stack)
   - [Frontend](#frontend)
   - [Backend](#backend)
@@ -36,45 +38,17 @@ Built with ❤️ by Joe and Devansh.
 
 In this user guide, we explain the core features of our application from the perspective of (1) a volunteer and, (2) an admin.
 
+> 💡 **Pro Tip**: For the best experience, use a laptop/desktop while using the application.
+
 Let's dive in! 🏊‍♂️
 
-## Volunteer
-
-### Sign up and Create Profile
-
-As a volunteer, you can easily sign up and create your profile. You just have to fill out a form and you're good to go! 🚀
-
-And don't worry, you can always come back and update your profile details later if you need to.
-
-> :warning: Note: You cannot update important personal information such as your first name, last name, email address, and date of birth. So, make sure you fill these in correctly when you sign up!
-
-### Register for Opportunities
-
-Once you've signed up and created your profile, you can easily browse through all the opportunities available to you.
-
-All you have to do is click "Register" to sign up for an opportunity. It's that simple! 🎉
-
-Once you've registered for an opportunity, the admin will review your registration and approve it. Once approved, you can view the opportunity in your personal volunteering history.
-
-> Note: There are 3 main statuses for a volunteer's registration for an opportunity:
->
-> - Pending: The volunteer has registered for the opportunity but the admin has not yet approved their registration
-> - Registered: The admin has approved the volunteer's registration for the opportunity
-> - Attended: The volunteer has attended the opportunity
-
-### View Personal Volunteering History
-
-Once you've attended an opportunity, you can view it in your personal volunteering history. This is a great way to keep track of all the opportunities you've volunteered for and to motivate yourself to continue volunteering! 🌟
-
-### Download Certificates ⭐️
-
-Once the admin has marked your attendance for an opportunity, you can download a certificate for volunteering for that opportunity _without troubling the admin_.
-
-You can even post these online to convince your friends to join you in volunteering! 📢
-
-> 💡 **Pro Tip**: Admins, this means that you don't have to manually create certificates for volunteers anymore! Hope this saves you a lot time :)
-
 ## Admin
+
+You cannot create an admin account through the application (for obvious security reasons). The admin account is created manually by the developers.
+
+This is how the admin view looks like:
+
+![Admin View](./assets/home.png)
 
 ### Create Opportunities
 
@@ -86,13 +60,23 @@ Fill in the necessary details such as:
 - Description: you can include any relevant information such as what the volunteers will be doing, the maximum number of volunteers who can sign up, registration deadline, etc. here.
 - Start and end date (and time) of the opportunity 📆
 - Location of the opportunity 📍
-- Number of volunteering hours each volunteer will receive
+- Number of volunteering hours each volunteer will receive (this may be different from the actual duration of the opportunity, depending on the nature of the work)
 
-By default, opportunities are sorted by the start date, so the most recent opportunities will appear at the top of the page.
+and that's it! You've created an opportunity! 🎉
+
+> :warning: Note: The capacity and registration deadline are not enforced by the system. The admin can manage the number of volunteers who can sign up for an opportunity and the deadline for registration.
+
+By default, opportunities are sorted by the start date in reverse chronological order, so the latest opportunities will appear at the top of the list.
 
 > 💡 **Pro Tip**: You can also add a photo to make your opportunity more appealing to volunteers!
 
-> :warning: Note: The capacity and registration deadline are not enforced by the system. The admin can manage the number of volunteers who can sign up for an opportunity and the deadline for registration.
+Here's a quick tutorial on how to create an opportunity:
+
+![Create Opportunity](./assets/create-opportunity.gif)
+
+Once created, you should see it in the list of opportunities, as shown below:
+
+![Updated Opportunities](./assets/updated-opportunities.png)
 
 ### Approve Volunteer Registrations
 
@@ -100,9 +84,17 @@ When volunteers sign up for an opportunity, their registration is not automatica
 
 > 💡 **Pro Tip**: When there are pending registrations which have not yet been approved, there will be an icon visible on the main opportunities page.
 
+This is how it looks like:
+
+![Pending Registrations](./assets/pending-registrations.png)
+
 For each opportunity, the admin can view a list of all volunteers who have registered for the opportunity. The admin can then approve the registrations of selected volunteers.
 
 On the day of the event, the admin can also mark the attendance of the volunteers who showed up for the event.
+
+As a quick summary, here are some of the actions you can take for any opportunity:
+
+![Volunteer Enrollments](./assets/volunteer-enrollments.png)
 
 > 💡 **Pro Tip**: Once the admin has marked attendance for a volunteer, the volunteer can download a certificate for volunteering for that opportunity!
 
@@ -123,6 +115,10 @@ If you accidentally created an opportunity, or if you simply want to remove an o
 No more hunting through spreadsheets to find a volunteer's details!
 
 You can easily **search**, **sort**, **filter**, and **view** all the details of your volunteers in one place. Oh, and did we forget to mention? You can also **download a CSV** of all your volunteers' details if you wish to export it!
+
+We're not joking when we say that this really is a superpower! 🦸‍♂️ Don't believe us? See it in action (and imagine you have thousands of volunteers!):
+
+![Manage Volunteers](./assets/manage-volunteers.gif)
 
 ### View Volunteer's Details and History
 
@@ -147,6 +143,56 @@ You can also view how well your organisation is doing in terms of:
 - Number of volunteer attendances in the past 6 months
 
 And of course, you can easily save these charts: simply right-click and "save as image" to add them to your reports and presentations!
+
+## Volunteer
+
+### Sign up and Create Profile
+
+As a volunteer, you can easily sign up and create your profile. You just have to fill out a form and you're good to go! 🚀
+
+And don't worry, you can always come back and update your profile details later if you need to.
+
+> :warning: Note: You cannot update important personal information such as your first name, last name, email address, and date of birth. So, make sure you fill these in correctly when you sign up!
+
+Here's an image of what the sign up form looks like:
+
+![Create Profile](./assets/create-profile.png)
+
+### Register for Opportunities
+
+Once you've signed up and created your profile, you can easily browse through all the opportunities available to you.
+
+All you have to do is click "Register" to sign up for an opportunity. It's that simple! 🎉
+
+Once you've registered for an opportunity, the admin will review your registration and approve it. Once approved, you can view the opportunity in your personal volunteering history.
+
+> Note: There are 3 main statuses for a volunteer's registration for an opportunity:
+>
+> - Pending: The volunteer has registered for the opportunity but the admin has not yet approved their registration
+> - Registered: The admin has approved the volunteer's registration for the opportunity
+> - Attended: The volunteer has attended the opportunity
+
+Here's how it looks on your dashboard:
+
+![Enrollment Status](./assets/enrollment-status.png)
+
+### View Personal Volunteering History
+
+Once you've attended an opportunity, you can view it in your personal volunteering history. This is a great way to keep track of all the opportunities you've volunteered for and to motivate yourself to continue volunteering! 🌟
+
+To make it even easier, you can sort and filter your personal volunteering history to find the information you need.
+
+### Download Certificates ⭐️
+
+Once the admin has marked your attendance for an opportunity, you can **download a certificate** for volunteering for that opportunity _without troubling the admin_.
+
+You can even post these online to convince your friends to join you in volunteering! 📢
+
+(Apologies for the "slow" internet in the GIF below, but we promise it's much faster in real life!)
+
+![Download Certificate](./assets/download-certificate.gif)
+
+> 💡 **Pro Tip**: Admins, this means that you don't have to manually create certificates for volunteers anymore! Hope this saves you a lot time :)
 
 # Tech Stack
 
