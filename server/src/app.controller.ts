@@ -578,6 +578,7 @@ export class AppController {
     const volunteers = await this.prisma.user.findMany({
       where: {
         role: 'VOLUNTEER',
+        volunteer: { isNot: null },
       },
       include: {
         volunteer: {
@@ -595,10 +596,17 @@ export class AppController {
     req.auth.userId === req.params.id ||
       (await this.appService.checkUserIsAdmin(req.auth.userId));
 
-    const volunteer = await this.appService.getUserJoinVolunteer(req.params.id);
+    const volunteerUser = await this.appService.getUserJoinVolunteer(
+      req.params.id,
+    );
 
-    if (!volunteer)
+    if (!volunteerUser)
       throw new NotFoundException('No volunteer found with that userId');
+
+    if (!volunteerUser.volunteer)
+      throw new BadRequestException(
+        'That volunteer has not created their profile',
+      );
 
     const enrollments =
       await this.prisma.volunteerOpportunityEnrollment.findMany({
@@ -610,7 +618,7 @@ export class AppController {
         },
       });
 
-    return { ...volunteer, enrollments };
+    return { ...volunteerUser, enrollments };
   }
 
   @Get('admin/report-data')
