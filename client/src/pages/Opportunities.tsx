@@ -31,6 +31,9 @@ export default function Opportunities() {
   // filter out archived opportunities
   content = content.filter((opp) => opp.archive === false);
   // console.log(content);
+  content.sort((a, b) => {
+    return new Date(b.start).getTime() - new Date(a.start).getTime();
+  });
 
   return (
     <div className="main-container">

@@ -88,6 +88,8 @@ Fill in the necessary details such as:
 - Location of the opportunity 📍
 - Number of volunteering hours each volunteer will receive
 
+By default, opportunities are sorted by the start date, so the most recent opportunities will appear at the top of the page.
+
 > 💡 **Pro Tip**: You can also add a photo to make your opportunity more appealing to volunteers!
 
 > :warning: Note: The capacity and registration deadline are not enforced by the system. The admin can manage the number of volunteers who can sign up for an opportunity and the deadline for registration.
