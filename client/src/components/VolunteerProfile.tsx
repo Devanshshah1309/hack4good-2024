@@ -33,7 +33,7 @@ export default function VolunteerProfile({
     volunteer.VolunteerPreference.map(({ preference }) => {
       return preference;
     }) || [];
-  console.log(preferences);
+  // console.log(preferences);
   return (
     <div>
       <Paper

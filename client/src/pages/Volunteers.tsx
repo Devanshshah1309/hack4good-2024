@@ -310,7 +310,7 @@ export default function Volunteers() {
             sx={{ maxWidth: '80vw', boxShadow: 2, border: 2 }}
           />
         </div>
-        <pre>response data: {JSON.stringify(content, undefined, 2)}</pre>
+        {/* <pre>response data: {JSON.stringify(content, undefined, 2)}</pre> */}
       </div>
     </div>
   );

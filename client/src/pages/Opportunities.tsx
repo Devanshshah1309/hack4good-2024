@@ -29,7 +29,7 @@ export default function Opportunities() {
   if (data) content = data.data.opportunities;
   // filter out archived opportunities
   content = content.filter((opp) => opp.archive === false);
-  console.log(content);
+  // console.log(content);
 
   return (
     <div className="main-container">

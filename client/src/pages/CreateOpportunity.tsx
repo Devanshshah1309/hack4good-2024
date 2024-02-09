@@ -60,7 +60,7 @@ export default function CreateOpportunity() {
     };
 
     if (!imgFile) {
-      console.log('file is', imgFile);
+      // console.log('file is', imgFile);
       return oppCopy;
     }
 
@@ -68,9 +68,9 @@ export default function CreateOpportunity() {
     const uploadPreset = import.meta.env.VITE_CLOUDINARY_IMAGE_UPLOAD_PRESET;
 
     // check if .env variable has been read correctly
-    console.log(uploadPreset);
+    // console.log(uploadPreset);
 
-    console.log('Uploading file...');
+    // console.log('Uploading file...');
     const formData = new FormData();
     formData.append('file', imgFile);
     formData.append('upload_preset', uploadPreset);
@@ -79,7 +79,7 @@ export default function CreateOpportunity() {
       secure_url: string;
       original_filename: string;
     }>(uploadUrl, formData);
-    console.log(res.data);
+    // console.log(res.data);
 
     oppCopy.imageUrl = res.data.secure_url;
     return oppCopy;

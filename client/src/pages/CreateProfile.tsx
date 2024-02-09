@@ -470,12 +470,12 @@ function CreateProfile() {
             </Button>
           </div>
           <div>
-            <pre>
+            {/* <pre>
               Me:
               <br />
               {JSON.stringify(profileData, undefined, 2)}
             </pre>
-            <br />
+            <br /> */}
           </div>
         </div>
       </div>

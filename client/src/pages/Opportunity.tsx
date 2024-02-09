@@ -267,7 +267,7 @@ export default function OpportunityPage() {
           />
         )}
 
-        <pre>{data && JSON.stringify(data.data, undefined, 2)}</pre>
+        {/* <pre>{data && JSON.stringify(data.data, undefined, 2)}</pre> */}
         {/* {data &&
           data.data.enrollments.map((enrollment) => (
             <div
