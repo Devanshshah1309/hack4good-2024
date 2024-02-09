@@ -62,6 +62,7 @@ export default function CreateOpportunity() {
 
     const uploadUrl = import.meta.env.VITE_CLOUDINARY_IMAGE_UPLOAD_URL;
     const uploadPreset = import.meta.env.VITE_CLOUDINARY_IMAGE_UPLOAD_PRESET;
+    const uploadFolder = import.meta.env.VITE_CLOUDINARY_IMAGE_UPLOAD_FOLDER;
 
     // check if .env variable has been read correctly
     // console.log(uploadPreset);
@@ -70,6 +71,7 @@ export default function CreateOpportunity() {
     const formData = new FormData();
     formData.append('file', imgFile);
     formData.append('upload_preset', uploadPreset);
+    formData.append('folder', uploadFolder);
 
     const res = await axios.post<{
       secure_url: string;
