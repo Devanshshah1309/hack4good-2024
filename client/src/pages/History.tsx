@@ -12,7 +12,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { AdminGetVolunteer } from '../../../sharedTypes';
 import { API_BASE_URL, authenticatedGet } from '../axios';
-import { extractDateAndTime } from '../utils';
+import { extractDateAndTime, renderCellExpand } from '../utils';
 import { useNavigate } from 'react-router-dom';
 import DownloadIcon from '@mui/icons-material/Download';
 
@@ -64,30 +64,12 @@ export default function History() {
 
   const cols: GridColDef[] = [
     {
-      field: 'download',
-      headerName: 'Download Certificate',
-      width: 200,
-      renderHeader: COLUMN_RENDER_HEADER,
-      headerClassName: COLUMN_HEADER_CLASSNAME,
-      align: 'center',
-      headerAlign: 'center',
-      renderCell: (params: GridRenderCellParams) => {
-        return (
-          <a
-            href={`${API_BASE_URL}/certificate/volunteer/${userId}/opportunities/${params.row.id}`}
-            target="_blank"
-          >
-            <DownloadIcon />
-          </a>
-        );
-      },
-    },
-    {
       field: 'opportunity',
       headerName: 'Opportunity',
       width: 200,
       renderHeader: COLUMN_RENDER_HEADER,
       headerClassName: COLUMN_HEADER_CLASSNAME,
+      renderCell: renderCellExpand,
       align: 'center',
       headerAlign: 'center',
     },
@@ -128,6 +110,25 @@ export default function History() {
       },
       align: 'center',
       headerAlign: 'center',
+    },
+    {
+      field: 'download',
+      headerName: 'Download Certificate',
+      width: 200,
+      renderHeader: COLUMN_RENDER_HEADER,
+      headerClassName: COLUMN_HEADER_CLASSNAME,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => {
+        return (
+          <a
+            href={`${API_BASE_URL}/certificate/volunteer/${userId}/opportunities/${params.row.id}`}
+            target="_blank"
+          >
+            <DownloadIcon color="primary" />
+          </a>
+        );
+      },
     },
   ];
   return (
