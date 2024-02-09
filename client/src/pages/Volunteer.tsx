@@ -192,7 +192,7 @@ export default function Volunteer() {
             </Typography>
           </>
         )}
-        <pre>{JSON.stringify(content, null, 2)}</pre>
+        {/* <pre>{JSON.stringify(content, null, 2)}</pre> */}
       </div>
     </div>
   );

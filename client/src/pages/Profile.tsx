@@ -141,6 +141,18 @@ function Profile() {
           <Typography variant="h4" align="center" margin="2rem">
             My Profile
           </Typography>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              style={{ margin: '1rem' }}
+              variant="contained"
+              color="success"
+              onClick={() => {
+                mutation.mutate(profileData);
+              }}
+            >
+              Save Changes
+            </Button>
+          </div>
           <form>
             <Paper
               elevation={3}
@@ -477,19 +489,7 @@ function Profile() {
               </Grid>
             </Paper>
           </form>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Button
-              className="center"
-              style={{ marginTop: '1rem' }}
-              variant="contained"
-              color="success"
-              onClick={() => {
-                mutation.mutate(profileData);
-              }}
-            >
-              Save Changes
-            </Button>
-          </div>
+          <div style={{ height: '2rem' }} />
           <Snackbar
             open={successSnackbarOpen}
             ContentProps={{
@@ -516,11 +516,11 @@ function Profile() {
               setErrorSnackbarOpen(false);
             }}
           />
-          <pre>
+          {/* <pre>
             Response data:
             <br />
             {JSON.stringify(query.data, undefined, 2)}
-          </pre>
+          </pre> */}
         </div>
       </div>
     </>
