@@ -74,7 +74,9 @@ export class AppService {
 
     const html = fs.readFileSync(`static/certificate-template.html`, 'utf8');
 
-    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
     const page = await browser.newPage();
 
     const replacedHtml = html.replace(/{{(.+?)}}/g, (_, g1) => replace[g1]);
