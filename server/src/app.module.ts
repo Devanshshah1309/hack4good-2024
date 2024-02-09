@@ -19,6 +19,7 @@ import { NextFunction, Request, Response } from 'express';
 import 'dotenv/config';
 import { PrismaService } from './prisma.service';
 import { Prisma } from '@prisma/client';
+import { HealthController } from './health.controller';
 
 declare global {
   namespace Express {
@@ -28,7 +29,7 @@ declare global {
 
 @Module({
   imports: [],
-  controllers: [AppController],
+  controllers: [HealthController, AppController],
   providers: [AppService, PrismaService, Logger],
 })
 export class AppModule implements NestModule {
@@ -52,7 +53,7 @@ export class AppModule implements NestModule {
         this.authMiddleware,
         CreateNewUserMiddleware,
       )
-      .exclude('api/v1/certificate/(.*)')
+      .exclude('health', 'api/v1/certificate/(.*)')
       .forRoutes('*');
   }
 }
