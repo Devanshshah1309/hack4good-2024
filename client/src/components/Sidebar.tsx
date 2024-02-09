@@ -54,7 +54,7 @@ export default function Sidebar() {
             '& .MuiDrawer-paper': {
               width: drawerWidth,
               boxSizing: 'border-box',
-              backgroundColor: '#81c784',
+              backgroundColor: '#fcf0f5',
             },
           }}
           variant="permanent"

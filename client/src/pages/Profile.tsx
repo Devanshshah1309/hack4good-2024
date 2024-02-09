@@ -489,7 +489,7 @@ function Profile() {
               </Grid>
             </Paper>
           </form>
-          <div style={{ height: '2rem' }} />
+          <div style={{ height: '10vh' }} />
           <Snackbar
             open={successSnackbarOpen}
             ContentProps={{
@@ -498,7 +498,7 @@ function Profile() {
               },
             }}
             autoHideDuration={3000}
-            message="Changes saved successfully"
+            message="Changes saved successfully!"
             onClose={() => {
               setSuccessSnackbarOpen(false);
             }}

@@ -22,6 +22,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import PersonIcon from '@mui/icons-material/Person';
+import bigAtHeartLogo from '../assets/big-at-heart.png';
 interface OpportunityCardProps {
   opportunity: OpportunityResponse;
   userRole: UserRole | null;
@@ -65,15 +66,14 @@ export default function OpportunityCard({
       sx={{
         height: '100%',
         display: 'flex',
+        backgroundColor: '#f0ead6',
         flexDirection: 'column',
         justifyContent: 'space-between',
       }}
     >
       <CardMedia
         sx={{ minHeight: 140 }}
-        image={
-          opportunity.imageUrl ? opportunity.imageUrl : PLACEHOLDER_IMAGE_URL
-        }
+        image={opportunity.imageUrl ? opportunity.imageUrl : bigAtHeartLogo}
         title={opportunity.name}
       />
       <CardContent>

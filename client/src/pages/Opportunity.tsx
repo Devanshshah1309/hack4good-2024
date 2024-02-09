@@ -16,15 +16,17 @@ import {
   GridColumnHeaderParams,
   GridToolbar,
 } from '@mui/x-data-grid';
-import { Button, Typography } from '@mui/material';
+import { Button, Snackbar, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import { extractDateAndTime, renderCellExpand } from '../utils';
+import { useState } from 'react';
 
 export default function OpportunityPage() {
   const navigate = useNavigate();
   const { getToken } = useAuth();
   const { opportunityId } = useParams();
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const { data } = useQuery({
     queryKey: [QueryKey.OPPORTUNITIES, opportunityId],
@@ -105,7 +107,7 @@ export default function OpportunityPage() {
     },
     {
       field: 'adminApproved',
-      headerName: 'Approved?',
+      headerName: 'Approved',
       width: 150,
       align: 'center',
       headerAlign: 'center',
@@ -204,7 +206,7 @@ export default function OpportunityPage() {
             {data && (
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button
-                  color="primary"
+                  color="warning"
                   variant="contained"
                   onClick={async () => {
                     await authenticatedPut(
@@ -218,6 +220,7 @@ export default function OpportunityPage() {
                     queryClient.invalidateQueries({
                       queryKey: [QueryKey.OPPORTUNITIES, opportunityId],
                     });
+                    setShowSnackbar(true);
                   }}
                 >
                   Archive Opportunity
@@ -266,56 +269,19 @@ export default function OpportunityPage() {
             sx={{ maxWidth: '80vw', boxShadow: 2, border: 2 }}
           />
         )}
-
-        {/* <pre>{data && JSON.stringify(data.data, undefined, 2)}</pre> */}
-        {/* {data &&
-          data.data.enrollments.map((enrollment) => (
-            <div
-              key={enrollment.volunteerId}
-              style={{ border: '1px solid black' }}
-            >
-              <p>
-                {enrollment.volunteer.firstName} {enrollment.volunteer.lastName}
-              </p>
-              <p>{enrollment.volunteer.user.email}</p>
-              <p>
-                adminApproved:
-                {String(enrollment.adminApproved)}
-              </p>
-              <p>
-                didAttend:
-                {String(enrollment.didAttend)}
-              </p>
-              <button
-                onClick={async () => {
-                  await authenticatedPut(
-                    `/admin/opportunities/${enrollment.opportunityId}/enrollments/${enrollment.volunteerId}/approval`,
-                    { adminApproved: !enrollment.adminApproved },
-                    (await getToken()) || '',
-                  );
-                  queryClient.invalidateQueries({
-                    queryKey: [QueryKey.OPPORTUNITIES, opportunityId],
-                  });
-                }}
-              >
-                approve/unapprove
-              </button>
-              <button
-                onClick={async () => {
-                  await authenticatedPut(
-                    `/admin/opportunities/${enrollment.opportunityId}/enrollments/${enrollment.volunteerId}/attendance`,
-                    { didAttend: !enrollment.didAttend },
-                    (await getToken()) || '',
-                  );
-                  queryClient.invalidateQueries({
-                    queryKey: [QueryKey.OPPORTUNITIES, opportunityId],
-                  });
-                }}
-              >
-                mark attendance
-              </button>
-            </div>
-          ))} */}
+        <Snackbar
+          open={showSnackbar}
+          ContentProps={{
+            style: {
+              backgroundColor: '#2E7D32',
+            },
+          }}
+          autoHideDuration={3000}
+          message="Opportunity archived successfully!"
+          onClose={() => {
+            setShowSnackbar(false);
+          }}
+        />
       </div>
     </div>
   );

@@ -21,6 +21,7 @@ import {
   Paper,
   Radio,
   RadioGroup,
+  Snackbar,
   TextField,
   Typography,
 } from '@mui/material';
@@ -48,6 +49,7 @@ function CreateProfile() {
   const [gender, setGender] = useState('');
   const [residentialStatus, setResidentialStatus] = useState('');
   const [preferences, setPreferences] = useState<Preference[]>([]);
+  const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
 
   const [profileData, setProfileData] = useState<CreateProfileDataRequest>({
     firstName: '',
@@ -77,6 +79,7 @@ function CreateProfile() {
       navigate(RoutePath.DASHBOARD);
     },
     onError: () => {
+      setErrorSnackbarOpen(true);
       console.error('failed to save');
     },
   });
@@ -343,7 +346,6 @@ function CreateProfile() {
                     label="Skills (e.g. programming, gardening, arts and crafts, etc.)"
                     variant="outlined"
                     fullWidth
-                    required
                     onChange={(e) => {
                       setProfileData({
                         ...profileData,
@@ -463,20 +465,38 @@ function CreateProfile() {
               variant="contained"
               color="success"
               onClick={() => {
+                // form validation
+                if (
+                  profileData.firstName === '' ||
+                  profileData.lastName === '' ||
+                  gender === '' ||
+                  residentialStatus === '' ||
+                  profileData.phone === '' ||
+                  profileData.address === '' ||
+                  profileData.postalCode === '' ||
+                  profileData.occupation === ''
+                ) {
+                  setErrorSnackbarOpen(true);
+                  return;
+                }
                 mutation.mutate(profileData);
               }}
             >
               Submit
             </Button>
           </div>
-          <div>
-            {/* <pre>
-              Me:
-              <br />
-              {JSON.stringify(profileData, undefined, 2)}
-            </pre>
-            <br /> */}
-          </div>
+          <Snackbar
+            open={errorSnackbarOpen}
+            ContentProps={{
+              style: {
+                backgroundColor: '#D32F2F',
+              },
+            }}
+            autoHideDuration={3000}
+            onClose={() => setErrorSnackbarOpen(false)}
+            message="Failed to create profile!"
+          />
+          <div style={{ height: '10vh' }} />
         </div>
       </div>
     </>

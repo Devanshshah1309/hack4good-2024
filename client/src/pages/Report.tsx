@@ -344,7 +344,7 @@ export default function ReportPage() {
               />
             </CustomTabPanel>
           </Box>
-          <Typography variant="h5" align="center" margin="2rem">
+          <Typography variant="h5" align="center" marginTop="2rem">
             Opportunities Statistics
           </Typography>
           <Box sx={{ width: '100%' }}>
@@ -378,7 +378,7 @@ export default function ReportPage() {
                   scales: {
                     y: {
                       suggestedMin: 0,
-                      suggestedMax: 100,
+                      suggestedMax: 20,
                     },
                   },
                   plugins: {

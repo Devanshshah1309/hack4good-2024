@@ -9,6 +9,7 @@ import { Button, CircularProgress, Typography } from '@mui/material';
 import { Grid } from '@material-ui/core';
 import { OpportunityResponse } from '../../../sharedTypes';
 import OpportunityCard from '../components/OpportunityCard';
+import { useEffect } from 'react';
 
 export default function Opportunities() {
   const { getToken } = useAuth();

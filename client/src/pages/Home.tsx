@@ -29,7 +29,11 @@ function Home() {
           </SignInButton>
           <div>
             <Typography variant="h1" style={{ fontWeight: 500 }}>
-              Start Volunteering Today!
+              Start{' '}
+              <span style={{ color: '#ff0066', fontWeight: '700' }}>
+                Volunteering
+              </span>{' '}
+              Today!
             </Typography>
             <Typography
               variant="h5"
