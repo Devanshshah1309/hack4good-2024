@@ -34,7 +34,7 @@ Built with ❤️ by Joe and Devansh.
 
 # Core Features
 
-In this user guide, we explain the core features of our application from the perspective of (1) a volunteer and, (2) an admin.
+In this user guide, we explain the core features of our application from the perspective of (1) an admin and, (2) a volunteer.
 
 > 💡 **Pro Tip**: For the best experience, use a laptop/desktop while using the application.
 
@@ -75,6 +75,8 @@ Here's a quick tutorial on how to create an opportunity:
 Once created, you should see it in the list of opportunities, as shown below:
 
 ![Updated Opportunities](./assets/updated-opportunities.png)
+
+To manage a particular opportunity, simply click on the opportunity name to view all the details and manage the registrations.
 
 ### Approve Volunteer Registrations
 
