@@ -1,11 +1,11 @@
 import { useAuth } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import useUserRole from '../hooks/useUserRole';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { authenticatedGet } from '../axios';
 import { useQuery } from '@tanstack/react-query';
 import { ReportDataResponse } from '../../../sharedTypes';
-import { Grid, Paper, Typography } from '@mui/material';
+import { Box, Grid, Paper, Tab, Tabs, Typography } from '@mui/material';
 import Sidebar from '../components/Sidebar';
 import {
   Chart as ChartJS,
@@ -40,10 +40,50 @@ ChartJS.register(
   Title,
 );
 
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
 export default function ReportPage() {
   const { role } = useUserRole();
   const { getToken } = useAuth();
   const navigate = useNavigate();
+  const [volunteerTabValue, setVolunteerTabValue] = useState(0);
+  const [opportunityTabValue, setOpportunityTabValue] = useState(0);
+  const handleVolunteerTabChange = (
+    event: React.SyntheticEvent,
+    newValue: number,
+  ) => {
+    setVolunteerTabValue(newValue);
+  };
+  const handleOpportunityTabChange = (
+    event: React.SyntheticEvent,
+    newValue: number,
+  ) => {
+    setOpportunityTabValue(newValue);
+  };
   useEffect(() => {
     if (role !== 'ADMIN') navigate('/opportunities');
   }, [role, navigate]);
@@ -155,23 +195,29 @@ export default function ReportPage() {
     <>
       <div className="main-container">
         <Sidebar />
-        <div className="main" style={{ maxWidth: '100px' }}>
+        <div className="main" style={{ minWidth: '80vw' }}>
           <Typography variant="h4" align="center" margin="2rem">
             Reports
           </Typography>
           <Typography variant="h5" align="center">
             Volunteer Statistics
           </Typography>
-          <Grid
-            container
-            spacing={2}
-            maxWidth="80vw"
-            display="flex"
-            justifyContent="center"
-          >
-            <Grid item xs={12} md={4}>
+          <Box sx={{ width: '100%' }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', m: '1rem' }}>
+              <Tabs
+                value={volunteerTabValue}
+                onChange={handleVolunteerTabChange}
+              >
+                <Tab label="gender" style={{ outline: 'none' }} />
+                <Tab label="age" style={{ outline: 'none' }} />
+                <Tab label="residential status" style={{ outline: 'none' }} />
+                <Tab label="preferences" style={{ outline: 'none' }} />
+              </Tabs>
+            </Box>
+            <CustomTabPanel value={volunteerTabValue} index={0}>
               <Pie
                 data={genderData}
+                style={{ maxWidth: '50vw', maxHeight: '50vh' }}
                 title="By Gender"
                 options={{
                   plugins: {
@@ -182,8 +228,8 @@ export default function ReportPage() {
                   },
                 }}
               />
-            </Grid>
-            <Grid item xs={12} md={4} display="flex">
+            </CustomTabPanel>
+            <CustomTabPanel value={volunteerTabValue} index={1}>
               <Bar
                 options={{
                   responsive: true,
@@ -194,7 +240,11 @@ export default function ReportPage() {
                     },
                   },
                 }}
-                style={{ alignSelf: 'center' }}
+                style={{
+                  alignSelf: 'center',
+                  maxWidth: '50vw',
+                  maxHeight: '50vh',
+                }}
                 data={{
                   labels: ageLabels,
                   datasets: [
@@ -208,8 +258,8 @@ export default function ReportPage() {
                   ],
                 }}
               />
-            </Grid>
-            <Grid item xs={12} md={4}>
+            </CustomTabPanel>
+            <CustomTabPanel value={volunteerTabValue} index={2}>
               <Pie
                 data={{
                   labels: Array.from(residentialStatusLabels.keys()),
@@ -239,6 +289,7 @@ export default function ReportPage() {
                     },
                   ],
                 }}
+                style={{ maxWidth: '50vw', maxHeight: '50vh' }}
                 title="By Residential Status"
                 options={{
                   plugins: {
@@ -249,8 +300,8 @@ export default function ReportPage() {
                   },
                 }}
               />
-            </Grid>
-            <Grid item xs={12} md={4}>
+            </CustomTabPanel>
+            <CustomTabPanel value={volunteerTabValue} index={3}>
               <Pie
                 data={{
                   labels: Array.from(preferences.keys()).map(formatEnum),
@@ -280,6 +331,7 @@ export default function ReportPage() {
                     },
                   ],
                 }}
+                style={{ maxWidth: '50vw', maxHeight: '50vh' }}
                 title="By Preferences"
                 options={{
                   plugins: {
@@ -290,22 +342,24 @@ export default function ReportPage() {
                   },
                 }}
               />
-            </Grid>
-          </Grid>
+            </CustomTabPanel>
+          </Box>
           <Typography variant="h5" align="center" margin="2rem">
             Opportunities Statistics
           </Typography>
-          <Grid
-            container
-            spacing={2}
-            maxWidth="80vw"
-            display="flex"
-            justifyContent="center"
-            marginBottom="2rem"
-          >
-            <Grid item xs={12} md={6}>
+          <Box sx={{ width: '100%' }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', m: '1rem' }}>
+              <Tabs
+                value={opportunityTabValue}
+                onChange={handleOpportunityTabChange}
+              >
+                <Tab label="opportunities" style={{ outline: 'none' }} />
+                <Tab label="attendance" style={{ outline: 'none' }} />
+              </Tabs>
+            </Box>
+            <CustomTabPanel value={opportunityTabValue} index={0}>
               <Line
-                id="1231"
+                style={{ maxWidth: '50vw', maxHeight: '50vh' }}
                 data={{
                   labels: getPastNMonths(6),
                   datasets: [
@@ -335,9 +389,10 @@ export default function ReportPage() {
                   },
                 }}
               />
-            </Grid>
-            <Grid item xs={12} md={6}>
+            </CustomTabPanel>
+            <CustomTabPanel value={opportunityTabValue} index={1}>
               <Line
+                style={{ maxWidth: '50vw', maxHeight: '50vh' }}
                 data={{
                   labels: getPastNMonths(6),
                   datasets: [
@@ -351,7 +406,6 @@ export default function ReportPage() {
                     },
                   ],
                 }}
-                title="Enrollments"
                 options={{
                   scales: {
                     y: {
@@ -367,9 +421,9 @@ export default function ReportPage() {
                   },
                 }}
               />
-            </Grid>
-          </Grid>
-          {/* <pre>{JSON.stringify(data?.data, null, 2)}</pre> */}
+            </CustomTabPanel>
+          </Box>
+          <div style={{ height: '10vh' }} />
         </div>
       </div>
     </>
