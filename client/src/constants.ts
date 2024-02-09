@@ -1,8 +1,7 @@
-import { ResidentialStatus } from '../../sharedTypes';
+import { ResidentialStatus } from '../../server/src/types';
 
 export const RoutePath = {
   ROOT: '/',
-  DASHBOARD: '/dashboard',
   PROFILE: '/profile',
   HISTORY: '/history',
   PROFILE_CREATE: '/profile/create',

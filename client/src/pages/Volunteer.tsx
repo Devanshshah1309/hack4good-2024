@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import useUserRole from '../hooks/useUserRole';
-import { AdminGetVolunteer } from '../../../sharedTypes';
+import { AdminGetVolunteer } from '../../../server/src/types';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { authenticatedGet } from '../axios';

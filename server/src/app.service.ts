@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import puppeteer from 'puppeteer';
 import fs from 'node:fs';
@@ -19,10 +24,9 @@ export class AppService {
     });
   }
 
-  async getVolunteerUser(clerkUserId: string) {
+  async getUserJoinVolunteer(clerkUserId: string) {
     const user = await this.prisma.user.findUnique({
       where: {
-        role: 'VOLUNTEER',
         clerkUserId,
       },
       include: {
@@ -45,8 +49,16 @@ export class AppService {
   }
 
   async checkUserIsVolunteer(clerkUserId: string) {
-    const user = await this.getUser(clerkUserId);
+    const user = await this.prisma.user.findUnique({
+      where: { clerkUserId },
+      include: { volunteer: true },
+    });
     if (!user || user.role !== 'VOLUNTEER') throw new ForbiddenException();
+
+    if (!user.volunteer)
+      throw new BadRequestException(
+        'You need to create your profile first! Go to "My Profile"',
+      );
   }
 
   async generateCertificate(replace: {

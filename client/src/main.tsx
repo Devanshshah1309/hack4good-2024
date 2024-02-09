@@ -7,7 +7,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Profile from './pages/Profile.tsx';
 import ErrorPage from './pages/ErrorPage.tsx';
-import Dashboard from './pages/Dashboard.tsx';
 import CreateProfile from './pages/CreateProfile.tsx';
 import { RoutePath } from './constants.ts';
 import CreateOpportunity from './pages/CreateOpportunity.tsx';

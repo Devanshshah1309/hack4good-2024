@@ -21,10 +21,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { PLACEHOLDER_IMAGE_URL, RoutePath } from '../constants';
 import { useAuth } from '@clerk/clerk-react';
 import useUserRole from '../hooks/useUserRole';
-import { useEffect } from 'react';
 import { Typography } from '@mui/material';
 import BigAtHeartLogo from '../assets/big-at-heart.png';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import GroupsIcon from '@mui/icons-material/Groups';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 

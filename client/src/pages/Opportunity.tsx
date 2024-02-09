@@ -11,7 +11,7 @@ import {
   EnrollmentWithVolunteer,
   Opportunity,
   SwapDatesWithStrings,
-} from '../../../sharedTypes';
+} from '../../../server/src/types';
 import { QueryKey } from '../constants';
 import {
   DataGrid,

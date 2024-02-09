@@ -4,7 +4,7 @@ import useUserRole from '../hooks/useUserRole';
 import { useEffect, useState } from 'react';
 import { authenticatedGet } from '../axios';
 import { useQuery } from '@tanstack/react-query';
-import { ReportDataResponse } from '../../../sharedTypes';
+import { ReportDataResponse } from '../../../server/src/types';
 import { Box, Grid, Paper, Tab, Tabs, Typography } from '@mui/material';
 import Sidebar from '../components/Sidebar';
 import {
