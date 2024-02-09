@@ -2,7 +2,7 @@ import {
   Enrollment,
   OpportunityResponse,
   UserRole,
-} from '../../../sharedTypes';
+} from '../../../server/src/types';
 import {
   Card,
   CardActions,
@@ -23,6 +23,7 @@ import DoneAllIcon from '@mui/icons-material/DoneAll';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import PersonIcon from '@mui/icons-material/Person';
 import bigAtHeartLogo from '../assets/big-at-heart.png';
+import { AxiosError } from 'axios';
 interface OpportunityCardProps {
   opportunity: OpportunityResponse;
   userRole: UserRole | null;
@@ -36,6 +37,7 @@ export default function OpportunityCard({
   const queryClient = useQueryClient();
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
+  const [errorSnackbarMsg, setErrorSnackbarMsg] = useState('Request failed!');
 
   const start = new Date(opportunity.start);
   const end = new Date(opportunity.end);
@@ -142,6 +144,15 @@ export default function OpportunityCard({
                     queryKey: [QueryKey.OPPORTUNITIES],
                   });
                 } catch (err) {
+                  setErrorSnackbarMsg(
+                    (
+                      (err as AxiosError).response?.data as {
+                        error: string;
+                        statusCode: number;
+                        message: string;
+                      }
+                    )?.message ?? 'Request failed!',
+                  );
                   setErrorSnackbarOpen(true);
                 }
               }}
@@ -176,7 +187,7 @@ export default function OpportunityCard({
           },
         }}
         autoHideDuration={3000}
-        message="Failed to submit request!"
+        message={errorSnackbarMsg}
         onClose={() => {
           setErrorSnackbarOpen(false);
         }}

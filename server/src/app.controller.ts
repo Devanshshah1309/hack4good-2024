@@ -22,7 +22,7 @@ import {
   SwapDatesWithStrings,
   UpdateOpportunityRequest,
   UpdateOpportunityImageRequest,
-} from '../../sharedTypes';
+} from './types';
 import dayjs from 'dayjs';
 import { createReadStream } from 'fs';
 
@@ -37,9 +37,14 @@ export class AppController {
   async getRole(
     @Req() req: RequireAuthProp<Request>,
   ): Promise<{ role: UserRole | null }> {
-    const user = await this.appService.getUser(req.auth.userId);
+    const user = await this.appService.getUserJoinVolunteer(req.auth.userId);
     if (!user) {
-      // user has created account with Clerk, but it does not exist in database yet
+      return { role: null };
+    }
+    if (user.role === 'ADMIN') {
+      return { role: 'ADMIN' };
+    }
+    if (!user.volunteer) {
       return { role: null };
     }
     return { role: user.role as UserRole };
@@ -49,10 +54,9 @@ export class AppController {
   async getProfile(@Req() req: RequireAuthProp<Request>) {
     await this.appService.checkUserIsVolunteer(req.auth.userId);
 
-    const user = await this.appService.getVolunteerUser(req.auth.userId);
+    const user = await this.appService.getUserJoinVolunteer(req.auth.userId);
 
-    if (!user) {
-      // user has created account with Clerk, but it does not exist in database yet
+    if (!user || !user.volunteer) {
       throw new NotFoundException('Profile has not been added yet');
     }
 
@@ -63,9 +67,9 @@ export class AppController {
   async addProfile(@Req() req: RequireAuthProp<Request>) {
     const [clerkUser, user] = await Promise.all([
       clerkClient.users.getUser(req.auth.userId),
-      this.appService.getUser(req.auth.userId),
+      this.appService.getUserJoinVolunteer(req.auth.userId),
     ]);
-    if (user) {
+    if (user?.volunteer) {
       throw new BadRequestException('Profile already added');
     }
 
@@ -89,35 +93,29 @@ export class AppController {
       preferences,
     } = req.body as SwapDatesWithStrings<CreateProfileDataRequest>;
 
-    await this.prisma.user.create({
+    await this.prisma.volunteer.create({
       data: {
-        clerkUserId: req.auth.userId,
-        email: clerkUser.emailAddresses[0].emailAddress,
-        role: 'VOLUNTEER',
-        volunteer: {
-          create: {
-            firstName,
-            lastName,
-            address,
-            dateOfBirth,
-            experience,
-            gender,
-            occupation,
-            school,
-            educationBackground,
-            driving,
-            ownsVehicle,
-            commitmentLevel,
-            phone,
-            postalCode,
-            residentialStatus,
-            skills,
-            VolunteerPreference: {
-              create: preferences.map((pref) => ({
-                preference: pref,
-              })),
-            },
-          },
+        userId: req.auth.userId,
+        firstName,
+        lastName,
+        address,
+        dateOfBirth,
+        experience,
+        gender,
+        occupation,
+        school,
+        educationBackground,
+        driving,
+        ownsVehicle,
+        commitmentLevel,
+        phone,
+        postalCode,
+        residentialStatus,
+        skills,
+        VolunteerPreference: {
+          create: preferences.map((pref) => ({
+            preference: pref,
+          })),
         },
       },
     });
@@ -125,9 +123,8 @@ export class AppController {
 
   @Put('profile')
   async updateProfile(@Req() req: RequireAuthProp<Request>) {
-    const user = await this.appService.getUser(req.auth.userId);
-    if (!user) {
-      // user has created account with Clerk, but it does not exist in database yet
+    const user = await this.appService.getUserJoinVolunteer(req.auth.userId);
+    if (!user?.volunteer) {
       throw new NotFoundException('Profile has not been added yet');
     }
 
@@ -598,7 +595,7 @@ export class AppController {
     req.auth.userId === req.params.id ||
       (await this.appService.checkUserIsAdmin(req.auth.userId));
 
-    const volunteer = await this.appService.getVolunteerUser(req.params.id);
+    const volunteer = await this.appService.getUserJoinVolunteer(req.params.id);
 
     if (!volunteer)
       throw new NotFoundException('No volunteer found with that userId');

@@ -8,10 +8,10 @@ import {
   AdminGetVolunteer,
   ProfileDataResponse,
   UpdateProfileDataRequest,
-} from '../../../sharedTypes';
+} from '../../../server/src/types';
 import { QueryKey, RESIDENTIAL_STATUS_MAP, RoutePath } from '../constants';
 import useUserRole from '../hooks/useUserRole';
-import { Preference, ResidentialStatus } from '../../../sharedTypes';
+import { Preference, ResidentialStatus } from '../../../server/src/types';
 import {
   Box,
   Button,

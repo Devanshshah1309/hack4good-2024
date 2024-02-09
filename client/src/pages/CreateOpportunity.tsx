@@ -4,7 +4,7 @@ import { useAuth } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import { useEffect, useState } from 'react';
-import { CreateOpportunityRequest } from '../../../sharedTypes';
+import { CreateOpportunityRequest } from '../../../server/src/types';
 import axios from 'axios';
 import useUserRole from '../hooks/useUserRole';
 import { QueryKey, RoutePath } from '../constants';
@@ -33,10 +33,6 @@ export default function CreateOpportunity() {
   const { getToken } = useAuth();
   const navigate = useNavigate();
   const { role } = useUserRole();
-
-  useEffect(() => {
-    if (role !== 'ADMIN') navigate(RoutePath.DASHBOARD);
-  }, [role]);
 
   const [opp, setOpp] = useState<
     Omit<CreateOpportunityRequest, 'imageUrl' | 'archive'>

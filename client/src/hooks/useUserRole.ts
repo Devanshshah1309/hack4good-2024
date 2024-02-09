@@ -1,5 +1,5 @@
 import { useAuth } from '@clerk/clerk-react';
-import { UserRole } from '../../../sharedTypes';
+import { UserRole } from '../../../server/src/types';
 import { useQuery } from '@tanstack/react-query';
 import { authenticatedGet } from '../axios';
 import { useNavigate } from 'react-router-dom';

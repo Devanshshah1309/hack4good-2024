@@ -7,7 +7,7 @@ import useUserRole from '../hooks/useUserRole';
 import { QueryKey, RoutePath } from '../constants';
 import { Button, CircularProgress, Typography } from '@mui/material';
 import { Grid } from '@material-ui/core';
-import { OpportunityResponse } from '../../../sharedTypes';
+import { OpportunityResponse } from '../../../server/src/types';
 import OpportunityCard from '../components/OpportunityCard';
 import { useEffect } from 'react';
 

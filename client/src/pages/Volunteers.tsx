@@ -5,7 +5,7 @@ import { useAuth } from '@clerk/clerk-react';
 import useUserRole from '../hooks/useUserRole';
 import { useQuery } from '@tanstack/react-query';
 import Sidebar from '../components/Sidebar';
-import { AdminGetVolunteers } from '../../../sharedTypes';
+import { AdminGetVolunteers } from '../../../server/src/types';
 import {
   DataGrid,
   GridRowsProp,

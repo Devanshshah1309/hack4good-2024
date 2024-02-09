@@ -10,7 +10,7 @@ import {
   GridToolbar,
 } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
-import { AdminGetVolunteer } from '../../../sharedTypes';
+import { AdminGetVolunteer } from '../../../server/src/types';
 import { API_BASE_URL, authenticatedGet } from '../axios';
 import { extractDateAndTime, renderCellExpand } from '../utils';
 import { useNavigate } from 'react-router-dom';

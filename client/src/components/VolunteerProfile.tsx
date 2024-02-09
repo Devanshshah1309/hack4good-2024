@@ -12,7 +12,7 @@ import {
   RadioGroup,
   TextField,
 } from '@mui/material';
-import { Preference, ProfileDataResponse } from '../../../sharedTypes';
+import { Preference, ProfileDataResponse } from '../../../server/src/types';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';

@@ -8,7 +8,7 @@ import {
   Gender,
   Preference,
   ResidentialStatus,
-} from '../../../sharedTypes';
+} from '../../../server/src/types';
 import { RESIDENTIAL_STATUS_MAP, RoutePath } from '../constants';
 import Sidebar from '../components/Sidebar';
 import {
@@ -75,9 +75,7 @@ function CreateProfile() {
     mutationFn: async (data: CreateProfileDataRequest) => {
       await authenticatedPost('/profile', data, (await getToken()) ?? '');
     },
-    onSuccess: () => {
-      navigate(RoutePath.DASHBOARD);
-    },
+    onSuccess: () => {},
     onError: () => {
       setErrorSnackbarOpen(true);
       console.error('failed to save');
