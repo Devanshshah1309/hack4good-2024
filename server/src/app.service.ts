@@ -8,7 +8,7 @@ import { PrismaService } from './prisma.service';
 import puppeteer from 'puppeteer';
 import fs from 'node:fs';
 import { v4 as uuidv4 } from 'uuid';
- 
+
 @Injectable()
 export class AppService {
   constructor(
@@ -74,7 +74,7 @@ export class AppService {
 
     const html = fs.readFileSync(`static/certificate-template.html`, 'utf8');
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
 
     const replacedHtml = html.replace(/{{(.+?)}}/g, (_, g1) => replace[g1]);
