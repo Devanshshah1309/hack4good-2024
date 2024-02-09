@@ -7,6 +7,7 @@ import { RoutePath } from '../constants';
 import { Typography } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import handsIcon from '../assets/hands-icon.png';
 
 function Home() {
   const { isSignedIn } = useAuth();
@@ -35,13 +36,17 @@ function Home() {
               </span>{' '}
               Today!
             </Typography>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <img src={handsIcon} alt="volunteering" width="20%" />
+            </div>
             <Typography
               variant="h5"
               align="center"
               style={{ paddingTop: '2rem' }}
             >
-              VOLUNASIA is that moment when you forget you're volunteering to
-              help change lives, because it's changing yours.
+              <span style={{ fontWeight: '700' }}>VOLUNASIA</span> is that
+              moment when you forget you're volunteering to help change lives,
+              because it's changing yours.
             </Typography>
             <Typography
               variant="subtitle1"
@@ -64,6 +69,18 @@ function Home() {
               fulfilling way. Come find your volunasia with us !
             </Typography>
           </div>
+          <div style={{ margin: '2rem' }} />
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <SignInButton>
+              <Button
+                variant="contained"
+                style={{ backgroundColor: '#ff0066', width: '10vw' }}
+              >
+                Sign Up
+              </Button>
+            </SignInButton>
+          </div>
+          <div style={{ margin: '2rem' }} />
         </SignedOut>
         <SignedIn>
           <>

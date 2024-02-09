@@ -97,11 +97,6 @@ export default function ReportPage() {
         navigate,
       ),
   });
-  useEffect(() => {
-    if (data?.data === undefined) {
-      navigate('/opportunities');
-    }
-  }, [data, navigate]);
 
   // GENDER DATA
   const maleVolunteersCount =
@@ -232,6 +227,18 @@ export default function ReportPage() {
             <CustomTabPanel value={volunteerTabValue} index={1}>
               <Bar
                 options={{
+                  scales: {
+                    y: {
+                      suggestedMin: 0,
+                      suggestedMax: 20,
+                    },
+                    x: {
+                      title: {
+                        display: true,
+                        text: 'Years',
+                      },
+                    },
+                  },
                   responsive: true,
                   plugins: {
                     title: {
