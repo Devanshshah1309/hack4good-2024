@@ -129,8 +129,7 @@ You can easily **search**, **sort**, **filter**, and **view** all the details of
 
 We're not joking when we say that this really is a superpower! 🦸‍♂️ Don't believe us? See it in action (and imagine you have thousands of volunteers!):
 
-
-https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/fe3e6db1-a5d8-425f-aa23-9449231b0957
+https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/eb1c678a-96c6-4e42-bf0c-caa2e0b9e211
 
 
 ### View Volunteer's Details and History
@@ -159,7 +158,7 @@ And of course, you can easily save these charts: simply right-click and "save as
 
 Here's how it looks:
 
-https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/5f172057-956f-4e49-ad86-8bce436fbc47
+https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/bbda5dbd-d982-4c2a-a4ff-2320d9e4cd66
 
 
 ## Volunteer
@@ -206,9 +205,7 @@ Once the admin has marked your attendance for an opportunity, you can **download
 
 You can even post these online to convince your friends to join you in volunteering! 📢
 
-
-https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/6eb23c26-3cea-489a-a53f-ea949da1af29
-
+https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/eafb569a-3d11-45bc-88ee-2451e68bda37
 
 > 💡 **Pro Tip**: Admins, this means that you don't have to manually create certificates for volunteers anymore! Hope this saves you a lot time :)
 
