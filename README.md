@@ -38,7 +38,8 @@ Built with ❤️ by Joe and Devansh.
 Here's a short video on _why_ we built VolunTech Connect and how you can use it:
 
 
-https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/79cf3ef1-ed8d-4ce4-91c8-7e3a9bdd669e
+https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/b5c18f71-4afe-46ec-9208-101a3de16012
+
 
 
 Download the slides here: [VolunTech Connect Pitch Deck.pdf](https://github.com/Devanshshah1309/hack4good-2024/files/14227908/VolunTech.Connect.Pitch.Deck.pdf)
