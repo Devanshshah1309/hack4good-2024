@@ -12,6 +12,7 @@ Built with ❤️ by Joe and Devansh.
 
 **Table of Contents**
 
+- [Quick Start](#quick-start)
 - [Core Features](#core-features)
   - [Admin](#admin)
     - [Create Opportunities](#create-opportunities)
@@ -31,6 +32,16 @@ Built with ❤️ by Joe and Devansh.
   - [Backend](#backend)
 
 ---
+
+# Quick Start
+
+Here's a short video on _why_ we built VolunTech Connect and how you can use it:
+
+<video controls>
+  <source src="./assets/VolunTech Connect Preesentation.mp4" type="video/mp4">
+</video>
+
+You can download the slides used in the presentation [here](./assets/VolunTech%20Connect%20Pitch%20Deck.pdf).
 
 # Core Features
 
