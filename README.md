@@ -35,9 +35,11 @@ Built with ❤️ by Joe and Devansh.
 
 # Quick Start
 
-Here's a short video on _why_ we built VolunTech Connect and how you can use it:
+Here's a short video on _why_ we built VolunTech Connect and how you can use it:\
 
-https://github.com/Devanshshah1309/hack4good-2024/blob/main/assets/VolunTech%20Connect%20Preesentation.mp4
+
+https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/ffe4679b-794f-439e-bf2e-d753c4016773
+
 
 You can download the slides used in the presentation [here](./assets/VolunTech%20Connect%20Pitch%20Deck.pdf).
 
@@ -127,7 +129,9 @@ You can easily **search**, **sort**, **filter**, and **view** all the details of
 
 We're not joking when we say that this really is a superpower! 🦸‍♂️ Don't believe us? See it in action (and imagine you have thousands of volunteers!):
 
-![Manage Volunteers](./assets/manage-volunteers.gif)
+
+https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/fe3e6db1-a5d8-425f-aa23-9449231b0957
+
 
 ### View Volunteer's Details and History
 
@@ -155,7 +159,8 @@ And of course, you can easily save these charts: simply right-click and "save as
 
 Here's how it looks:
 
-![Summary Statistics](./assets/summary-statistics.gif)
+https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/5f172057-956f-4e49-ad86-8bce436fbc47
+
 
 ## Volunteer
 
@@ -201,9 +206,9 @@ Once the admin has marked your attendance for an opportunity, you can **download
 
 You can even post these online to convince your friends to join you in volunteering! 📢
 
-(Apologies for the "slow" internet in the GIF below, but we promise it's much faster in real life!)
 
-![Download Certificate](./assets/download-certificate.gif)
+https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/6eb23c26-3cea-489a-a53f-ea949da1af29
+
 
 > 💡 **Pro Tip**: Admins, this means that you don't have to manually create certificates for volunteers anymore! Hope this saves you a lot time :)
 
