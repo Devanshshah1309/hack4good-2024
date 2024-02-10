@@ -35,13 +35,13 @@ Built with ❤️ by Joe and Devansh.
 
 # Quick Start
 
-Here's a short video on _why_ we built VolunTech Connect and how you can use it:\
+Here's a short video on _why_ we built VolunTech Connect and how you can use it:
 
 
-https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/ffe4679b-794f-439e-bf2e-d753c4016773
+https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/79cf3ef1-ed8d-4ce4-91c8-7e3a9bdd669e
 
 
-You can download the slides used in the presentation [here](./assets/VolunTech%20Connect%20Pitch%20Deck.pdf).
+Download the slides here: [VolunTech Connect Pitch Deck.pdf](https://github.com/Devanshshah1309/hack4good-2024/files/14227908/VolunTech.Connect.Pitch.Deck.pdf)
 
 # Core Features
 
@@ -162,6 +162,8 @@ https://github.com/Devanshshah1309/hack4good-2024/assets/59191109/bbda5dbd-d982-
 
 
 ## Volunteer
+
+Before you can register for any opportunity, you need to create a profile.
 
 ### Sign up and Create Profile
 
